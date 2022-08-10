@@ -1,10 +1,9 @@
-export interface Photo {
-  categories: string[];
+export interface ImageInterface {
+  path: string;
   url: string;
   urlThumbnail: string;
   description: string;
-  order?: number;
+  order: number;
   text?: string;
   date?: string;
-  isTitle?: boolean;
 }

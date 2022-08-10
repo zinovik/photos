@@ -1,27 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getCategories } from '../services/categories';
-import { Category } from '../types/Category';
+import { getSectionsWithImages } from "../services";
+import { SectionTree } from "../types";
 
 function HomePage() {
-  const [categories, setCategories] = useState(null as Category[] | null);
+  const [sectionsWithImages, setSectionsWithImages] = useState(
+    [] as SectionTree[]
+  );
 
   useEffect(() => {
-    getCategories().then((result) => setCategories(result));
+    getSectionsWithImages().then((result) => setSectionsWithImages(result));
   }, []);
+
+  console.log(123, sectionsWithImages);
 
   return (
     <>
-      <main>
-        Main Page
-      </main>
+      <main>Home Page</main>
       <nav>
-        {!categories && <>Loading</>}
+        {!sectionsWithImages.length && <>Loading</>}
 
-        {categories && categories.map(category => <div><Link to={`/${category.slug}`}>{category.title}</Link></div>)}
+        {sectionsWithImages &&
+          sectionsWithImages.map(({ section, images }) => (
+            <div>
+              <Link to={`/${section.path}`}>{section.title}</Link>
+              {images[0] && <div>{images[0].url}</div>}
+            </div>
+          ))}
       </nav>
     </>
   );
 }
 
-export default HomePage
+export default HomePage;
