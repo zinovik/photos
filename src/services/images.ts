@@ -21,5 +21,5 @@ export const getImages = async (path?: string): Promise<ImageInterface[]> => {
     .filter((image) =>
       path ? isThisOrChildPath(image.path, path) : isTopLevelPath(image.path)
     )
-    .sort((p1, p2) => p1.order - p2.order);
+    .sort((p1, p2) => p2.order - p1.order);
 };

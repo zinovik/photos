@@ -1,38 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Section } from "./Section";
 import { getSectionsWithImages } from "../services";
+import { getLinks } from "../services/helper";
 import { SectionTree } from "../types";
 
-export default function SectionPage() {
-  const { topLevelSection, "*": restPath = "" } = useParams();
+export const SectionPage = () => {
+  const { section, "*": sections = "" } = useParams();
 
-  const fullPath = `${topLevelSection}${restPath}`;
+  const path = `${section}/${sections}`.replace(/\/+$/, "");
 
   const [sectionsWithImages, setSectionWithImages] = useState(
     [] as SectionTree[]
   );
 
   useEffect(() => {
-    getSectionsWithImages(fullPath).then((result) =>
-      setSectionWithImages(result)
-    );
-  }, []);
+    getSectionsWithImages(path).then((result) => setSectionWithImages(result));
+  }, [path]);
 
   const [sectionWithImages] = sectionsWithImages;
 
-  console.log(1, sectionsWithImages);
-
   if (!sectionWithImages) return null;
+
+  const links = getLinks(path);
 
   return (
     <>
-      <main>
-        <h2>{sectionWithImages.section.title}</h2>
-        <p>{sectionWithImages.sections.map(({ section }) => section.title)}</p>
-      </main>
       <nav>
-        <Link to="/">Home</Link>
+        <br />
+        <Link to="/">gallery</Link>
+        {links.map((link) => (
+          <>
+            {" / "}
+            <Link to={link.url}>{link.text}</Link>
+          </>
+        ))}
       </nav>
+
+      <main>
+        <Section sectionTree={sectionWithImages} path={path} />
+      </main>
     </>
   );
-}
+};

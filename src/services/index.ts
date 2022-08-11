@@ -14,7 +14,7 @@ export const getSectionsWithImages = async (
   const sectionTrees: SectionTree[] = sections.map((section) => ({
     section,
     images: images.filter((image) => image.path === section.path),
-    sections: [],
+    children: [],
   }));
 
   const sectionByPath: { [path: string]: SectionTree } = sectionTrees.reduce(
@@ -30,7 +30,7 @@ export const getSectionsWithImages = async (
 
     if (!sectionByPath[parentPath]) return;
 
-    sectionByPath[parentPath].sections.push(sectionTree);
+    sectionByPath[parentPath].children.push(sectionTree);
   });
 
   return sectionTrees.filter(({ section }) =>

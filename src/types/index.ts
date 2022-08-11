@@ -4,7 +4,7 @@ import { ImageInterface } from "./ImageInterface";
 export interface SectionTree {
   section: SectionInterface;
   images: ImageInterface[];
-  sections: SectionTree[];
+  children: SectionTree[];
 }
 
 export * from "./SectionInterface";

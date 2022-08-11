@@ -25,5 +25,5 @@ export const getSections = async (
         ? isThisOrChildPath(section.path, path)
         : isTopLevelPath(section.path)
     )
-    .sort((c1, c2) => c1.order - c2.order);
+    .sort((s1, s2) => s2.order - s1.order);
 };
