@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Image } from "./Image";
 import { getSectionsWithImages } from "../services";
-import { SectionTree } from "../types";
+import { SectionWithImages } from "../types";
 
 export const HomePage = () => {
   const [sectionsWithImages, setSectionsWithImages] = useState(
-    [] as SectionTree[]
+    [] as SectionWithImages[]
   );
 
   useEffect(() => {
-    getSectionsWithImages().then((result) =>
-      setSectionsWithImages([...result].reverse())
-    );
+    getSectionsWithImages().then((result) => setSectionsWithImages(result));
   }, []);
 
   return (
@@ -26,16 +24,15 @@ export const HomePage = () => {
 
         {sectionsWithImages.map(({ section, images }) => (
           <div>
-            <Link to={`/${section.path}`}>{section.title}</Link>
-            <br />
-            <br />
+            <h2>
+              <Link to={`/${section.path}`}>{section.title}</Link>
+            </h2>
 
             {images.map((image) => (
               <Image image={image} />
             ))}
 
             {section.text && <p>{section.text}</p>}
-            <br />
             <br />
           </div>
         ))}

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Section } from "./Section";
 import { getSectionsWithImages } from "../services";
-import { getLinks } from "../services/helper";
-import { SectionTree } from "../types";
+import { getLinks, getImagesFilenames } from "../services/helper";
+import { SectionWithImages } from "../types";
 
 export const SectionPage = () => {
   const { section, "*": sections = "" } = useParams();
@@ -11,18 +11,16 @@ export const SectionPage = () => {
   const path = `${section}/${sections}`.replace(/\/+$/, "");
 
   const [sectionsWithImages, setSectionWithImages] = useState(
-    [] as SectionTree[]
+    [] as SectionWithImages[]
   );
 
   useEffect(() => {
     getSectionsWithImages(path).then((result) => setSectionWithImages(result));
   }, [path]);
 
-  const [sectionWithImages] = sectionsWithImages;
-
-  if (!sectionWithImages) return null;
-
   const links = getLinks(path);
+
+  const imagesNames = getImagesFilenames(sectionsWithImages);
 
   return (
     <>
@@ -38,7 +36,13 @@ export const SectionPage = () => {
       </nav>
 
       <main>
-        <Section sectionTree={sectionWithImages} path={path} />
+        {sectionsWithImages.map((sectionWithImages) => (
+          <Section
+            sectionWithImages={sectionWithImages}
+            path={path}
+            imagesNames={imagesNames}
+          />
+        ))}
       </main>
     </>
   );
