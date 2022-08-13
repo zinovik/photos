@@ -1,21 +1,18 @@
 import React from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Markdown } from './Markdown';
+import { ImageFullscreen } from './ImageFullscreen';
 import { getImageFilename } from '../services/helper';
 import { ImageInterface } from '../types';
 
 interface Props {
   image: ImageInterface;
-  nextImageFilename?: string | null;
-  previousImageFilename?: string | null;
+  imagesNames?: string[];
 }
 
-export const Image = ({
-  image,
-  nextImageFilename,
-  previousImageFilename,
-}: Props) => {
-  const { url, urlThumbnail, description } = image;
+export const Image = ({ image, imagesNames }: Props) => {
+  const { url, urlThumbnail, description, text } = image;
   const filename = getImageFilename(url);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,40 +20,24 @@ export const Image = ({
   const isFullScreen = filename === searchParams.get('image');
 
   const handleImageClick = (): void => {
-    setSearchParams(isFullScreen ? {} : { image: filename });
+    setSearchParams({ image: filename });
   };
 
   return (
     <>
+      {text && <Markdown text={text} />}
+
       <LazyLoadImage
         src={urlThumbnail}
         width={400}
         height={300}
         onClick={handleImageClick}
       />
+      <p>{description}</p>
 
       {isFullScreen && (
-        <>
-          <LazyLoadImage
-            src={url}
-            width={400}
-            height={300}
-            onClick={handleImageClick}
-            style={{ position: 'fixed', top: 0, left: 0 }}
-          />
-          <br />
-
-          {previousImageFilename && (
-            <Link to={`?image=${previousImageFilename}`}>Back</Link>
-          )}
-          <br />
-
-          {nextImageFilename && (
-            <Link to={`?image=${nextImageFilename}`}>Next</Link>
-          )}
-        </>
+        <ImageFullscreen image={image} imagesNames={imagesNames} />
       )}
-      <p>{description}</p>
     </>
   );
 };

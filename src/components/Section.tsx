@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Markdown } from './Markdown';
 import { Image } from './Image';
-import { getImageFilename } from '../services/helper';
 import { SectionWithImages } from '../types';
 
 interface Props {
@@ -36,26 +36,11 @@ export const Section = ({ sectionWithImages, path, imagesNames }: Props) => {
           </h4>
         )}
 
-        {section.text && <p>{section.text}</p>}
+        {section.text && <Markdown text={section.text} />}
 
-        {images.map((image) => {
-          const currentIndex = imagesNames.indexOf(getImageFilename(image.url));
-          const nextImageFilename =
-            currentIndex < imagesNames.length - 1
-              ? imagesNames[currentIndex + 1]
-              : null;
-          const previousImageFilename =
-            currentIndex > 0 ? imagesNames[currentIndex - 1] : null;
-
-          return (
-            <Image
-              image={image}
-              nextImageFilename={nextImageFilename}
-              previousImageFilename={previousImageFilename}
-              key={image.url}
-            />
-          );
-        })}
+        {images.map((image) => (
+          <Image image={image} imagesNames={imagesNames} key={image.url} />
+        ))}
       </main>
     </>
   );
