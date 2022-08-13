@@ -7,5 +7,7 @@ interface Props {
 }
 
 export const Markdown = ({ text }: Props) => (
-  <ReactMarkdown rehypePlugins={[rehypeRaw]} children={text} />
+  <div style={{ maxWidth: '400' }}>
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} children={text} />
+  </div>
 );

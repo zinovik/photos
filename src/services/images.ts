@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { isThisOrChildPath, isTopLevelPath } from './helper';
+import {
+  isThisOrChildPath,
+  isTopLevelPath,
+  getDatetimeFromUrl,
+} from './helper';
 import { ImageInterface } from '../types';
 
 const IMAGES_URL =
@@ -22,5 +26,13 @@ export const getImages = async (path?: string): Promise<ImageInterface[]> => {
     .filter((image) =>
       path ? isThisOrChildPath(image.path, path) : isTopLevelPath(image.path)
     )
-    .sort((p1, p2) => (p2.order || 0) - (p1.order || 0));
+    .sort((p1, p2) => (p2.order || 0) - (p1.order || 0))
+    .map((image) => {
+      const datetime = getDatetimeFromUrl(image.url);
+
+      return {
+        ...image,
+        description: `${image.description}${datetime ? `, ${datetime}` : ''}`,
+      };
+    });
 };

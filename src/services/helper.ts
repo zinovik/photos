@@ -33,3 +33,17 @@ export const getImagesFilenames = (
     ],
     []
   );
+
+export const getDatetimeFromUrl = (url: string): string => {
+  const dateTimeParsed = url.match(
+    new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})')
+  );
+
+  if (!Array.isArray(dateTimeParsed)) {
+    return '';
+  }
+
+  const [, year, month, date, hour, minute] = dateTimeParsed;
+
+  return `${date}.${month}.${year} ${hour}:${minute}`;
+};

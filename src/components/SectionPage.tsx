@@ -36,6 +36,8 @@ export const SectionPage = () => {
       </nav>
 
       <main>
+        {!sectionsWithImages.length && <>Loading...</>}
+
         {sectionsWithImages.map((sectionWithImages) => (
           <Section
             sectionWithImages={sectionWithImages}
