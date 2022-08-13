@@ -1,8 +1,8 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { HomePage } from "./components/HomePage";
-import { SectionPage } from "./components/SectionPage";
-import "./App.css";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { HomePage } from './components/HomePage';
+import { SectionPage } from './components/SectionPage';
+import './App.css';
 
 function App() {
   return (

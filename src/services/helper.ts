@@ -1,6 +1,6 @@
-import { SectionWithImages } from "../types";
+import { SectionWithImages } from '../types';
 
-export const isTopLevelPath = (path: string): boolean => !path.includes("/");
+export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
 export const isThisOrChildPath = (
   instancePath: string,
@@ -9,19 +9,19 @@ export const isThisOrChildPath = (
 
 export const getLinks = (path: string): { text: string; url: string }[] =>
   path
-    .split("/")
+    .split('/')
     .slice(0, -1)
     .map((link, index, links) => {
-      const url = `${links.slice(0, index).join("/")}/${link}`;
+      const url = `${links.slice(0, index).join('/')}/${link}`;
 
       return {
         text: link,
-        url: `${url.startsWith("/") ? "" : "/"}${url}`,
+        url: `${url.startsWith('/') ? '' : '/'}${url}`,
       };
     });
 
 export const getImageFilename = (url: string): string =>
-  url.split("/").slice(-1)[0] || "";
+  url.split('/').slice(-1)[0] || '';
 
 export const getImagesFilenames = (
   sectionsWithImages: SectionWithImages[]

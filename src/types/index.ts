@@ -1,5 +1,5 @@
-import { SectionInterface } from "./SectionInterface";
-import { ImageInterface } from "./ImageInterface";
+import { SectionInterface } from './SectionInterface';
+import { ImageInterface } from './ImageInterface';
 
 export interface SectionWithImages {
   section: SectionInterface;
@@ -7,5 +7,5 @@ export interface SectionWithImages {
   images: ImageInterface[];
 }
 
-export * from "./SectionInterface";
-export * from "./ImageInterface";
+export * from './SectionInterface';
+export * from './ImageInterface';

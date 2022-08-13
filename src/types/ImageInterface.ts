@@ -3,7 +3,7 @@ export interface ImageInterface {
   url: string;
   urlThumbnail: string;
   description: string;
-  order: number;
+  order?: number;
   text?: string;
   date?: string;
 }

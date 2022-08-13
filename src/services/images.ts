@@ -1,8 +1,9 @@
-import axios from "axios";
-import { isThisOrChildPath, isTopLevelPath } from "./helper";
-import { ImageInterface } from "../types";
+import axios from 'axios';
+import { isThisOrChildPath, isTopLevelPath } from './helper';
+import { ImageInterface } from '../types';
 
-const IMAGES_URL = "https://raw.githubusercontent.com/zinovik/gallery-data/main/images.json";
+const IMAGES_URL =
+  'https://raw.githubusercontent.com/zinovik/gallery-data/main/images.json';
 
 let loadedImages: ImageInterface[] = [];
 
@@ -21,5 +22,5 @@ export const getImages = async (path?: string): Promise<ImageInterface[]> => {
     .filter((image) =>
       path ? isThisOrChildPath(image.path, path) : isTopLevelPath(image.path)
     )
-    .sort((p1, p2) => p2.order - p1.order);
+    .sort((p1, p2) => (p2.order || 0) - (p1.order || 0));
 };

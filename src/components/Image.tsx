@@ -1,8 +1,8 @@
-import React from "react";
-import { useSearchParams, Link } from "react-router-dom";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { getImageFilename } from "../services/helper";
-import { ImageInterface } from "../types";
+import React from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { getImageFilename } from '../services/helper';
+import { ImageInterface } from '../types';
 
 interface Props {
   image: ImageInterface;
@@ -20,7 +20,7 @@ export const Image = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const isFullScreen = filename === searchParams.get("image");
+  const isFullScreen = filename === searchParams.get('image');
 
   const handleImageClick = (): void => {
     setSearchParams(isFullScreen ? {} : { image: filename });
@@ -42,7 +42,7 @@ export const Image = ({
             width={400}
             height={300}
             onClick={handleImageClick}
-            style={{ position: "fixed", top: 0, left: 0 }}
+            style={{ position: 'fixed', top: 0, left: 0 }}
           />
           <br />
 

@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Image } from "./Image";
-import { getImageFilename } from "../services/helper";
-import { SectionWithImages } from "../types";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Image } from './Image';
+import { getImageFilename } from '../services/helper';
+import { SectionWithImages } from '../types';
 
 interface Props {
   sectionWithImages: SectionWithImages;
@@ -52,6 +52,7 @@ export const Section = ({ sectionWithImages, path, imagesNames }: Props) => {
               image={image}
               nextImageFilename={nextImageFilename}
               previousImageFilename={previousImageFilename}
+              key={image.url}
             />
           );
         })}

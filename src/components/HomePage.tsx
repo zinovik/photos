@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Image } from "./Image";
-import { getSectionsWithImages } from "../services";
-import { SectionWithImages } from "../types";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Image } from './Image';
+import { getSectionsWithImages } from '../services';
+import { SectionWithImages } from '../types';
 
 export const HomePage = () => {
   const [sectionsWithImages, setSectionsWithImages] = useState(
@@ -23,13 +23,13 @@ export const HomePage = () => {
         {!sectionsWithImages.length && <>Loading</>}
 
         {sectionsWithImages.map(({ section, images }) => (
-          <div>
+          <div key={section.path}>
             <h2>
               <Link to={`/${section.path}`}>{section.title}</Link>
             </h2>
 
             {images.map((image) => (
-              <Image image={image} />
+              <Image image={image} key={image.url} />
             ))}
 
             {section.text && <p>{section.text}</p>}

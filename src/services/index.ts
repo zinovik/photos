@@ -1,6 +1,6 @@
-import { getSections } from "./sections";
-import { getImages } from "./images";
-import { SectionWithImages } from "../types";
+import { getSections } from './sections';
+import { getImages } from './images';
+import { SectionWithImages } from '../types';
 
 export const getSectionsWithImages = async (
   path?: string
@@ -12,7 +12,7 @@ export const getSectionsWithImages = async (
 
   return sections.map((section) => ({
     section,
-    level: section.path.split("/").length,
+    level: section.path.split('/').length,
     images: images.filter((image) => image.path === section.path),
   }));
 };
