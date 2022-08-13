@@ -2,7 +2,7 @@ import axios from "axios";
 import { isThisOrChildPath, isTopLevelPath } from "./helper";
 import { ImageInterface } from "../types";
 
-const IMAGES_URL = "/data/images.json";
+const IMAGES_URL = "https://raw.githubusercontent.com/zinovik/gallery-data/main/images.json";
 
 let loadedImages: ImageInterface[] = [];
 
