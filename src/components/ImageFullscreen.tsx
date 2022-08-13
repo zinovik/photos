@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const ImageFullscreen = ({ image, imagesNames = [] }: Props) => {
-  const { url } = image;
+  const { url, description } = image;
   const filename = getImageFilename(url);
 
   const [, setSearchParams] = useSearchParams();
@@ -20,41 +20,29 @@ export const ImageFullscreen = ({ image, imagesNames = [] }: Props) => {
   };
 
   const currentImageIndex = imagesNames.indexOf(filename);
-  const nextImageFilename =
-    currentImageIndex < imagesNames.length - 1
-      ? imagesNames[currentImageIndex + 1]
-      : null;
-  const previousImageFilename =
-    currentImageIndex > 0 ? imagesNames[currentImageIndex - 1] : null;
 
   return (
-    <>
-      <LazyLoadImage
-        src={url}
-        width={'800'}
-        height={'600'}
-        onClick={handleImageClick}
-        style={{ position: 'fixed', top: 0, left: 0 }}
-      />
+    <div style={{ position: 'fixed', top: 0, left: 0 }}>
+      <LazyLoadImage src={url} height={'600'} onClick={handleImageClick} />
+      <p>{description}</p>
 
-      {imagesNames.length > 0 && (
+      {imagesNames.length > 1 && (
         <>
-          <br />
           {`${currentImageIndex + 1} / ${imagesNames.length}`}
           <br />
         </>
       )}
 
-      {previousImageFilename && (
+      {currentImageIndex > 0 && (
         <>
-          <Link to={`?image=${previousImageFilename}`}>Back</Link>
+          <Link to={`?image=${imagesNames[currentImageIndex - 1]}`}>Back</Link>
           <br />
         </>
       )}
 
-      {nextImageFilename && (
-        <Link to={`?image=${nextImageFilename}`}>Next</Link>
+      {currentImageIndex < imagesNames.length - 1 && (
+        <Link to={`?image=${imagesNames[currentImageIndex + 1]}`}>Next</Link>
       )}
-    </>
+    </div>
   );
 };

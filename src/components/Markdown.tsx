@@ -6,6 +6,6 @@ interface Props {
   text: string;
 }
 
-export const Markdown = ({ text }: Props) => {
-  return <ReactMarkdown rehypePlugins={[rehypeRaw]} children={text} />;
-};
+export const Markdown = ({ text }: Props) => (
+  <ReactMarkdown rehypePlugins={[rehypeRaw]} children={text} />
+);

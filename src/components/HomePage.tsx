@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Image } from './Image';
+import { Markdown } from './Markdown';
 import { getSectionsWithImages } from '../services';
 import { SectionWithImages } from '../types';
 
@@ -20,7 +21,7 @@ export const HomePage = () => {
       </main>
 
       <nav>
-        {!sectionsWithImages.length && <>Loading</>}
+        {!sectionsWithImages.length && <>Loading...</>}
 
         {sectionsWithImages.map(({ section, images }) => (
           <div key={section.path}>
@@ -32,7 +33,7 @@ export const HomePage = () => {
               <Image image={image} key={image.url} />
             ))}
 
-            {section.text && <p>{section.text}</p>}
+            {section.text && <Markdown text={section.text} />}
             <br />
           </div>
         ))}
