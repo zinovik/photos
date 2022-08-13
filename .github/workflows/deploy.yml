@@ -24,6 +24,8 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
 
+    - run: npm run test
+
     - name: Deploy
       run: |
         git config --global user.name $user_name

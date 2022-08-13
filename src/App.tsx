@@ -4,7 +4,7 @@ import { HomePage } from './components/HomePage';
 import { SectionPage } from './components/SectionPage';
 import './App.css';
 
-function App() {
+export const App = () => {
   return (
     <div className="App">
       <Routes>
@@ -13,6 +13,4 @@ function App() {
       </Routes>
     </div>
   );
-}
-
-export default App;
+};
