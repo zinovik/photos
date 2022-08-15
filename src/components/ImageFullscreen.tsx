@@ -1,48 +1,64 @@
 import React from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Slider, { Settings } from 'react-slick';
+import { useSearchParams } from 'react-router-dom';
+import { ImageInterface, SectionInterface } from '../types';
 import { getImageFilename } from '../services/helper';
-import { ImageInterface } from '../types';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface Props {
-  image: ImageInterface;
-  imagesNames?: string[];
+  allImages: ImageInterface[];
+  currentImageIndex: number;
+  sections: SectionInterface[];
 }
 
-export const ImageFullscreen = ({ image, imagesNames = [] }: Props) => {
-  const { url, description } = image;
-  const filename = getImageFilename(url);
-
+export const ImageFullscreen = ({
+  allImages,
+  currentImageIndex,
+  sections,
+}: Props) => {
   const [, setSearchParams] = useSearchParams();
 
   const handleImageClick = (): void => {
     setSearchParams({});
   };
 
-  const currentImageIndex = imagesNames.indexOf(filename);
+  const handleImageChange = (currentSlide: number): void => {
+    setSearchParams({ image: getImageFilename(allImages[currentSlide].url) });
+  };
+
+  const settings: Settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: currentImageIndex,
+    afterChange: handleImageChange,
+  };
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0 }}>
-      <LazyLoadImage src={url} height={'600'} onClick={handleImageClick} />
-      <p>{description}</p>
+    <Slider {...settings}>
+      {allImages.map((image, index) => (
+        <div>
+          <img
+            src={image.url}
+            height={'600'}
+            onClick={handleImageClick}
+            alt={image.description}
+          />
 
-      {imagesNames.length > 1 && (
-        <>
-          {`${currentImageIndex + 1} / ${imagesNames.length}`}
-          <br />
-        </>
-      )}
+          <p>{image.description}</p>
 
-      {currentImageIndex > 0 && (
-        <>
-          <Link to={`?image=${imagesNames[currentImageIndex - 1]}`}>Back</Link>
-          <br />
-        </>
-      )}
+          {allImages.length > 1 && (
+            <p>{`${index + 1} / ${allImages.length}`}</p>
+          )}
 
-      {currentImageIndex < imagesNames.length - 1 && (
-        <Link to={`?image=${imagesNames[currentImageIndex + 1]}`}>Next</Link>
-      )}
-    </div>
+          <p>{sections[index].title}</p>
+
+          {sections[index].text && <p>{sections[index].text}</p>}
+        </div>
+      ))}
+    </Slider>
   );
 };

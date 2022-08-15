@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Section } from './Section';
-import { getSectionsWithImages } from '../services';
-import { getLinks, getImagesFilenames } from '../services/helper';
+import { getLinks } from '../services/helper';
 import { SectionWithImages } from '../types';
 
-export const SectionPage = () => {
-  const { section, '*': sections = '' } = useParams();
+interface Props {
+  sectionsWithImages: SectionWithImages[];
+  path: string;
+}
 
-  const path = `${section}/${sections}`.replace(/\/+$/, '');
-
-  const [sectionsWithImages, setSectionWithImages] = useState(
-    [] as SectionWithImages[]
-  );
-
-  useEffect(() => {
-    getSectionsWithImages(path).then((result) => setSectionWithImages(result));
-  }, [path]);
-
+export const SectionPage = ({ sectionsWithImages, path }: Props) => {
   const links = getLinks(path);
-
-  const imagesNames = getImagesFilenames(sectionsWithImages);
 
   return (
     <>
@@ -36,13 +26,12 @@ export const SectionPage = () => {
       </nav>
 
       <main>
-        {!sectionsWithImages.length && <>Loading...</>}
+        {sectionsWithImages.length === 0 && <>Loading...</>}
 
         {sectionsWithImages.map((sectionWithImages) => (
           <Section
             sectionWithImages={sectionWithImages}
             path={path}
-            imagesNames={imagesNames}
             key={sectionWithImages.section.path}
           />
         ))}

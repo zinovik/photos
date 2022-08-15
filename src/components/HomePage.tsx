@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Image } from './Image';
 import { Markdown } from './Markdown';
-import { getSectionsWithImages } from '../services';
 import { SectionWithImages } from '../types';
 
-export const HomePage = () => {
-  const [sectionsWithImages, setSectionsWithImages] = useState(
-    [] as SectionWithImages[]
-  );
+interface Props {
+  sectionsWithImages: SectionWithImages[];
+}
 
-  useEffect(() => {
-    getSectionsWithImages().then((result) => setSectionsWithImages(result));
-  }, []);
-
+export const HomePage = ({ sectionsWithImages }: Props) => {
   return (
     <>
       <main>
@@ -21,7 +16,7 @@ export const HomePage = () => {
       </main>
 
       <nav>
-        {!sectionsWithImages.length && <>Loading...</>}
+        {sectionsWithImages.length === 0 && <>Loading...</>}
 
         {sectionsWithImages.map(({ section, images }) => (
           <div key={section.path}>

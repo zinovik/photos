@@ -7,10 +7,9 @@ import { SectionWithImages } from '../types';
 interface Props {
   sectionWithImages: SectionWithImages;
   path: string;
-  imagesNames: string[];
 }
 
-export const Section = ({ sectionWithImages, path, imagesNames }: Props) => {
+export const Section = ({ sectionWithImages, path }: Props) => {
   const { section, level, images } = sectionWithImages;
 
   return (
@@ -39,7 +38,7 @@ export const Section = ({ sectionWithImages, path, imagesNames }: Props) => {
         {section.text && <Markdown text={section.text} />}
 
         {images.map((image) => (
-          <Image image={image} imagesNames={imagesNames} key={image.url} />
+          <Image image={image} key={image.url} />
         ))}
       </main>
     </>

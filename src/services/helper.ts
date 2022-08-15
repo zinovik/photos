@@ -1,4 +1,4 @@
-import { SectionWithImages } from '../types';
+import { ImageInterface, SectionWithImages } from '../types';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
@@ -23,15 +23,12 @@ export const getLinks = (path: string): { text: string; url: string }[] =>
 export const getImageFilename = (url: string): string =>
   url.split('/').slice(-1)[0] || '';
 
-export const getImagesFilenames = (
+export const getAllImages = (
   sectionsWithImages: SectionWithImages[]
-): string[] =>
+): ImageInterface[] =>
   sectionsWithImages.reduce(
-    (acc: string[], sectionWithImages) => [
-      ...acc,
-      ...sectionWithImages.images.map((image) => getImageFilename(image.url)),
-    ],
-    []
+    (acc, sectionWithImages) => [...acc, ...sectionWithImages.images],
+    [] as ImageInterface[]
   );
 
 export const getDatetimeFromUrl = (url: string): string => {
