@@ -1,7 +1,7 @@
 export interface ImageInterface {
   path: string;
   url: string;
-  urlThumbnail: string;
+  urlThumbnail?: string;
   description: string;
   order?: number;
   text?: string;

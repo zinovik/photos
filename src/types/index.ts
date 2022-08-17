@@ -9,3 +9,4 @@ export interface SectionWithImages {
 
 export * from './SectionInterface';
 export * from './ImageInterface';
+export * from './AgendaInterface';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { SectionPage } from './SectionPage';
 import { ImagePage } from './ImagePage';
@@ -8,7 +8,10 @@ import { SectionWithImages } from '../types';
 export const SectionRouter = () => {
   const { section, '*': sections = '' } = useParams();
 
-  const path = `${section}/${sections}`.replace(/\/+$/, '');
+  const path = useMemo(
+    () => `${section}/${sections}`.replace(/\/+$/, ''),
+    [section, sections]
+  );
 
   const [sectionsWithImages, setSectionWithImages] = useState(
     [] as SectionWithImages[]

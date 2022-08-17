@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SectionWithImages } from '../types';
+import { SectionInterface, SectionWithImages } from '../types';
 import { ImageFullscreen } from './ImageFullscreen';
 import { getAllImages, getImageFilename } from '../services/helper';
 import 'slick-carousel/slick/slick.css';
@@ -11,20 +11,31 @@ interface Props {
 }
 
 export const ImagePage = ({ sectionsWithImages }: Props) => {
-  const allImages = getAllImages(sectionsWithImages);
+  const allImages = useMemo(
+    () => getAllImages(sectionsWithImages),
+    [sectionsWithImages]
+  );
 
   const [searchParams] = useSearchParams();
   const currentImageFilename = searchParams.get('image');
 
-  const currentImageIndex = allImages.findIndex(
-    (image) => getImageFilename(image.url) === currentImageFilename
+  const currentImageIndex = useMemo(
+    () =>
+      allImages.findIndex(
+        (image) => getImageFilename(image.url) === currentImageFilename
+      ),
+    [allImages, currentImageFilename]
   );
 
-  const sections = allImages.map(
-    (image) =>
+  const currentSection: SectionInterface = useMemo(
+    () =>
       sectionsWithImages.find((sectionWithImages) =>
-        sectionWithImages.images.some(({ url }) => url === image.url)
-      )?.section!
+        sectionWithImages.images.some(
+          (sectionImage) =>
+            sectionImage.url === allImages[currentImageIndex].url
+        )
+      )?.section!, // Each image has a section because we got images from sections,
+    [allImages, sectionsWithImages, currentImageIndex]
   );
 
   return (
@@ -35,7 +46,7 @@ export const ImagePage = ({ sectionsWithImages }: Props) => {
         <ImageFullscreen
           allImages={allImages}
           currentImageIndex={currentImageIndex}
-          sections={sections}
+          currentSection={currentSection}
         />
       )}
     </>

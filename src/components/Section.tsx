@@ -1,44 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Title } from './Title';
 import { Markdown } from './Markdown';
 import { Image } from './Image';
-import { SectionWithImages } from '../types';
+import { Agenda } from './Agenda';
+import { AgendaInterface, SectionWithImages } from '../types';
 
 interface Props {
   sectionWithImages: SectionWithImages;
   path: string;
+  agenda: AgendaInterface[];
 }
 
-export const Section = ({ sectionWithImages, path }: Props) => {
+export const Section = ({ sectionWithImages, path, agenda }: Props) => {
   const { section, level, images } = sectionWithImages;
 
   return (
     <>
       <main>
-        {level === 1 && <h2>{section.path === path && section.title}</h2>}
-        {level === 2 && <h3>{section.path === path && section.title}</h3>}
-        {level > 2 && <h4>{section.path === path && section.title}</h4>}
+        <Title level={level}>{section.path === path && section.title}</Title>
 
-        {section.path !== path && level === 1 && (
-          <h2>
+        {section.path !== path && (
+          <Title level={level}>
             <Link to={`/${section.path}`}>{section.title}</Link>
-          </h2>
-        )}
-        {section.path !== path && level === 2 && (
-          <h3>
-            <Link to={`/${section.path}`}>{section.title}</Link>
-          </h3>
-        )}
-        {section.path !== path && level > 2 && (
-          <h4>
-            <Link to={`/${section.path}`}>{section.title}</Link>
-          </h4>
+          </Title>
         )}
 
         {section.text && <Markdown text={section.text} />}
 
         {images.map((image) => (
-          <Image image={image} key={image.url} />
+          <>
+            <Image image={image} key={image.url} />
+            {level === 1 && <Agenda agenda={agenda} />}
+          </>
         ))}
       </main>
     </>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Section } from './Section';
 import { getLinks } from '../services/helper';
-import { SectionWithImages } from '../types';
+import { AgendaInterface, SectionWithImages } from '../types';
 
 interface Props {
   sectionsWithImages: SectionWithImages[];
@@ -10,18 +10,26 @@ interface Props {
 }
 
 export const SectionPage = ({ sectionsWithImages, path }: Props) => {
-  const links = getLinks(path);
+  const links = useMemo(() => getLinks(path), [path]);
+
+  const agenda: AgendaInterface[] = sectionsWithImages
+    .map((sectionWithImages) => ({
+      level: sectionWithImages.level,
+      title: sectionWithImages.section.title,
+      path: sectionWithImages.section.path,
+    }))
+    .splice(1);
 
   return (
     <>
       <nav>
         <br />
-        <Link to="/">gallery</Link>
+        <Link to="/">home</Link>
         {links.map((link) => (
-          <>
+          <span key={link.url}>
             {' / '}
             <Link to={link.url}>{link.text}</Link>
-          </>
+          </span>
         ))}
       </nav>
 
@@ -33,6 +41,7 @@ export const SectionPage = ({ sectionsWithImages, path }: Props) => {
             sectionWithImages={sectionWithImages}
             path={path}
             key={sectionWithImages.section.path}
+            agenda={agenda}
           />
         ))}
       </main>

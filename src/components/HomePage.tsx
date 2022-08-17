@@ -8,31 +8,23 @@ interface Props {
   sectionsWithImages: SectionWithImages[];
 }
 
-export const HomePage = ({ sectionsWithImages }: Props) => {
-  return (
-    <>
-      <main>
-        <p>gallery</p>
-      </main>
+export const HomePage = ({ sectionsWithImages }: Props) => (
+  <main>
+    {sectionsWithImages.length === 0 && <>Loading...</>}
 
-      <nav>
-        {sectionsWithImages.length === 0 && <>Loading...</>}
+    {sectionsWithImages.map(({ section, images }) => (
+      <div key={section.path}>
+        <h1>
+          <Link to={`/${section.path}`}>{section.title}</Link>
+        </h1>
 
-        {sectionsWithImages.map(({ section, images }) => (
-          <div key={section.path}>
-            <h2>
-              <Link to={`/${section.path}`}>{section.title}</Link>
-            </h2>
-
-            {images.map((image) => (
-              <Image image={image} key={image.url} />
-            ))}
-
-            {section.text && <Markdown text={section.text} />}
-            <br />
-          </div>
+        {images.map((image) => (
+          <Image image={image} isClickDisabled key={image.url} />
         ))}
-      </nav>
-    </>
-  );
-};
+
+        {section.text && <Markdown text={section.text} />}
+        <br />
+      </div>
+    ))}
+  </main>
+);
