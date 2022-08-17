@@ -27,7 +27,7 @@ nav {
 }
 
 @media (max-width: 51rem){
-  h1, h2, h3, h4, p {
+  h1, h2, h3, h4, p, nav {
     padding: 0 0.5rem 0 0.5rem;
   }
 }
