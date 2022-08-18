@@ -2,8 +2,9 @@ import React from 'react';
 import Slider, { Settings } from 'react-slick';
 import { useSearchParams } from 'react-router-dom';
 import { Markdown } from './Markdown';
+import { Video } from './Video';
 import { ImageInterface, SectionInterface } from '../types';
-import { getImageFilename } from '../services/helper';
+import { getImageFilename, isImageUrl } from '../services/helper';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -47,11 +48,15 @@ export const ImageFullscreen = ({
         {allImages.map((image) => (
           <>
             <div className="fullscreen-image-container">
-              <img
-                src={image.url}
-                alt={image.description}
-                style={{ maxHeight: '92vh', maxWidth: '100vw' }}
-              />
+              {isImageUrl(image.url) && (
+                <img
+                  src={image.url}
+                  alt={image.description}
+                  style={{ maxHeight: '92vh', maxWidth: '100vw' }}
+                />
+              )}
+
+              {!isImageUrl(image.url) && <Video url={image.url} />}
             </div>
             <p className="image-description">{image.description}</p>
           </>
@@ -64,7 +69,6 @@ export const ImageFullscreen = ({
         {allImages.length > 1 && (
           <span>{`${currentImageIndex + 1} / ${allImages.length} | `}</span>
         )}
-
         <a
           href={allImages[currentImageIndex].url}
           target="_blank"

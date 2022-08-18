@@ -4,6 +4,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Markdown } from './Markdown';
 import { getImageFilename, isImageUrl } from '../services/helper';
 import { ImageInterface } from '../types';
+import { Video } from './Video';
 
 interface Props {
   image: ImageInterface;
@@ -41,11 +42,7 @@ export const Image = ({ image, isClickDisabled }: Props) => {
           />
         )}
 
-        {!isImage && (
-          <video controls>
-            <source src={image.url} type="video/mp4" />
-          </video>
-        )}
+        {!isImage && <Video url={image.url} />}
 
         <p className="image-description">{description}</p>
       </div>

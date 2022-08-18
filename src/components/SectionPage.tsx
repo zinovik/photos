@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Section } from './Section';
 import { getLinks } from '../services/helper';
@@ -11,6 +11,8 @@ interface Props {
 
 export const SectionPage = ({ sectionsWithImages, path }: Props) => {
   const links = useMemo(() => getLinks(path), [path]);
+
+  useEffect(() => window.scrollTo(0, 0), []);
 
   const agenda: AgendaInterface[] = sectionsWithImages
     .map((sectionWithImages) => ({

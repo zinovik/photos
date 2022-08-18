@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 import { AgendaInterface } from '../types';
 
 interface Props {
@@ -7,9 +8,13 @@ interface Props {
 
 export const Agenda = ({ agenda }: Props) => (
   <div>
-    <p>Agenda</p>
-    {agenda.map(({ title, level }) => (
-      <p style={{ paddingLeft: `${level - 1}rem` }}>{title}</p>
+    <h2>Agenda</h2>
+    {agenda.map(({ title, level, path }) => (
+      <>
+        <p style={{ paddingLeft: `${level - 1}rem` }}>
+          <HashLink to={`#${path}`}>{title}</HashLink>
+        </p>
+      </>
     ))}
   </div>
 );

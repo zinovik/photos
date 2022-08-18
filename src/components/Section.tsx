@@ -22,7 +22,9 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
 
         {section.path !== path && (
           <Title level={level}>
-            <Link to={`/${section.path}`}>{section.title}</Link>
+            <Link id={section.path} to={`/${section.path}`}>
+              {section.title}
+            </Link>
           </Title>
         )}
 
