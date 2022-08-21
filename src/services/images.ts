@@ -32,7 +32,9 @@ export const getImages = async (path?: string): Promise<ImageInterface[]> => {
 
       return {
         ...image,
-        description: `${image.description}${datetime ? `, ${datetime}` : ''}`,
+        description: `${image.description}${
+          image.description && datetime && ', '
+        }${datetime}`,
       };
     });
 };

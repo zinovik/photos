@@ -1,6 +1,6 @@
 export interface SectionInterface {
-  title: string;
   path: string;
-  order?: number;
+  title: string;
   text?: string;
+  order?: number;
 }

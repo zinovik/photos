@@ -2,8 +2,8 @@ export interface ImageInterface {
   path: string;
   url: string;
   urlThumbnail?: string;
-  description: string;
-  order?: number;
+  description?: string;
   text?: string;
   date?: string;
+  order?: number;
 }
