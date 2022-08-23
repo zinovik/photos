@@ -30,15 +30,19 @@ export const ImageFullscreen = ({
     });
   };
 
+  const speed = 500;
+
   const settings: Settings = {
     infinite: true,
     lazyLoad: 'anticipated',
-    speed: 500,
+    speed,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: currentImageIndex,
     adaptiveHeight: true,
-    afterChange: handleImageChange,
+    beforeChange: (current, next) => {
+      setTimeout(() => handleImageChange(next), speed);
+    },
   };
 
   return (
