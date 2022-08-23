@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Video } from './Video';
+import { ImageDescription } from './ImageDescription';
 import { Markdown } from './Markdown';
 import { getImageFilename, isImageUrl } from '../services/helper';
+
 import { ImageInterface } from '../types';
-import { Video } from './Video';
 
 interface Props {
   image: ImageInterface;
@@ -13,7 +15,7 @@ interface Props {
 
 export const Image = ({ image, isClickDisabled }: Props) => {
   const { url, urlThumbnail, description, text } = image;
-  const filename = useMemo(() => getImageFilename(url), [url]);
+  const filename = getImageFilename(url);
   const isImage = isImageUrl(url);
 
   const [, setSearchParams] = useSearchParams();
@@ -28,11 +30,10 @@ export const Image = ({ image, isClickDisabled }: Props) => {
     <>
       {text && <Markdown text={text} />}
 
-      <div className="image-container">
+      <div style={{ textAlign: 'center' }}>
         {isImage && (
           <LazyLoadImage
             src={urlThumbnail || url}
-            height="50%"
             onClick={handleImageClick}
             style={{
               objectFit: 'contain',
@@ -44,7 +45,7 @@ export const Image = ({ image, isClickDisabled }: Props) => {
 
         {!isImage && <Video url={image.url} />}
 
-        <p className="image-description">{description}</p>
+        <ImageDescription description={description} />
       </div>
     </>
   );

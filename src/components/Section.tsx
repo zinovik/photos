@@ -31,10 +31,10 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
         {section.text && <Markdown text={section.text} />}
 
         {images.map((image) => (
-          <>
+          <div key={image.url}>
             <Image image={image} key={image.url} />
             {level === 1 && <Agenda agenda={agenda} />}
-          </>
+          </div>
         ))}
       </main>
     </>

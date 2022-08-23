@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Section } from './Section';
 import { getLinks } from '../services/helper';
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const SectionPage = ({ sectionsWithImages, path }: Props) => {
-  const links = useMemo(() => getLinks(path), [path]);
+  const links = getLinks(path);
 
   useEffect(() => window.scrollTo(0, 0), []);
 
@@ -24,11 +24,10 @@ export const SectionPage = ({ sectionsWithImages, path }: Props) => {
 
   return (
     <>
-      <nav>
-        <br />
+      <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
         <Link to="/">home</Link>
         {links.map((link) => (
-          <span key={link.url}>
+          <span>
             {' / '}
             <Link to={link.url}>{link.text}</Link>
           </span>
@@ -36,14 +35,14 @@ export const SectionPage = ({ sectionsWithImages, path }: Props) => {
       </nav>
 
       <main>
-        {sectionsWithImages.length === 0 && <>Loading...</>}
+        {sectionsWithImages.length === 0 && <>⏳ Loading...</>}
 
         {sectionsWithImages.map((sectionWithImages) => (
           <Section
             sectionWithImages={sectionWithImages}
             path={path}
-            key={sectionWithImages.section.path}
             agenda={agenda}
+            key={sectionWithImages.section.path}
           />
         ))}
       </main>

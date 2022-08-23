@@ -1,8 +1,9 @@
 import React from 'react';
 import Slider, { Settings } from 'react-slick';
 import { useSearchParams } from 'react-router-dom';
-import { Markdown } from './Markdown';
 import { Video } from './Video';
+import { ImageDescription } from './ImageDescription';
+import { Markdown } from './Markdown';
 import { ImageInterface, SectionInterface } from '../types';
 import { getImageFilename, isImageUrl } from '../services/helper';
 import 'slick-carousel/slick/slick.css';
@@ -21,9 +22,7 @@ export const ImageFullscreen = ({
 }: Props) => {
   const [, setSearchParams] = useSearchParams();
 
-  const close = (): void => {
-    setSearchParams({});
-  };
+  const close = () => setSearchParams({});
 
   const handleImageChange = (currentSlide: number): void => {
     setSearchParams({
@@ -32,13 +31,13 @@ export const ImageFullscreen = ({
   };
 
   const settings: Settings = {
-    dots: true,
     infinite: true,
     lazyLoad: 'anticipated',
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: currentImageIndex,
+    adaptiveHeight: true,
     afterChange: handleImageChange,
   };
 
@@ -46,26 +45,27 @@ export const ImageFullscreen = ({
     <>
       <Slider {...settings}>
         {allImages.map((image) => (
-          <>
-            <div className="fullscreen-image-container">
+          <div key={image.url}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
               {isImageUrl(image.url) && (
                 <img
                   src={image.url}
                   alt={image.description}
-                  style={{ maxHeight: '92vh', maxWidth: '100vw' }}
+                  style={{ maxHeight: '100vh', maxWidth: '100vw' }}
                 />
               )}
 
               {!isImageUrl(image.url) && <Video url={image.url} />}
             </div>
-            <p className="image-description">{image.description}</p>
-          </>
+            <ImageDescription description={image.description} />
+            <div style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}>
+              {image.text && <Markdown text={image.text} />}
+            </div>
+          </div>
         ))}
       </Slider>
 
-      <div>
-        <br />
-        <br />
+      <div style={{ padding: '0.5rem' }}>
         {allImages.length > 1 && (
           <span>{`${currentImageIndex + 1} / ${allImages.length} | `}</span>
         )}
@@ -77,7 +77,9 @@ export const ImageFullscreen = ({
           full size
         </a>{' '}
         <button onClick={close}>close</button>
-        <p>{currentSection.title}</p>
+        <div style={{ paddingTop: '1rem' }}>
+          <em>{currentSection.title}</em>
+        </div>
         {currentSection.text && <Markdown text={currentSection.text!} />}
       </div>
     </>

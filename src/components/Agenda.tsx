@@ -10,7 +10,7 @@ export const Agenda = ({ agenda }: Props) => (
   <div>
     <h2>Agenda</h2>
     {agenda.map(({ title, level, path }) => (
-      <p style={{ paddingLeft: `${level - 1}rem` }}>
+      <p key={path} style={{ paddingLeft: `${level - 1}rem` }}>
         <HashLink to={`#${path}`}>{title}</HashLink>
       </p>
     ))}

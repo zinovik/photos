@@ -13,10 +13,10 @@ export const HomePage = ({ sectionsWithImages }: Props) => {
 
   return (
     <main>
-      {sectionsWithImages.length === 0 && <>Loading...</>}
+      {sectionsWithImages.length === 0 && <>⏳ Loading...</>}
 
       {sectionsWithImages.map(({ section, images }) => (
-        <div key={section.path}>
+        <div key={section.path} style={{ paddingBottom: '1rem' }}>
           <h1>
             <Link to={`/${section.path}`}>{section.title}</Link>
           </h1>
@@ -26,7 +26,6 @@ export const HomePage = ({ sectionsWithImages }: Props) => {
           ))}
 
           {section.text && <Markdown text={section.text} />}
-          <br />
         </div>
       ))}
     </main>

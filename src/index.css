@@ -22,10 +22,6 @@ main {
   text-align: left;
 }
 
-nav {
-  text-align: right;
-}
-
 @media (max-width: 51rem){
   h1, h2, h3, h4, p, nav {
     padding: 0 0.5rem 0 0.5rem;
@@ -39,19 +35,4 @@ a:link, a:visited {
 
 a:hover, a:active {
   color: black;
-}
-
-.image-container {
-  text-align: center;
-}
-
-.image-description {
-  color: darkgray;
-  font-size: 90%;
-  margin-top: 0;
-}
-
-.fullscreen-image-container {
-  display: flex;
-  justify-content: center;
 }
