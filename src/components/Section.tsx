@@ -16,27 +16,25 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
   const { section, level, images } = sectionWithImages;
 
   return (
-    <>
-      <main>
-        <Title level={level}>{section.path === path && section.title}</Title>
+    <main>
+      <Title level={level}>{section.path === path && section.title}</Title>
 
-        {section.path !== path && (
-          <Title level={level}>
-            <Link id={section.path} to={`/${section.path}`}>
-              {section.title}
-            </Link>
-          </Title>
-        )}
+      {section.path !== path && (
+        <Title level={level}>
+          <Link id={section.path} to={`/${section.path}`}>
+            {section.title}
+          </Link>
+        </Title>
+      )}
 
-        {section.text && <Markdown text={section.text} />}
+      <Markdown text={section.text} />
 
-        {images.map((image) => (
-          <div key={image.url}>
-            <Image image={image} key={image.url} />
-            {level === 1 && <Agenda agenda={agenda} />}
-          </div>
-        ))}
-      </main>
-    </>
+      {images.map((image) => (
+        <div key={image.url}>
+          <Image image={image} key={image.url} />
+          {level === 1 && <Agenda agenda={agenda} />}
+        </div>
+      ))}
+    </main>
   );
 };

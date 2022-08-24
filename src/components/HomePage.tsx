@@ -22,10 +22,10 @@ export const HomePage = ({ sectionsWithImages }: Props) => {
           </h1>
 
           {images.map((image) => (
-            <Image image={image} isClickDisabled key={image.url} />
+            <Image image={image} clickUrl={section.path} key={image.url} />
           ))}
 
-          {section.text && <Markdown text={section.text} />}
+          <Markdown text={section.text} />
         </div>
       ))}
     </main>
