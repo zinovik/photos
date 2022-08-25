@@ -11,9 +11,10 @@ import { ImageInterface } from '../types';
 interface Props {
   image: ImageInterface;
   clickUrl?: string;
+  isSkipText?: boolean;
 }
 
-export const Image = ({ image, clickUrl }: Props) => {
+export const Image = ({ image, clickUrl, isSkipText }: Props) => {
   const { url, urlThumbnail, description, text } = image;
   const filename = getImageFilename(url);
   const isImage = isImageUrl(url);
@@ -40,7 +41,7 @@ export const Image = ({ image, clickUrl }: Props) => {
 
   return (
     <>
-      <Markdown text={text} />
+      {!isSkipText && <Markdown text={text} />}
 
       <div style={{ textAlign: 'center' }}>
         {isImage &&

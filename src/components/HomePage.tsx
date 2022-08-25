@@ -11,10 +11,10 @@ interface Props {
 export const HomePage = ({ sectionsWithImages }: Props) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
+  if (sectionsWithImages.length === 0) return <>⏳ Loading...</>;
+
   return (
     <main>
-      {sectionsWithImages.length === 0 && <>⏳ Loading...</>}
-
       {sectionsWithImages.map(({ section, images }) => (
         <div key={section.path} style={{ paddingBottom: '1rem' }}>
           <h1>
@@ -22,7 +22,12 @@ export const HomePage = ({ sectionsWithImages }: Props) => {
           </h1>
 
           {images.map((image) => (
-            <Image image={image} clickUrl={section.path} key={image.url} />
+            <Image
+              image={image}
+              clickUrl={section.path}
+              key={image.url}
+              isSkipText
+            />
           ))}
 
           <Markdown text={section.text} />
