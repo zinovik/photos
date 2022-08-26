@@ -18,8 +18,8 @@ main, nav {
   margin-right: auto;
 }
 
-main {
-  text-align: left;
+p {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 51rem){

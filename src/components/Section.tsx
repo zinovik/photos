@@ -16,7 +16,7 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
   const { section, level, images } = sectionWithImages;
 
   return (
-    <main>
+    <>
       <Title level={level}>{section.path === path && section.title}</Title>
 
       {section.path !== path && (
@@ -35,6 +35,6 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
           {level === 1 && <Agenda agenda={agenda} />}
         </div>
       ))}
-    </main>
+    </>
   );
 };

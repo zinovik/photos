@@ -33,12 +33,12 @@ export const ImageFullscreen = ({
   const speed = 500;
   const settings: Settings = {
     infinite: true,
-    lazyLoad: 'anticipated',
     speed,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: currentImageIndex,
     adaptiveHeight: true,
+    // use it because afterChange doesn't work with adaptiveHeight
     beforeChange: (_current, next) =>
       setTimeout(() => handleImageChange(next), speed),
   };
@@ -58,16 +58,9 @@ export const ImageFullscreen = ({
 
             {!isImageUrl(image.url) && <Video url={image.url} />}
           </div>
-          <ImageDescription description={image.description} />
 
-          <div
-            style={{
-              paddingLeft: '0.5rem',
-              paddingRight: '0.5rem',
-              paddingBottom: '0.5rem',
-            }}
-          >
-            <Markdown text={image.text} />
+          <div style={{ textAlign: 'center' }}>
+            <ImageDescription description={image.description} />
             {imagesWithSections.length > 1 && (
               <span>{`${currentImageIndex + 1} / ${
                 imagesWithSections.length
@@ -77,9 +70,24 @@ export const ImageFullscreen = ({
               full size
             </a>{' '}
             <button onClick={close}>close</button>
-            <div style={{ paddingTop: '1rem' }}>
+          </div>
+
+          <div
+            style={{
+              paddingLeft: '0.5rem',
+              paddingRight: '0.5rem',
+              paddingBottom: '1rem',
+              maxWidth: '50rem',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            <Markdown text={image.text} />
+
+            <div style={{ textAlign: 'center', paddingTop: '1rem' }}>
               <em>{section.title}</em>
             </div>
+
             <Markdown text={section.text!} />
           </div>
         </div>
