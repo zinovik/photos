@@ -34,9 +34,9 @@ export const SectionPage = ({ sectionsWithImages, path }: Props) => {
         ))}
       </nav>
 
-      {sectionsWithImages.length === 0 && <>⏳ Loading...</>}
-
       <main>
+        {sectionsWithImages.length === 0 && <>⏳ Loading...</>}
+
         {sectionsWithImages.map((sectionWithImages) => (
           <Section
             sectionWithImages={sectionWithImages}

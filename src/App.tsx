@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import { HomeRouter } from './components/HomeRouter';
 import { SectionRouter } from './components/SectionRouter';
 import { BackToTop } from './components/BackToTop';
-import './App.css';
 
 export const App = () => {
   return (
