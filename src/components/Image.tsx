@@ -12,9 +12,10 @@ interface Props {
   image: ImageInterface;
   clickUrl?: string;
   isSkipText?: boolean;
+  level?: number;
 }
 
-export const Image = ({ image, clickUrl, isSkipText }: Props) => {
+export const Image = ({ image, clickUrl, isSkipText, level }: Props) => {
   const { url, urlThumbnail, description, text } = image;
   const filename = getImageFilename(url);
   const isImage = isImageUrl(url);
@@ -41,7 +42,7 @@ export const Image = ({ image, clickUrl, isSkipText }: Props) => {
 
   return (
     <>
-      {!isSkipText && <Markdown text={text} />}
+      {level !== 1 && !isSkipText && <Markdown text={text} />}
 
       <div style={{ textAlign: 'center' }}>
         {isImage &&
@@ -55,6 +56,8 @@ export const Image = ({ image, clickUrl, isSkipText }: Props) => {
 
         <ImageDescription description={description} />
       </div>
+
+      {level === 1 && !isSkipText && <Markdown text={text} />}
     </>
   );
 };

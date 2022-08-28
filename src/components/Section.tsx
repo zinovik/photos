@@ -31,7 +31,7 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
 
       {images.map((image) => (
         <div key={image.url}>
-          <Image image={image} key={image.url} />
+          <Image image={image} key={image.url} level={level} />
           {level === 1 && <Agenda agenda={agenda} />}
         </div>
       ))}
