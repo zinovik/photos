@@ -32,6 +32,7 @@ export const Image = ({ image, clickUrl, isSkipText, level }: Props) => {
     <LazyLoadImage
       src={urlThumbnail || url}
       onClick={handleImageClick}
+      delayTime={500}
       style={{
         objectFit: 'contain',
         maxWidth: '100%',
