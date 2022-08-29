@@ -1,9 +1,9 @@
 export interface ImageInterface {
   path: string;
+  filename: string;
   url: string;
-  urlThumbnail?: string;
+  thumbnail?: string;
   description?: string;
   text?: string | string[];
-  date?: string;
   order?: number;
 }

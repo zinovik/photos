@@ -3,13 +3,21 @@ import { Link } from 'react-router-dom';
 import { Section } from './Section';
 import { getLinks } from '../services/helper';
 import { AgendaInterface, SectionWithImages } from '../types';
+import {
+  LazyComponentProps,
+  trackWindowScroll,
+} from 'react-lazy-load-image-component';
 
-interface Props {
+interface Props extends LazyComponentProps {
   sectionsWithImages: SectionWithImages[];
   path: string;
 }
 
-export const SectionPage = ({ sectionsWithImages, path }: Props) => {
+const SectionPageWithoutTrackWindowScroll = ({
+  sectionsWithImages,
+  path,
+  scrollPosition,
+}: Props) => {
   const links = getLinks(path);
 
   useEffect(() => window.scrollTo(0, 0), []);
@@ -43,9 +51,14 @@ export const SectionPage = ({ sectionsWithImages, path }: Props) => {
             path={path}
             agenda={agenda}
             key={sectionWithImages.section.path}
+            scrollPosition={scrollPosition}
           />
         ))}
       </main>
     </>
   );
 };
+
+export const SectionPage = trackWindowScroll(
+  SectionPageWithoutTrackWindowScroll
+);

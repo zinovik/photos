@@ -32,6 +32,7 @@ export const ImageFullscreen = ({
 
   const speed = 500;
   const settings: Settings = {
+    lazyLoad: 'ondemand',
     infinite: true,
     speed,
     slidesToShow: 1,
@@ -74,8 +75,6 @@ export const ImageFullscreen = ({
 
           <div
             style={{
-              paddingLeft: '0.5rem',
-              paddingRight: '0.5rem',
               paddingBottom: '1rem',
               maxWidth: '50rem',
               marginLeft: 'auto',

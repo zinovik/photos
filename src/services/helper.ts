@@ -47,3 +47,11 @@ export const getDatetimeFromUrl = (url: string): string => {
 
   return `${date}.${month}.${year} ${hour}:${minute}`;
 };
+
+export const getThumbnail = (url: string, type?: string): string => {
+  if (type === 'cloudinary') {
+    return url.replace('/upload/v', '/upload/c_scale,h_0.25,w_0.25/v');
+  }
+
+  return url;
+};

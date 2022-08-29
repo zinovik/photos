@@ -5,14 +5,21 @@ import { Markdown } from './Markdown';
 import { Image } from './Image';
 import { Agenda } from './Agenda';
 import { AgendaInterface, SectionWithImages } from '../types';
+import { ScrollPosition } from 'react-lazy-load-image-component';
 
 interface Props {
   sectionWithImages: SectionWithImages;
   path: string;
   agenda: AgendaInterface[];
+  scrollPosition: ScrollPosition;
 }
 
-export const Section = ({ sectionWithImages, path, agenda }: Props) => {
+export const Section = ({
+  sectionWithImages,
+  path,
+  agenda,
+  scrollPosition,
+}: Props) => {
   const { section, level, images } = sectionWithImages;
 
   return (
@@ -31,7 +38,12 @@ export const Section = ({ sectionWithImages, path, agenda }: Props) => {
 
       {images.map((image) => (
         <div key={image.url}>
-          <Image image={image} key={image.url} level={level} />
+          <Image
+            image={image}
+            key={image.url}
+            level={level}
+            scrollPosition={scrollPosition}
+          />
           {level === 1 && <Agenda agenda={agenda} />}
         </div>
       ))}

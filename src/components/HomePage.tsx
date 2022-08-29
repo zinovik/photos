@@ -3,12 +3,19 @@ import { Link } from 'react-router-dom';
 import { Image } from './Image';
 import { Markdown } from './Markdown';
 import { SectionWithImages } from '../types';
+import {
+  LazyComponentProps,
+  trackWindowScroll,
+} from 'react-lazy-load-image-component';
 
-interface Props {
+interface Props extends LazyComponentProps {
   sectionsWithImages: SectionWithImages[];
 }
 
-export const HomePage = ({ sectionsWithImages }: Props) => {
+const HomePageWithoutTrackWindowScroll = ({
+  sectionsWithImages,
+  scrollPosition,
+}: Props) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   if (sectionsWithImages.length === 0) return <>⏳ Loading...</>;
@@ -27,6 +34,7 @@ export const HomePage = ({ sectionsWithImages }: Props) => {
               clickUrl={section.path}
               key={image.url}
               isSkipText
+              scrollPosition={scrollPosition}
             />
           ))}
 
@@ -36,3 +44,5 @@ export const HomePage = ({ sectionsWithImages }: Props) => {
     </main>
   );
 };
+
+export const HomePage = trackWindowScroll(HomePageWithoutTrackWindowScroll);
