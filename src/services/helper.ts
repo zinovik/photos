@@ -50,7 +50,8 @@ export const getDatetimeFromUrl = (url: string): string => {
 
 export const getThumbnail = (url: string, type?: string): string => {
   if (type === 'cloudinary') {
-    return url.replace('/upload/v', '/upload/c_scale,h_0.25,w_0.25/v');
+    const LEVEL = '0.2';
+    return url.replace('/upload/v', `/upload/c_scale,h_${LEVEL},w_${LEVEL}/v`);
   }
 
   return url;
