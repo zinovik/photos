@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider, { Settings } from 'react-slick';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Video } from './Video';
 import { ImageDescription } from './ImageDescription';
 import { Markdown } from './Markdown';
@@ -84,7 +84,9 @@ export const ImageFullscreen = ({
             <Markdown text={image.text} />
 
             <div style={{ textAlign: 'center', paddingTop: '1rem' }}>
-              <em>{section.title}</em>
+              <Link id={section.path} to={`/${section.path}`}>
+                {section.title}
+              </Link>
             </div>
 
             <Markdown text={section.text!} />

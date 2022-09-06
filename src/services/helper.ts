@@ -3,9 +3,9 @@ import { ImageInterface, SectionWithImages } from '../types';
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
 export const isThisOrChildPath = (
-  instancePath: string,
-  searchPath: string
-): boolean => instancePath.indexOf(searchPath) === 0;
+  sectionPath: string,
+  currentPath: string
+): boolean => sectionPath.indexOf(currentPath) === 0;
 
 export const getLinks = (path: string): { text: string; url: string }[] =>
   path

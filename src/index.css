@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: #111111;
+  color: lightgrey;
 }
 
 code {
@@ -34,7 +37,7 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
-  color: black;
+  color: white;
 }
 
 .slick-list {

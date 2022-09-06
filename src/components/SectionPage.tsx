@@ -35,7 +35,7 @@ const SectionPageWithoutTrackWindowScroll = ({
       <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
         <Link to="/">home</Link>
         {links.map((link) => (
-          <span>
+          <span key={link.url}>
             {' / '}
             <Link to={link.url}>{link.text}</Link>
           </span>
