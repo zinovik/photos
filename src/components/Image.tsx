@@ -11,7 +11,7 @@ import { ImageInterface } from '../types';
 interface Props {
   image: ImageInterface;
   clickUrl?: string;
-  isSkipText?: boolean;
+  isSkipText?: boolean; // used for the home page
   level?: number;
   scrollPosition?: ScrollPosition;
 }
@@ -36,9 +36,14 @@ export const Image = ({
   };
 
   const [src, setSrc] = useState(getThumbnail(url, thumbnail));
+  const [errors, setErrors] = useState(0);
 
   const handleImageError = (): void => {
     console.log('Image loading error! Reloading...');
+    if (errors >= 4) {
+      return;
+    }
+    setErrors(errors + 1);
     setSrc('');
     setTimeout(() => setSrc(getThumbnail(url, thumbnail)), 1000);
   };

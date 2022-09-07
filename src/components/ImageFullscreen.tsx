@@ -60,8 +60,9 @@ export const ImageFullscreen = ({
             {!isImageUrl(image.url) && <Video url={image.url} />}
           </div>
 
+          <ImageDescription description={image.description} />
+
           <div style={{ textAlign: 'center' }}>
-            <ImageDescription description={image.description} />
             {imagesWithSections.length > 1 && (
               <span>{`${currentImageIndex + 1} / ${
                 imagesWithSections.length
@@ -69,26 +70,20 @@ export const ImageFullscreen = ({
             )}
             <a href={image.url} target="_blank" rel="noreferrer">
               full size
-            </a>{' '}
+            </a>
+            {' | '}
             <button onClick={close}>close</button>
           </div>
 
-          <div
-            style={{
-              paddingBottom: '1rem',
-              maxWidth: '50rem',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
-            <Markdown text={image.text} />
+          <Markdown text={image.text} />
 
-            <div style={{ textAlign: 'center', paddingTop: '1rem' }}>
-              <Link id={section.path} to={`/${section.path}`}>
-                {section.title}
-              </Link>
-            </div>
+          <div style={{ textAlign: 'center' }}>
+            <Link id={section.path} to={`/${section.path}`}>
+              {section.title}
+            </Link>
+          </div>
 
+          <div style={{ paddingBottom: '1rem' }}>
             <Markdown text={section.text!} />
           </div>
         </div>
