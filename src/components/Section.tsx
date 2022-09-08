@@ -29,7 +29,7 @@ export const Section = ({
       {section.path !== path && (
         <Title level={level}>
           <Link id={section.path} to={`/${section.path}`}>
-            {section.title}
+            {`${section.title} →`}
           </Link>
         </Title>
       )}
@@ -44,6 +44,7 @@ export const Section = ({
             isFirstSectionImage={level === 1}
             scrollPosition={scrollPosition}
           />
+
           {level === 1 && <Agenda agenda={agenda} />}
         </div>
       ))}

@@ -23,12 +23,12 @@ const SectionPageWithoutTrackWindowScroll = ({
   useEffect(() => window.scrollTo(0, 0), []);
 
   const agenda: AgendaInterface[] = sectionsWithImages
+    .slice(1)
     .map((sectionWithImages) => ({
       level: sectionWithImages.level,
       title: sectionWithImages.section.title,
       path: sectionWithImages.section.path,
-    }))
-    .splice(1);
+    }));
 
   return (
     <>
