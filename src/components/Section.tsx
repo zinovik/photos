@@ -41,7 +41,7 @@ export const Section = ({
           <Image
             image={image}
             key={image.url}
-            level={level}
+            isFirstSectionImage={level === 1}
             scrollPosition={scrollPosition}
           />
           {level === 1 && <Agenda agenda={agenda} />}

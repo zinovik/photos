@@ -11,16 +11,16 @@ import { ImageInterface } from '../types';
 interface Props {
   image: ImageInterface;
   clickUrl?: string;
-  isSkipText?: boolean; // used for the home page
-  level?: number;
+  isSkipImageText?: boolean; // used for the home page
+  isFirstSectionImage?: boolean;
   scrollPosition?: ScrollPosition;
 }
 
 export const Image = ({
   image,
   clickUrl,
-  isSkipText,
-  level,
+  isSkipImageText,
+  isFirstSectionImage,
   scrollPosition,
 }: Props) => {
   const { url, thumbnail, description, text } = image;
@@ -65,7 +65,7 @@ export const Image = ({
 
   return (
     <>
-      {level !== 1 && !isSkipText && <Markdown text={text} />}
+      {!isFirstSectionImage && !isSkipImageText && <Markdown text={text} />}
 
       <div style={{ textAlign: 'center' }}>
         {isImage &&
@@ -80,7 +80,7 @@ export const Image = ({
         <ImageDescription description={description} />
       </div>
 
-      {level === 1 && !isSkipText && <Markdown text={text} />}
+      {isFirstSectionImage && !isSkipImageText && <Markdown text={text} />}
     </>
   );
 };

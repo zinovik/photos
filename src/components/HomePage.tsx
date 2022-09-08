@@ -33,7 +33,7 @@ const HomePageWithoutTrackWindowScroll = ({
               image={image}
               clickUrl={section.path}
               key={image.url}
-              isSkipText
+              isSkipImageText
               scrollPosition={scrollPosition}
             />
           ))}

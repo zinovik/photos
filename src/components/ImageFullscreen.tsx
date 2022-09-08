@@ -62,7 +62,7 @@ export const ImageFullscreen = ({
 
           <ImageDescription description={image.description} />
 
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', paddingBottom: '1rem' }}>
             {imagesWithSections.length > 1 && (
               <span>{`${currentImageIndex + 1} / ${
                 imagesWithSections.length
