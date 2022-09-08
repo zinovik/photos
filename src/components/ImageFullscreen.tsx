@@ -79,7 +79,7 @@ export const ImageFullscreen = ({
 
           <div style={{ textAlign: 'center' }}>
             <Link id={section.path} to={`/${section.path}`}>
-              {section.title}
+              {`${section.title} →`}
             </Link>
           </div>
 
