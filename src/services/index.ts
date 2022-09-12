@@ -1,34 +1,33 @@
 import { getSections } from './sections';
-import { getImages } from './images';
-import { getImageUrls } from './image-urls';
-import { SectionWithImages } from '../types';
+import { getFiles } from './files';
+import { getFileUrls } from './file-urls';
+import { SectionWithFiles } from '../types';
 import { getDatetimeFromUrl } from './helper';
 
-export const getSectionsWithImages = async (
+export const getSectionsWithFiles = async (
   path?: string
-): Promise<SectionWithImages[]> => {
-  const [sections, images, imageUrls] = await Promise.all([
+): Promise<SectionWithFiles[]> => {
+  const [sections, files, fileUrls] = await Promise.all([
     getSections(path),
-    getImages(path),
-    getImageUrls(path),
+    getFiles(path),
+    getFileUrls(),
   ]);
 
   return sections.map((section) => ({
     section,
     level: section.path.split('/').length,
-    images: images
-      .filter((image) => image.path === section.path)
-      .map((image) => {
+    files: files
+      .filter((file) => file.path === section.path)
+      .map((file) => {
         const url =
-          imageUrls.find((url) => url.includes(image.filename)) ||
-          image.filename;
+          fileUrls.find((url) => url.includes(file.filename)) || file.filename;
         const datetime = getDatetimeFromUrl(url);
 
         return {
-          ...image,
+          ...file,
           url,
-          description: `${image.description}${
-            image.description && datetime && ', '
+          description: `${file.description}${
+            file.description && datetime && ', '
           }${datetime}`,
         };
       }),

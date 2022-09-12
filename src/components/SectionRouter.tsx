@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { SectionPage } from './SectionPage';
-import { ImagePage } from './ImagePage';
-import { getSectionsWithImages } from '../services';
-import { SectionWithImages } from '../types';
+import { FilePage } from './FilePage';
+import { getSectionsWithFiles } from '../services';
+import { PARAMETER_NAME } from '../constants';
+import { SectionWithFiles } from '../types';
 
 export const SectionRouter = () => {
   const { section, '*': sections = '' } = useParams();
 
   const path = `${section}/${sections}`.replace(/\/+$/, '');
 
-  const [sectionsWithImages, setSectionWithImages] = useState(
-    [] as SectionWithImages[]
+  const [sectionsWithFiles, setSectionWithFiles] = useState(
+    [] as SectionWithFiles[]
   );
 
   useEffect(() => {
-    getSectionsWithImages(path).then((result) => setSectionWithImages(result));
+    getSectionsWithFiles(path).then((result) => setSectionWithFiles(result));
   }, [path]);
 
   const [searchParams] = useSearchParams();
 
-  const isFullScreen = searchParams.get('image') !== null;
+  const isFullScreen = searchParams.get(PARAMETER_NAME) !== null;
 
   return isFullScreen ? (
-    <ImagePage sectionsWithImages={sectionsWithImages} />
+    <FilePage sectionsWithFiles={sectionsWithFiles} />
   ) : (
-    <SectionPage sectionsWithImages={sectionsWithImages} path={path} />
+    <SectionPage sectionsWithFiles={sectionsWithFiles} path={path} />
   );
 };

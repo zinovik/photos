@@ -2,32 +2,24 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Section } from './Section';
 import { getLinks } from '../services/helper';
-import { AgendaInterface, SectionWithImages } from '../types';
-import {
-  LazyComponentProps,
-  trackWindowScroll,
-} from 'react-lazy-load-image-component';
+import { AgendaInterface, SectionWithFiles } from '../types';
 
-interface Props extends LazyComponentProps {
-  sectionsWithImages: SectionWithImages[];
+interface Props {
+  sectionsWithFiles: SectionWithFiles[];
   path: string;
 }
 
-const SectionPageWithoutTrackWindowScroll = ({
-  sectionsWithImages,
-  path,
-  scrollPosition,
-}: Props) => {
+export const SectionPage = ({ sectionsWithFiles, path }: Props) => {
   const links = getLinks(path);
 
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const agenda: AgendaInterface[] = sectionsWithImages
+  const agenda: AgendaInterface[] = sectionsWithFiles
     .slice(1)
-    .map((sectionWithImages) => ({
-      level: sectionWithImages.level,
-      title: sectionWithImages.section.title,
-      path: sectionWithImages.section.path,
+    .map((sectionWithFiles) => ({
+      level: sectionWithFiles.level,
+      title: sectionWithFiles.section.title,
+      path: sectionWithFiles.section.path,
     }));
 
   return (
@@ -43,22 +35,17 @@ const SectionPageWithoutTrackWindowScroll = ({
       </nav>
 
       <main>
-        {sectionsWithImages.length === 0 && <>⏳ Loading...</>}
+        {sectionsWithFiles.length === 0 && <>⏳ Loading...</>}
 
-        {sectionsWithImages.map((sectionWithImages) => (
+        {sectionsWithFiles.map((sectionWithFiles) => (
           <Section
-            sectionWithImages={sectionWithImages}
+            sectionWithFiles={sectionWithFiles}
             path={path}
             agenda={agenda}
-            key={sectionWithImages.section.path}
-            scrollPosition={scrollPosition}
+            key={sectionWithFiles.section.path}
           />
         ))}
       </main>
     </>
   );
 };
-
-export const SectionPage = trackWindowScroll(
-  SectionPageWithoutTrackWindowScroll
-);

@@ -2,25 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Title } from './Title';
 import { Markdown } from './Markdown';
-import { Image } from './Image';
+import { File } from './File';
 import { Agenda } from './Agenda';
-import { AgendaInterface, SectionWithImages } from '../types';
-import { ScrollPosition } from 'react-lazy-load-image-component';
+import { AgendaInterface, SectionWithFiles } from '../types';
 
 interface Props {
-  sectionWithImages: SectionWithImages;
+  sectionWithFiles: SectionWithFiles;
   path: string;
   agenda: AgendaInterface[];
-  scrollPosition: ScrollPosition;
 }
 
-export const Section = ({
-  sectionWithImages,
-  path,
-  agenda,
-  scrollPosition,
-}: Props) => {
-  const { section, level, images } = sectionWithImages;
+export const Section = ({ sectionWithFiles, path, agenda }: Props) => {
+  const { section, level, files } = sectionWithFiles;
 
   return (
     <>
@@ -36,14 +29,9 @@ export const Section = ({
 
       <Markdown text={section.text} />
 
-      {images.map((image) => (
-        <div key={image.url}>
-          <Image
-            image={image}
-            key={image.url}
-            isFirstSectionImage={level === 1}
-            scrollPosition={scrollPosition}
-          />
+      {files.map((file) => (
+        <div key={file.url}>
+          <File file={file} key={file.url} isFirstSectionFile={level === 1} />
 
           {level === 1 && <Agenda agenda={agenda} />}
         </div>

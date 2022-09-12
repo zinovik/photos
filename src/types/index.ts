@@ -1,12 +1,12 @@
 import { SectionInterface } from './SectionInterface';
-import { ImageInterface } from './ImageInterface';
+import { FileInterface } from './FileInterface';
 
-export interface SectionWithImages {
+export interface SectionWithFiles {
   section: SectionInterface;
   level: number;
-  images: ImageInterface[];
+  files: FileInterface[];
 }
 
 export * from './SectionInterface';
-export * from './ImageInterface';
+export * from './FileInterface';
 export * from './AgendaInterface';

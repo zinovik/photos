@@ -1,40 +1,32 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Image } from './Image';
+import { File } from './File';
 import { Markdown } from './Markdown';
-import { SectionWithImages } from '../types';
-import {
-  LazyComponentProps,
-  trackWindowScroll,
-} from 'react-lazy-load-image-component';
+import { SectionWithFiles } from '../types';
 
-interface Props extends LazyComponentProps {
-  sectionsWithImages: SectionWithImages[];
+interface Props {
+  sectionsWithFiles: SectionWithFiles[];
 }
 
-const HomePageWithoutTrackWindowScroll = ({
-  sectionsWithImages,
-  scrollPosition,
-}: Props) => {
+export const HomePage = ({ sectionsWithFiles }: Props) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
-  if (sectionsWithImages.length === 0) return <>⏳ Loading...</>;
+  if (sectionsWithFiles.length === 0) return <>⏳ Loading...</>;
 
   return (
     <main>
-      {sectionsWithImages.map(({ section, images }) => (
+      {sectionsWithFiles.map(({ section, files }) => (
         <div key={section.path} style={{ paddingBottom: '1rem' }}>
           <h1>
             <Link to={`/${section.path}`}>{section.title}</Link>
           </h1>
 
-          {images.map((image) => (
-            <Image
-              image={image}
+          {files.map((file) => (
+            <File
+              file={file}
               clickUrl={section.path}
-              key={image.url}
-              isSkipImageText
-              scrollPosition={scrollPosition}
+              key={file.url}
+              isSkipFileText
             />
           ))}
 
@@ -44,5 +36,3 @@ const HomePageWithoutTrackWindowScroll = ({
     </main>
   );
 };
-
-export const HomePage = trackWindowScroll(HomePageWithoutTrackWindowScroll);

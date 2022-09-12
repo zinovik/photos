@@ -2,32 +2,33 @@ import React from 'react';
 import Slider, { Settings } from 'react-slick';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Video } from './Video';
-import { ImageDescription } from './ImageDescription';
+import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { ImageInterface, SectionInterface } from '../types';
-import { getImageFilename, isImageUrl } from '../services/helper';
+import { getFilename, isImageUrl } from '../services/helper';
+import { PARAMETER_NAME } from '../constants';
+import { FileInterface, SectionInterface } from '../types';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 interface Props {
-  imagesWithSections: {
-    image: ImageInterface;
+  filesWithSections: {
+    file: FileInterface;
     section: SectionInterface;
   }[];
-  currentImageIndex: number;
+  currentFileIndex: number;
 }
 
-export const ImageFullscreen = ({
-  imagesWithSections,
-  currentImageIndex,
+export const FileFullscreen = ({
+  filesWithSections,
+  currentFileIndex,
 }: Props) => {
   const [, setSearchParams] = useSearchParams();
 
   const close = () => setSearchParams({});
 
-  const handleImageChange = (currentSlide: number) =>
+  const handleFileChange = (currentSlide: number) =>
     setSearchParams({
-      image: getImageFilename(imagesWithSections[currentSlide].image.url),
+      [PARAMETER_NAME]: getFilename(filesWithSections[currentSlide].file.url),
     });
 
   const speed = 500;
@@ -37,45 +38,45 @@ export const ImageFullscreen = ({
     speed,
     slidesToShow: 1,
     slidesToScroll: 1,
-    initialSlide: currentImageIndex,
+    initialSlide: currentFileIndex,
     adaptiveHeight: true,
     // use it because afterChange doesn't work with adaptiveHeight
     beforeChange: (_current, next) =>
-      setTimeout(() => handleImageChange(next), speed),
+      setTimeout(() => handleFileChange(next), speed),
   };
 
   return (
     <Slider {...settings}>
-      {imagesWithSections.map(({ image, section }) => (
-        <div key={image.url}>
+      {filesWithSections.map(({ file, section }) => (
+        <div key={file.url}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {isImageUrl(image.url) && (
+            {isImageUrl(file.url) && (
               <img
-                src={image.url}
-                alt={image.description}
+                src={file.url}
+                alt={file.description}
                 style={{ maxHeight: '100vh', maxWidth: '100vw' }}
               />
             )}
 
-            {!isImageUrl(image.url) && <Video url={image.url} />}
+            {!isImageUrl(file.url) && <Video url={file.url} />}
           </div>
 
-          <ImageDescription description={image.description} />
+          <FileDescription description={file.description} />
 
           <div style={{ textAlign: 'center', paddingBottom: '1rem' }}>
-            {imagesWithSections.length > 1 && (
-              <span>{`${currentImageIndex + 1} / ${
-                imagesWithSections.length
+            {filesWithSections.length > 1 && (
+              <span>{`${currentFileIndex + 1} / ${
+                filesWithSections.length
               } | `}</span>
             )}
-            <a href={image.url} target="_blank" rel="noreferrer">
+            <a href={file.url} target="_blank" rel="noreferrer">
               full size
             </a>
             {' | '}
             <button onClick={close}>close</button>
           </div>
 
-          <Markdown text={image.text} />
+          <Markdown text={file.text} />
 
           <div style={{ textAlign: 'center' }}>
             <Link id={section.path} to={`/${section.path}`}>

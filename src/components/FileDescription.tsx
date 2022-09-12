@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-export const ImageDescription = ({ description }: Props) =>
+export const FileDescription = ({ description }: Props) =>
   description ? (
     <p
       style={{

@@ -1,4 +1,4 @@
-import { ImageInterface, SectionWithImages } from '../types';
+import { FileInterface, SectionWithFiles } from '../types';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
@@ -21,18 +21,18 @@ export const getLinks = (path: string): { text: string; url: string }[] =>
       };
     });
 
-export const getImageFilename = (url: string): string =>
+export const getFilename = (url: string): string =>
   url.split('/').slice(-1)[0] || '';
 
 export const isImageUrl = (url: string): boolean =>
   url.substring(url.length - 3) !== 'mp4';
 
-export const getAllImages = (
-  sectionsWithImages: SectionWithImages[]
-): ImageInterface[] =>
-  sectionsWithImages.reduce(
-    (acc, sectionWithImages) => [...acc, ...sectionWithImages.images],
-    [] as ImageInterface[]
+export const getAllFiles = (
+  sectionsWithFiles: SectionWithFiles[]
+): FileInterface[] =>
+  sectionsWithFiles.reduce(
+    (acc, sectionWithFiles) => [...acc, ...sectionWithFiles.files],
+    [] as FileInterface[]
   );
 
 export const getDatetimeFromUrl = (url: string): string => {

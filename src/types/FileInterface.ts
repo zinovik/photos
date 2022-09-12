@@ -1,4 +1,4 @@
-export interface ImageInterface {
+export interface FileInterface {
   path: string;
   filename: string;
   url: string;

@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { isThisOrChildPath, isTopLevelPath } from './helper';
+import { SECTIONS_URL } from '../constants';
 import { SectionInterface } from '../types';
-
-const SECTIONS_URL =
-  'https://raw.githubusercontent.com/zinovik/gallery-data/main/sections.json';
 
 let loadedSections: SectionInterface[] = [];
 
