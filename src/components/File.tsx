@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import React from 'react';
 import LazyLoad from 'react-lazy-load';
+import { Image } from './Image';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { getFilename, isImageUrl, getThumbnail } from '../services/helper';
+import { isImageUrl } from '../services/helper';
 
 import { FileInterface } from '../types';
 
@@ -21,44 +21,7 @@ export const File = ({
   isSkipFileText,
   isFirstSectionFile,
 }: Props) => {
-  const { url, thumbnail, description, text } = file;
-  const filename = getFilename(url);
-
-  const [, setSearchParams] = useSearchParams();
-
-  const handleImageClick = (): void => {
-    if (clickUrl) return;
-
-    setSearchParams({ file: filename });
-  };
-
-  const [src, setSrc] = useState(getThumbnail(url, thumbnail));
-  const [errors, setErrors] = useState(0);
-
-  const handleImageError = (): void => {
-    console.log('Image loading error! Reloading...');
-    if (errors >= 4) {
-      return;
-    }
-    setErrors(errors + 1);
-    setSrc('');
-    setTimeout(() => setSrc(getThumbnail(url, thumbnail)), 1000);
-  };
-
-  const getImageComponent = () => (
-    <img
-      src={src}
-      alt={file.description}
-      onClick={handleImageClick}
-      onError={handleImageError}
-      style={{
-        objectFit: 'contain',
-        maxWidth: '100%',
-        textAlign: 'center',
-        cursor: 'pointer',
-      }}
-    />
-  );
+  const { url, description, text } = file;
 
   return (
     <>
@@ -66,18 +29,12 @@ export const File = ({
 
       <LazyLoad>
         <div style={{ textAlign: 'center' }}>
-          {isImageUrl(url) &&
-            (clickUrl ? (
-              <Link to={clickUrl}>{getImageComponent()}</Link>
-            ) : (
-              getImageComponent()
-            ))}
-
-          {!isImageUrl(url) && <Video url={file.url} />}
-
-          <FileDescription description={description} />
+          {isImageUrl(url) && <Image file={file} clickUrl={clickUrl} />}
+          {!isImageUrl(url) && <Video url={url} />}
         </div>
       </LazyLoad>
+
+      <FileDescription description={description} />
 
       {isFirstSectionFile && !isSkipFileText && <Markdown text={text} />}
     </>
