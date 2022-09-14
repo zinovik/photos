@@ -1,6 +1,6 @@
 This application requires 3 files:
 
-**SECTIONS_URL** - array of sections:
+**SECTIONS_URL** - an array of sections:
 
 ```typescript
 interface SectionInterface {
@@ -11,7 +11,7 @@ interface SectionInterface {
 }
 ```
 
-**FILES_URL** - array of files (images and videos):
+**FILES_URL** - an array of files (images and videos):
 
 ```typescript
 interface FileInterface {
@@ -25,7 +25,7 @@ interface FileInterface {
 }
 ```
 
-**FILE_URLS_URL** - array of file urls:
+**FILE_URLS_URL** - an array of file urls:
 
 ```typescript
 String[]
