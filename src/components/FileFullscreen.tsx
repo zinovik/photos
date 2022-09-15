@@ -54,7 +54,7 @@ export const FileFullscreen = ({
               <img
                 src={file.url}
                 alt={file.description}
-                style={{ maxHeight: '100vh', maxWidth: '100vw' }}
+                style={{ maxHeight: '100vh', maxWidth: '100%' }}
               />
             )}
 

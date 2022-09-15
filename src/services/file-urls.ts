@@ -1,12 +1,11 @@
-import axios from 'axios';
 import { FILE_URLS_URL } from '../constants';
 
 let loadedFileUrls: string[] = [];
 
 const loadFileUrls = async (): Promise<void> => {
-  const response = await axios.get<string[]>(FILE_URLS_URL);
+  const response = await fetch(FILE_URLS_URL);
 
-  loadedFileUrls = response.data;
+  loadedFileUrls = await response.json();
 };
 
 export const getFileUrls = async (): Promise<string[]> => {

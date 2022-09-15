@@ -10,24 +10,24 @@ import { FileInterface } from '../types';
 
 interface Props {
   file: FileInterface;
-  clickUrl?: string;
+  clickUrl?: string; // if provided - go to, else - open the file fullscreen
   isSkipFileText?: boolean; // used for the home page
-  isFirstSectionFile?: boolean;
+  isTextAfterFile?: boolean;
 }
 
 export const File = ({
   file,
   clickUrl,
   isSkipFileText,
-  isFirstSectionFile,
+  isTextAfterFile,
 }: Props) => {
   const { url, description, text } = file;
 
   return (
     <>
-      {!isFirstSectionFile && !isSkipFileText && <Markdown text={text} />}
+      {!isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
 
-      <LazyLoad>
+      <LazyLoad offset={500}>
         <div style={{ textAlign: 'center' }}>
           {isImageUrl(url) && <Image file={file} clickUrl={clickUrl} />}
           {!isImageUrl(url) && <Video url={url} />}
@@ -36,7 +36,7 @@ export const File = ({
 
       <FileDescription description={description} />
 
-      {isFirstSectionFile && !isSkipFileText && <Markdown text={text} />}
+      {isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
     </>
   );
 };

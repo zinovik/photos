@@ -4,20 +4,28 @@ import { Title } from './Title';
 import { Markdown } from './Markdown';
 import { File } from './File';
 import { Agenda } from './Agenda';
+import { getLevel } from '../services/helper';
 import { AgendaInterface, SectionWithFiles } from '../types';
 
 interface Props {
   sectionWithFiles: SectionWithFiles;
   path: string;
-  agenda: AgendaInterface[];
+  sectionAgenda: AgendaInterface[];
 }
 
-export const Section = ({ sectionWithFiles, path, agenda }: Props) => {
-  const { section, level, files } = sectionWithFiles;
+export const Section = ({ sectionWithFiles, path, sectionAgenda }: Props) => {
+  const { section, files } = sectionWithFiles;
+  const level = getLevel(section.path);
+  const isTopLevelSection = level === 1;
 
   return (
     <>
-      <Title level={level}>{section.path === path && section.title}</Title>
+      {section.path === path && (
+        <>
+          <Title level={level}>{section.title}</Title>
+          {!isTopLevelSection && <Agenda agenda={sectionAgenda} />}
+        </>
+      )}
 
       {section.path !== path && (
         <Title level={level}>
@@ -30,12 +38,10 @@ export const Section = ({ sectionWithFiles, path, agenda }: Props) => {
       <Markdown text={section.text} />
 
       {files.map((file) => (
-        <div key={file.url}>
-          <File file={file} key={file.url} isFirstSectionFile={level === 1} />
-
-          {level === 1 && <Agenda agenda={agenda} />}
-        </div>
+        <File file={file} isTextAfterFile={isTopLevelSection} key={file.url} />
       ))}
+
+      {isTopLevelSection && <Agenda agenda={sectionAgenda} />}
     </>
   );
 };

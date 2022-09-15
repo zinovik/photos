@@ -14,10 +14,9 @@ export const SectionPage = ({ sectionsWithFiles, path }: Props) => {
 
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const agenda: AgendaInterface[] = sectionsWithFiles
+  const sectionAgenda: AgendaInterface[] = sectionsWithFiles
     .slice(1)
     .map((sectionWithFiles) => ({
-      level: sectionWithFiles.level,
       title: sectionWithFiles.section.title,
       path: sectionWithFiles.section.path,
     }));
@@ -41,7 +40,7 @@ export const SectionPage = ({ sectionsWithFiles, path }: Props) => {
           <Section
             sectionWithFiles={sectionWithFiles}
             path={path}
-            agenda={agenda}
+            sectionAgenda={sectionAgenda}
             key={sectionWithFiles.section.path}
           />
         ))}

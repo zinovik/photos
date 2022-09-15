@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { isThisOrChildPath, isTopLevelPath } from './helper';
 import { SECTIONS_URL } from '../constants';
 import { SectionInterface } from '../types';
@@ -6,9 +5,9 @@ import { SectionInterface } from '../types';
 let loadedSections: SectionInterface[] = [];
 
 const loadSections = async (): Promise<void> => {
-  const response = await axios.get<SectionInterface[]>(SECTIONS_URL);
+  const response = await fetch(SECTIONS_URL);
 
-  loadedSections = response.data;
+  loadedSections = await response.json();
 };
 
 export const getSections = async (

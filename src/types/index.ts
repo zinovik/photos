@@ -3,7 +3,6 @@ import { FileInterface } from './FileInterface';
 
 export interface SectionWithFiles {
   section: SectionInterface;
-  level: number;
   files: FileInterface[];
 }
 

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { isThisOrChildPath, isTopLevelPath } from './helper';
 import { FILES_URL } from '../constants';
 import { FileInterface } from '../types';
@@ -6,9 +5,9 @@ import { FileInterface } from '../types';
 let loadedFiles: Omit<FileInterface, 'url'>[] = [];
 
 const loadFiles = async (): Promise<void> => {
-  const response = await axios.get<Omit<FileInterface, 'url'>[]>(FILES_URL);
+  const response = await fetch(FILES_URL);
 
-  loadedFiles = response.data;
+  loadedFiles = await response.json();
 };
 
 export const getFiles = async (
