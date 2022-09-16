@@ -4,8 +4,7 @@ import { Image } from './Image';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { isImageUrl } from '../services/helper';
-
+import { isImageUrl, getThumbnail } from '../services/helper';
 import { FileInterface } from '../types';
 
 interface Props {
@@ -21,7 +20,8 @@ export const File = ({
   isSkipFileText,
   isTextAfterFile,
 }: Props) => {
-  const { url, description, text } = file;
+  const { url, thumbnail, description, text } = file;
+  const thumbnailUrl = getThumbnail(url, thumbnail);
 
   return (
     <>
@@ -29,8 +29,14 @@ export const File = ({
 
       <LazyLoad offset={500}>
         <div style={{ textAlign: 'center' }}>
-          {isImageUrl(url) && <Image file={file} clickUrl={clickUrl} />}
-          {!isImageUrl(url) && <Video url={url} />}
+          {isImageUrl(url) && (
+            <Image
+              url={thumbnailUrl}
+              description={description}
+              clickUrl={clickUrl}
+            />
+          )}
+          {!isImageUrl(url) && <Video url={thumbnailUrl} />}
         </div>
       </LazyLoad>
 

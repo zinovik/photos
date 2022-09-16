@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getFilename, getThumbnail } from '../services/helper';
-import { FileInterface } from '../types';
+import { getFilename } from '../services/helper';
 
 interface Props {
-  file: FileInterface;
+  url: string;
+  description?: string;
   clickUrl?: string;
 }
 
-export const Image = ({ file, clickUrl }: Props) => {
-  const { url, thumbnail, description } = file;
+export const Image = ({ url, description, clickUrl }: Props) => {
   const filename = getFilename(url);
 
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
 
   const handleImageClick = (): void => {
-    if (clickUrl) {
-      navigate(clickUrl);
-    } else {
-      setSearchParams({ file: filename });
-    }
+    if (clickUrl) navigate(clickUrl);
+    else setSearchParams({ file: filename });
   };
 
-  const [src, setSrc] = useState(getThumbnail(url, thumbnail));
+  const [src, setSrc] = useState(url);
   const [errors, setErrors] = useState(0);
 
   const handleImageError = (): void => {
@@ -33,7 +29,7 @@ export const Image = ({ file, clickUrl }: Props) => {
 
     setErrors(errors + 1);
     setSrc('');
-    setTimeout(() => setSrc(getThumbnail(url, thumbnail)), 1000);
+    setTimeout(() => setSrc(url), 1000);
   };
 
   return (
