@@ -4,7 +4,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { getFilename, isImageUrl } from '../services/helper';
+import { getFilename, getThumbnail, isImageUrl } from '../services/helper';
 import { PARAMETER_NAME } from '../constants';
 import { FileInterface, SectionInterface } from '../types';
 import 'slick-carousel/slick/slick.css';
@@ -52,13 +52,15 @@ export const FileFullscreen = ({
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             {isImageUrl(file.url) && (
               <img
-                src={file.url}
+                src={getThumbnail(file.url, true, file.thumbnail)}
                 alt={file.description}
                 style={{ maxHeight: '100vh', maxWidth: '100%' }}
               />
             )}
 
-            {!isImageUrl(file.url) && <Video url={file.url} />}
+            {!isImageUrl(file.url) && (
+              <Video url={getThumbnail(file.url, true, file.thumbnail)} />
+            )}
           </div>
 
           <FileDescription description={file.description} />

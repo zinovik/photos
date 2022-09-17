@@ -49,9 +49,13 @@ export const getDatetimeFromUrl = (url: string): string => {
   return `${date}.${month}.${year} ${hour}:${minute}`;
 };
 
-export const getThumbnail = (url: string, type?: string): string => {
+export const getThumbnail = (
+  url: string,
+  isFullscreen: boolean,
+  type?: string
+): string => {
   if (type === 'cloudinary') {
-    const LEVEL = '0.3';
+    const LEVEL = isFullscreen ? '0.6' : '0.3';
     return url.replace('/upload/v', `/upload/c_scale,h_${LEVEL},w_${LEVEL}/v`);
   }
 

@@ -21,7 +21,7 @@ export const File = ({
   isTextAfterFile,
 }: Props) => {
   const { url, thumbnail, description, text } = file;
-  const thumbnailUrl = getThumbnail(url, thumbnail);
+  const thumbnailUrl = getThumbnail(url, false, thumbnail);
 
   return (
     <>
