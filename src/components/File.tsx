@@ -24,7 +24,7 @@ export const File = ({
   const thumbnailUrl = getThumbnail(url, false, thumbnail);
 
   return (
-    <>
+    <div style={{ minHeight: 500 }}>
       {!isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
 
       <LazyLoad offset={500}>
@@ -43,6 +43,6 @@ export const File = ({
       <FileDescription description={description} />
 
       {isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
-    </>
+    </div>
   );
 };

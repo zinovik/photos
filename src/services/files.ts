@@ -21,5 +21,5 @@ export const getFiles = async (
     .filter((file) =>
       path ? isThisOrChildPath(file.path, path) : isTopLevelPath(file.path)
     )
-    .sort((p1, p2) => (p2.order || 0) - (p1.order || 0));
+    .sort((f1, f2) => (f2.order || 0) - (f1.order || 0));
 };
