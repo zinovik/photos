@@ -59,7 +59,7 @@ export const getThumbnail = (
     const getLevel = (width: number, isFullscreen: boolean): string => {
       if (width > 800) return isFullscreen ? '0.6' : '0.3';
 
-      return width < 400 ? '0.15' : '0.25';
+      return width < 400 ? '0.2' : '0.3';
     };
 
     const LEVEL = getLevel(width, isFullscreen);
