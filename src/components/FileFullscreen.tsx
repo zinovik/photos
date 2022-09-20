@@ -52,14 +52,14 @@ export const FileFullscreen = ({
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             {isImageUrl(file.url) && (
               <img
-                src={getThumbnail(file.url, true, file.thumbnail)}
+                src={getThumbnail(file.url, window.innerWidth, true, file.thumbnail)}
                 alt={file.description}
                 style={{ maxHeight: '100vh', maxWidth: '100%' }}
               />
             )}
 
             {!isImageUrl(file.url) && (
-              <Video url={getThumbnail(file.url, true, file.thumbnail)} />
+              <Video url={getThumbnail(file.url, window.innerWidth, true, file.thumbnail)} />
             )}
           </div>
 

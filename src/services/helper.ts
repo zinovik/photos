@@ -51,11 +51,19 @@ export const getDatetimeFromUrl = (url: string): string => {
 
 export const getThumbnail = (
   url: string,
+  width: number,
   isFullscreen: boolean,
   type?: string
 ): string => {
   if (type === 'cloudinary') {
-    const LEVEL = isFullscreen ? '0.6' : '0.3';
+    const getLevel = (width: number, isFullscreen: boolean): string => {
+      if (width > 800) return isFullscreen ? '0.6' : '0.3';
+
+      return width < 400 ? '0.15' : '0.25';
+    };
+
+    const LEVEL = getLevel(width, isFullscreen);
+
     return url.replace('/upload/v', `/upload/c_scale,h_${LEVEL},w_${LEVEL}/v`);
   }
 
