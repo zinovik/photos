@@ -29,5 +29,5 @@ interface FileInterface {
 **FILE_URLS_URL** - an array of file urls:
 
 ```typescript
-String[]
+string[]
 ```
