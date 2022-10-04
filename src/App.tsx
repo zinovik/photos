@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { HomeRouter } from './components/HomeRouter';
-import { SectionRouter } from './components/SectionRouter';
+import { HomeRouter } from './routers/HomeRouter';
+import { SectionRouter } from './routers/SectionRouter';
 import { BackToTop } from './components/BackToTop';
 
 export const App = () => {

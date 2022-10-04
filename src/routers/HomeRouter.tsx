@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { HomePage } from './HomePage';
+import { Meta } from '../components/Meta';
+import { HomePage } from '../pages/HomePage';
 import { getSectionsWithFiles } from '../services';
 import { SectionWithFiles } from '../types';
 
@@ -12,5 +13,10 @@ export const HomeRouter = () => {
     getSectionsWithFiles().then((result) => setSectionWithFiles(result));
   }, []);
 
-  return <HomePage sectionsWithFiles={sectionsWithFiles} />;
+  return (
+    <>
+      <Meta sectionsWithFiles={sectionsWithFiles} isHome />
+      <HomePage sectionsWithFiles={sectionsWithFiles} />
+    </>
+  );
 };

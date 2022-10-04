@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { File } from './File';
-import { Markdown } from './Markdown';
+import { File } from '../components/File';
+import { Markdown } from '../components/Markdown';
 import { SectionWithFiles } from '../types';
 
 interface Props {

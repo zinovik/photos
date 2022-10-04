@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Section } from './Section';
+import { Section } from '../components/Section';
 import { getLinks } from '../services/helper';
 import { AgendaInterface, SectionWithFiles } from '../types';
 
