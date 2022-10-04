@@ -1,7 +1,7 @@
 export const PARAMETER_NAME = 'file';
 
 const baseUrl =
-  process.env.NODE_ENV === 'development' && false
+  process.env.NODE_ENV === 'development'
     ? 'http://localhost:5000'
     : 'https://raw.githubusercontent.com/zinovik/gallery-data/main';
 
