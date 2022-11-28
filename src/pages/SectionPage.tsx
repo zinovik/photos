@@ -7,12 +7,19 @@ import { AgendaInterface, SectionWithFiles } from '../types';
 interface Props {
   sectionsWithFiles: SectionWithFiles[];
   path: string;
+  hash: string;
 }
 
-export const SectionPage = ({ sectionsWithFiles, path }: Props) => {
+export const SectionPage = ({ sectionsWithFiles, path, hash }: Props) => {
   const links = getLinks(path);
 
   useEffect(() => window.scrollTo(0, 0), []);
+
+  useEffect(() => {
+    if (!hash) return;
+    const element = document.getElementById(hash.substring(1));
+    if (element) element.scrollIntoView();
+  }, [sectionsWithFiles, hash]);
 
   const sectionAgenda: AgendaInterface[] = sectionsWithFiles
     .slice(1)
@@ -37,12 +44,13 @@ export const SectionPage = ({ sectionsWithFiles, path }: Props) => {
         {sectionsWithFiles.length === 0 && <>⏳ Loading...</>}
 
         {sectionsWithFiles.map((sectionWithFiles) => (
-          <Section
-            sectionWithFiles={sectionWithFiles}
-            path={path}
-            sectionAgenda={sectionAgenda}
-            key={sectionWithFiles.section.path}
-          />
+          <div id={path} key={sectionWithFiles.section.path}>
+            <Section
+              sectionWithFiles={sectionWithFiles}
+              path={path}
+              sectionAgenda={sectionAgenda}
+            />
+          </div>
         ))}
       </main>
     </>

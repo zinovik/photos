@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { SectionPage } from '../pages/SectionPage';
 import { FilePage } from '../components/FilePage';
 import { getSectionsWithFiles } from '../services';
@@ -8,6 +8,7 @@ import { SectionWithFiles } from '../types';
 
 export const SectionRouter = () => {
   const { section, '*': sections = '' } = useParams();
+  const { hash } = useLocation();
 
   const path = `${section}/${sections}`.replace(/\/+$/, '');
 
@@ -26,6 +27,10 @@ export const SectionRouter = () => {
   return isFullScreen ? (
     <FilePage sectionsWithFiles={sectionsWithFiles} />
   ) : (
-    <SectionPage sectionsWithFiles={sectionsWithFiles} path={path} />
+    <SectionPage
+      sectionsWithFiles={sectionsWithFiles}
+      path={path}
+      hash={hash}
+    />
   );
 };
