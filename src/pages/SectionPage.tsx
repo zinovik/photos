@@ -8,18 +8,19 @@ interface Props {
   sectionsWithFiles: SectionWithFiles[];
   path: string;
   hash: string;
+  file: string | null;
 }
 
-export const SectionPage = ({ sectionsWithFiles, path, hash }: Props) => {
+export const SectionPage = ({ sectionsWithFiles, path, hash, file }: Props) => {
   const links = getLinks(path);
 
   useEffect(() => window.scrollTo(0, 0), []);
 
   useEffect(() => {
-    if (!hash) return;
-    const element = document.getElementById(hash.substring(1));
+    if (!hash && !file) return;
+    const element = document.getElementById(file || hash.substring(1));
     if (element) element.scrollIntoView();
-  }, [sectionsWithFiles, hash]);
+  }, [sectionsWithFiles, hash, file]);
 
   const sectionAgenda: AgendaInterface[] = sectionsWithFiles
     .slice(1)

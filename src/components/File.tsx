@@ -9,7 +9,7 @@ import { FileInterface } from '../types';
 
 interface Props {
   file: FileInterface;
-  clickUrl?: string; // if provided - go to, else - open the file fullscreen
+  clickUrl?: string; // if provided - go to on click
   isSkipFileText?: boolean; // used for the home page
   isTextAfterFile?: boolean;
 }
@@ -21,10 +21,10 @@ export const File = ({
   isTextAfterFile,
 }: Props) => {
   const { url, thumbnail, description, text } = file;
-  const thumbnailUrl = getThumbnail(url, window.innerWidth, false, thumbnail);
+  const thumbnailUrl = getThumbnail(url, window.innerWidth, thumbnail);
 
   return (
-    <div style={{ minHeight: 200 }}>
+    <div id={file.filename} style={{ minHeight: 200 }}>
       {!isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
 
       <LazyLoad offset={500}>

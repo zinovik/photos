@@ -16,7 +16,7 @@ code {
 }
 
 main, nav, p {
-  max-width: 50rem;
+  max-width: 55rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -25,7 +25,7 @@ p {
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 51rem){
+@media (max-width: 56rem){
   h1, h2, h3, h4, p, nav {
     padding: 0 0.5rem 0 0.5rem;
   }
@@ -38,10 +38,6 @@ a:link, a:visited {
 
 a:hover, a:active {
   color: white;
-}
-
-.slick-list {
-  min-height: 100vh;
 }
 
 .LazyLoad {

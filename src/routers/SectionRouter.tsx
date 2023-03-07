@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { SectionPage } from '../pages/SectionPage';
-import { FilePage } from '../components/FilePage';
 import { getSectionsWithFiles } from '../services';
-import { PARAMETER_NAME } from '../constants';
+import { PARAMETER_FILE } from '../constants';
 import { SectionWithFiles } from '../types';
 
 export const SectionRouter = () => {
@@ -22,15 +21,14 @@ export const SectionRouter = () => {
 
   const [searchParams] = useSearchParams();
 
-  const isFullScreen = searchParams.get(PARAMETER_NAME) !== null;
+  const file = searchParams.get(PARAMETER_FILE);
 
-  return isFullScreen ? (
-    <FilePage sectionsWithFiles={sectionsWithFiles} />
-  ) : (
+  return (
     <SectionPage
       sectionsWithFiles={sectionsWithFiles}
       path={path}
       hash={hash}
+      file={file}
     />
   );
 };
