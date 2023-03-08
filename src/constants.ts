@@ -2,7 +2,7 @@ export const PARAMETER_FILE = 'file';
 
 const baseUrl =
   process.env.NODE_ENV === 'development'
-    ? 'https://raw.githubusercontent.com/zinovik/gallery-data/main'
+    ? 'http://localhost:5000'
     : 'https://raw.githubusercontent.com/zinovik/gallery-data/main';
 
 export const SECTIONS_URL = `${baseUrl}/sections.json`;
