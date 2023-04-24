@@ -55,7 +55,7 @@ export const getThumbnail = (
   type?: string
 ): string => {
   if (type === 'cloudinary') {
-    const LEVEL = width < 400 ? '0.2' : '0.4';
+    const LEVEL = width < 400 ? '0.3' : '0.6';
 
     return url.replace('/upload/v', `/upload/c_scale,h_${LEVEL},w_${LEVEL}/v`);
   }
