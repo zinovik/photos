@@ -1,11 +1,11 @@
-import { SectionInterface } from './SectionInterface';
+import { AlbumInterface } from './AlbumInterface';
 import { FileInterface } from './FileInterface';
 
-export interface SectionWithFiles {
-  section: SectionInterface;
+export interface AlbumWithFiles {
+  album: AlbumInterface;
   files: FileInterface[];
 }
 
-export * from './SectionInterface';
+export * from './AlbumInterface';
 export * from './FileInterface';
 export * from './AgendaInterface';

@@ -1,4 +1,4 @@
-export interface SectionInterface {
+export interface AlbumInterface {
   path: string;
   title: string;
   text?: string | string[];

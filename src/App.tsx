@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { HomeRouter } from './routers/HomeRouter';
-import { SectionRouter } from './routers/SectionRouter';
+import { AlbumRouter } from './routers/AlbumRouter';
 import { BackToTop } from './components/BackToTop';
 
 export const App = () => {
@@ -9,7 +9,7 @@ export const App = () => {
     <div className="App">
       <Routes>
         <Route path="" element={<HomeRouter />} />
-        <Route path=":section/*" element={<SectionRouter />} />
+        <Route path=":album/*" element={<AlbumRouter />} />
       </Routes>
       <BackToTop />
     </div>

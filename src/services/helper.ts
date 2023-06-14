@@ -1,12 +1,12 @@
-import { FileInterface, SectionWithFiles } from '../types';
+import { FileInterface, AlbumWithFiles } from '../types';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
 export const isThisOrChildPath = (
-  sectionPath: string,
+  albumPath: string,
   currentPath: string
 ): boolean =>
-  sectionPath === currentPath || sectionPath.indexOf(`${currentPath}/`) === 0;
+  albumPath === currentPath || albumPath.indexOf(`${currentPath}/`) === 0;
 
 export const getLinks = (path: string): { text: string; url: string }[] =>
   path
@@ -28,10 +28,10 @@ export const isImageUrl = (url: string): boolean =>
   url.substring(url.length - 3) !== 'mp4';
 
 export const getAllFiles = (
-  sectionsWithFiles: SectionWithFiles[]
+  albumsWithFiles: AlbumWithFiles[]
 ): FileInterface[] =>
-  sectionsWithFiles.reduce(
-    (acc, sectionWithFiles) => [...acc, ...sectionWithFiles.files],
+  albumsWithFiles.reduce(
+    (acc, albumWithFiles) => [...acc, ...albumWithFiles.files],
     [] as FileInterface[]
   );
 

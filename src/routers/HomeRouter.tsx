@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { HomePage } from '../pages/HomePage';
-import { getSectionsWithFiles } from '../services';
-import { SectionWithFiles } from '../types';
+import { getAlbumsWithFiles } from '../services';
+import { AlbumWithFiles } from '../types';
 
 export const HomeRouter = () => {
-  const [sectionsWithFiles, setSectionWithFiles] = useState(
-    [] as SectionWithFiles[]
-  );
+  const [albumsWithFiles, setAlbumWithFiles] = useState([] as AlbumWithFiles[]);
 
   useEffect(() => {
-    getSectionsWithFiles().then((result) => setSectionWithFiles(result));
+    getAlbumsWithFiles().then((result) => setAlbumWithFiles(result));
   }, []);
 
-  return <HomePage sectionsWithFiles={sectionsWithFiles} />;
+  return <HomePage albumsWithFiles={albumsWithFiles} />;
 };

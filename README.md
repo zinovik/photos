@@ -1,9 +1,9 @@
 This application requires 3 files:
 
-**SECTIONS_URL** - an array of sections:
+**ALBUMS_URL** - an array of albums:
 
 ```typescript
-interface SectionInterface {
+interface AlbumInterface {
   path: string;
   title: string;
   text?: string | string[];

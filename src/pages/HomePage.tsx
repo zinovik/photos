@@ -2,35 +2,35 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { File } from '../components/File';
 import { Markdown } from '../components/Markdown';
-import { SectionWithFiles } from '../types';
+import { AlbumWithFiles } from '../types';
 
 interface Props {
-  sectionsWithFiles: SectionWithFiles[];
+  albumsWithFiles: AlbumWithFiles[];
 }
 
-export const HomePage = ({ sectionsWithFiles }: Props) => {
+export const HomePage = ({ albumsWithFiles }: Props) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
-  if (sectionsWithFiles.length === 0) return <>⏳ Loading...</>;
+  if (albumsWithFiles.length === 0) return <>⏳ Loading...</>;
 
   return (
     <main>
-      {sectionsWithFiles.map(({ section, files }) => (
-        <div key={section.path} style={{ paddingBottom: '1rem' }}>
+      {albumsWithFiles.map(({ album, files }) => (
+        <div key={album.path} style={{ paddingBottom: '1rem' }}>
           <h1>
-            <Link to={`/${section.path}`}>{section.title}</Link>
+            <Link to={`/${album.path}`}>{album.title}</Link>
           </h1>
 
           {files.map((file) => (
             <File
               file={file}
-              clickUrl={section.path}
+              clickUrl={album.path}
               key={file.url}
               isSkipFileText
             />
           ))}
 
-          <Markdown text={section.text} />
+          <Markdown text={album.text} />
         </div>
       ))}
     </main>

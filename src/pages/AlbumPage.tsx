@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Section } from '../components/Section';
+import { Album } from '../components/Album';
 import { getLinks } from '../services/helper';
-import { AgendaInterface, SectionWithFiles } from '../types';
+import { AgendaInterface, AlbumWithFiles } from '../types';
 
 interface Props {
-  sectionsWithFiles: SectionWithFiles[];
+  albumsWithFiles: AlbumWithFiles[];
   path: string;
   hash: string;
   file: string | null;
 }
 
-export const SectionPage = ({ sectionsWithFiles, path, hash, file }: Props) => {
+export const AlbumPage = ({ albumsWithFiles, path, hash, file }: Props) => {
   const links = getLinks(path);
 
   useEffect(() => window.scrollTo(0, 0), []);
@@ -20,13 +20,13 @@ export const SectionPage = ({ sectionsWithFiles, path, hash, file }: Props) => {
     if (!hash && !file) return;
     const element = document.getElementById(file || hash.substring(1));
     if (element) element.scrollIntoView();
-  }, [sectionsWithFiles, hash, file]);
+  }, [albumsWithFiles, hash, file]);
 
-  const sectionAgenda: AgendaInterface[] = sectionsWithFiles
+  const albumAgenda: AgendaInterface[] = albumsWithFiles
     .slice(1)
-    .map((sectionWithFiles) => ({
-      title: sectionWithFiles.section.title,
-      path: sectionWithFiles.section.path,
+    .map((albumWithFiles) => ({
+      title: albumWithFiles.album.title,
+      path: albumWithFiles.album.path,
     }));
 
   return (
@@ -42,14 +42,14 @@ export const SectionPage = ({ sectionsWithFiles, path, hash, file }: Props) => {
       </nav>
 
       <main>
-        {sectionsWithFiles.length === 0 && <>⏳ Loading...</>}
+        {albumsWithFiles.length === 0 && <>⏳ Loading...</>}
 
-        {sectionsWithFiles.map((sectionWithFiles) => (
-          <div id={path} key={sectionWithFiles.section.path}>
-            <Section
-              sectionWithFiles={sectionWithFiles}
+        {albumsWithFiles.map((albumWithFiles) => (
+          <div id={path} key={albumWithFiles.album.path}>
+            <Album
+              albumWithFiles={albumWithFiles}
               path={path}
-              sectionAgenda={sectionAgenda}
+              albumAgenda={albumAgenda}
             />
           </div>
         ))}
