@@ -18,7 +18,7 @@ interface FileInterface {
   path: string;
   filename: string;
   url: string;
-  thumbnail?: string;
+  fix?: boolean;
   description?: string;
   text?: string | string[];
   order?: number;
@@ -26,8 +26,11 @@ interface FileInterface {
 }
 ```
 
-**FILE_URLS_URL** - an array of file urls:
+**SOURCES_CONFIG_URL** - an object with the file sources:
 
 ```typescript
-string[]
+type SourcesConfig = Record<
+  string,
+  { url: string; type: 'image' | 'video' } | undefined
+>;
 ```

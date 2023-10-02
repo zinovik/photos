@@ -1,3 +1,4 @@
+import { Host } from '../constants';
 import { FileInterface, AlbumWithFiles } from '../types';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
@@ -35,7 +36,7 @@ export const getAllFiles = (
     [] as FileInterface[]
   );
 
-export const getDatetimeFromUrl = (url: string): string => {
+export const getDatetimeFromFilename = (url: string): string => {
   const dateTimeParsed = url.match(
     new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})')
   );
@@ -49,12 +50,8 @@ export const getDatetimeFromUrl = (url: string): string => {
   return `${date}.${month}.${year} ${hour}:${minute}`;
 };
 
-export const getThumbnail = (
-  url: string,
-  width: number,
-  type?: string
-): string => {
-  if (type === 'cloudinary') {
+export const getThumbnail = (url: string, width: number): string => {
+  if (url.includes(Host.cloudinary)) {
     const LEVEL = width < 400 ? '0.3' : '0.6';
 
     return url.replace('/upload/v', `/upload/c_scale,h_${LEVEL},w_${LEVEL}/v`);
