@@ -34,3 +34,12 @@ type SourcesConfig = Record<
   { url: string; type: 'image' | 'video' } | undefined
 >;
 ```
+
+### create bucket, setup cors, check the bucket's cors:
+
+```bash
+gcloud storage buckets create gs://zinovik-gallery --location=us-central1
+gcloud storage buckets update gs://zinovik-gallery --cors-file=cors_file.json
+gcloud storage buckets describe gs://zinovik-gallery --format="default(cors_config)"
+gcloud storage buckets update gs://zinovik-gallery --versioning
+```
