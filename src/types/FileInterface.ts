@@ -6,6 +6,5 @@ export interface FileInterface {
   fix?: boolean;
   description?: string;
   text?: string | string[];
-  order?: number;
   isVertical?: boolean;
 }

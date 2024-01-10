@@ -17,9 +17,9 @@ export const Agenda = ({ agenda }: Props) => {
 
   return (
     <div>
-      {agenda.map(({ title, path }) => (
+      {agenda.map(({ title, path }, index) => (
         <p
-          key={path}
+          key={path + index}
           style={{ paddingLeft: `${getLevel(path) - minLevel + 1}rem` }}
         >
           <HashLink to={`#${path}`}>{`${title} ↓`}</HashLink>{' '}

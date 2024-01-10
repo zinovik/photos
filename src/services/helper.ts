@@ -1,5 +1,5 @@
 import { Host } from '../constants';
-import { FileInterface, AlbumWithFiles } from '../types';
+import { AlbumWithFiles, FileInterface } from '../types';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
@@ -7,7 +7,7 @@ export const isThisOrChildPath = (
   albumPath: string,
   currentPath: string
 ): boolean =>
-  albumPath === currentPath || albumPath.indexOf(`${currentPath}/`) === 0;
+  albumPath === currentPath || albumPath.startsWith(`${currentPath}/`);
 
 export const getLinks = (path: string): { text: string; url: string }[] =>
   path
@@ -28,15 +28,9 @@ export const getFilename = (url: string): string =>
 export const isImageUrl = (url: string): boolean =>
   url.substring(url.length - 3) !== 'mp4';
 
-export const getAllFiles = (
-  albumsWithFiles: AlbumWithFiles[]
-): FileInterface[] =>
-  albumsWithFiles.reduce(
-    (acc, albumWithFiles) => [...acc, ...albumWithFiles.files],
-    [] as FileInterface[]
-  );
-
-export const getDatetimeFromFilename = (url: string): string => {
+const getDatetimeValues = (
+  url: string
+): '' | [string, string, string, string, string] => {
   const dateTimeParsed = url.match(
     new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})')
   );
@@ -47,7 +41,27 @@ export const getDatetimeFromFilename = (url: string): string => {
 
   const [, year, month, date, hour, minute] = dateTimeParsed;
 
+  return [year, month, date, hour, minute];
+};
+
+export const getDatetimeFromFilename = (url: string): string => {
+  const datetimeValues = getDatetimeValues(url);
+
+  if (datetimeValues === '') return '';
+
+  const [year, month, date, hour, minute] = datetimeValues;
+
   return `${date}.${month}.${year} ${hour}:${minute}`;
+};
+
+export const getDatetimeCodeFromFilename = (url: string): string => {
+  const datetimeValues = getDatetimeValues(url);
+
+  if (datetimeValues === '') return '';
+
+  const [year, month, date, hour, minute] = datetimeValues;
+
+  return `${year}${month}${date}${hour}${minute}`;
 };
 
 export const getThumbnail = (url: string, width: number): string => {
@@ -61,3 +75,35 @@ export const getThumbnail = (url: string, width: number): string => {
 };
 
 export const getLevel = (path: string): number => path.split('/').length;
+
+export const sortAlbumsWithFilesByFilenames = (
+  albumsWithFiles: AlbumWithFiles[]
+): AlbumWithFiles[] =>
+  albumsWithFiles
+    .filter((album) => album.files.length > 0)
+    .reduce(
+      (acc, album) => [...acc, ...album.files.map((file) => ({ ...file }))],
+      [] as FileInterface[]
+    )
+    .sort((file1, file2) =>
+      getDatetimeCodeFromFilename(file2.filename).localeCompare(
+        getDatetimeCodeFromFilename(file1.filename)
+      )
+    )
+    .reduce((acc, file) => {
+      if (acc.length === 0 || acc[acc.length - 1].album.path !== file.path) {
+        const { album } = albumsWithFiles.find(
+          (albumWithFiles) => albumWithFiles.album.path === file.path
+        ) as AlbumWithFiles;
+
+        return [...acc, { album, files: [file] }];
+      }
+
+      const accExceptLast = acc.slice(0, acc.length - 1);
+      const accLast = acc[acc.length - 1];
+
+      return [
+        ...accExceptLast,
+        { ...accLast, files: [...accLast.files, file] },
+      ];
+    }, [] as AlbumWithFiles[]);

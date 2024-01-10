@@ -45,7 +45,14 @@ export const AlbumPage = ({ albumsWithFiles, path, hash, file }: Props) => {
         {albumsWithFiles.length === 0 && <>⏳ Loading...</>}
 
         {albumsWithFiles.map((albumWithFiles) => (
-          <div id={path} key={albumWithFiles.album.path}>
+          <div
+            id={path}
+            key={
+              albumWithFiles.album.path +
+              '-' +
+              albumWithFiles.files.map((file) => file.filename).join(',')
+            }
+          >
             <Album
               albumWithFiles={albumWithFiles}
               path={path}

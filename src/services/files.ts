@@ -1,4 +1,8 @@
-import { isThisOrChildPath, isTopLevelPath } from './helper';
+import {
+  getDatetimeCodeFromFilename,
+  isThisOrChildPath,
+  isTopLevelPath,
+} from './helper';
 import { FILES_URL } from '../constants';
 import { FileInterface } from '../types';
 
@@ -11,15 +15,31 @@ const loadFiles = async (): Promise<void> => {
 };
 
 export const getFiles = async (
-  path?: string
+  path?: string,
+  dateRanges?: string[][]
 ): Promise<Omit<FileInterface, 'url'>[]> => {
   if (loadedFiles.length === 0) {
     await loadFiles();
   }
 
   return [...loadedFiles]
-    .filter((file) =>
-      path ? isThisOrChildPath(file.path, path) : isTopLevelPath(file.path)
+    .filter(
+      (file) =>
+        !path ||
+        (path === '/'
+          ? isTopLevelPath(file.path)
+          : isThisOrChildPath(file.path, path))
     )
-    .sort((f1, f2) => (f2.order || 0) - (f1.order || 0));
+    .filter(
+      (file) =>
+        !dateRanges ||
+        dateRanges.some(([from, to]) => {
+          const fileDateCode = getDatetimeCodeFromFilename(file.filename).slice(
+            0,
+            8
+          );
+
+          return fileDateCode >= from && (!to || fileDateCode <= to);
+        })
+    );
 };

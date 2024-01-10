@@ -10,13 +10,16 @@ interface Props {
 
 export const Image = ({ url, description, clickUrl }: Props) => {
   const navigate = useNavigate();
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const filename = getFilename(url);
 
   const handleImageClick = (): void => {
     if (clickUrl) navigate(clickUrl);
-    else setSearchParams({ file: filename });
+    else {
+      searchParams.set('file', filename);
+      setSearchParams(searchParams);
+    }
   };
 
   const [src, setSrc] = useState(url);

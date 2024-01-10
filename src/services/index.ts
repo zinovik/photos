@@ -6,11 +6,12 @@ import { FileType } from '../constants';
 import { AlbumWithFiles } from '../types';
 
 export const getAlbumsWithFiles = async (
-  path?: string
+  path?: string,
+  dateRanges?: string[][]
 ): Promise<AlbumWithFiles[]> => {
   const [albums, files, sourcesConfig] = await Promise.all([
     getAlbums(path),
-    getFiles(path),
+    getFiles(path, dateRanges),
     getSourcesConfig(),
   ]);
 

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { AlbumPage } from '../pages/AlbumPage';
 import { getAlbumsWithFiles } from '../services';
-import { PARAMETER_FILE } from '../constants';
+import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
+import { sortAlbumsWithFilesByFilenames } from '../services/helper';
 
 export const AlbumRouter = () => {
   const { album, '*': albums = '' } = useParams();
@@ -11,13 +12,23 @@ export const AlbumRouter = () => {
 
   const path = `${album}/${albums}`.replace(/\/+$/, '');
 
+  const [searchParams] = useSearchParams();
+
   const [albumsWithFiles, setAlbumWithFiles] = useState([] as AlbumWithFiles[]);
 
-  useEffect(() => {
-    getAlbumsWithFiles(path).then((result) => setAlbumWithFiles(result));
-  }, [path]);
+  const dateRangesParameter = searchParams.get(PARAMETER_DATE_RANGES);
 
-  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const dateRanges = dateRangesParameter
+      ?.split(',')
+      .map((dateRange) => dateRange.split('-'));
+
+    getAlbumsWithFiles(path, dateRanges).then((result) =>
+      setAlbumWithFiles(
+        dateRanges ? sortAlbumsWithFilesByFilenames(result) : result
+      )
+    );
+  }, [path, dateRangesParameter]);
 
   const file = searchParams.get(PARAMETER_FILE);
 

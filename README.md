@@ -7,7 +7,6 @@ interface AlbumInterface {
   path: string;
   title: string;
   text?: string | string[];
-  order?: number;
 }
 ```
 
@@ -21,7 +20,6 @@ interface FileInterface {
   fix?: boolean;
   description?: string;
   text?: string | string[];
-  order?: number;
   isVertical?: boolean;
 }
 ```

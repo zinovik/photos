@@ -1,4 +1,5 @@
 export const PARAMETER_FILE = 'file';
+export const PARAMETER_DATE_RANGES = 'date-ranges';
 
 const baseUrl =
   process.env.NODE_ENV === 'development'
