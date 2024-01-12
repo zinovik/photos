@@ -4,7 +4,6 @@ import { HomePage } from '../pages/HomePage';
 import { getAlbumsWithFiles } from '../services';
 import { AlbumWithFiles } from '../types';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
-import { sortAlbumsWithFilesByFilenames } from '../services/helper';
 import { AlbumPage } from '../pages/AlbumPage';
 
 export const HomeRouter = () => {
@@ -19,13 +18,8 @@ export const HomeRouter = () => {
       ?.split(',')
       .map((dateRange) => dateRange.split('-'));
 
-    getAlbumsWithFiles(dateRanges ? undefined : '/', dateRanges).then(
-      (result) =>
-        setAlbumWithFiles(
-          dateRanges
-            ? sortAlbumsWithFilesByFilenames(result)
-            : [...result].reverse()
-        )
+    getAlbumsWithFiles({ path: dateRanges ? '' : '/', dateRanges }).then(
+      (result) => setAlbumWithFiles(result)
     );
   }, [dateRangesParameter]);
 

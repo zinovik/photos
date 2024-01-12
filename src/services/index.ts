@@ -1,42 +1,46 @@
 import { getAlbums } from './albums';
 import { getFiles } from './files';
-import { getSourcesConfig } from './sources-config';
-import { getDatetimeFromFilename } from './helper';
-import { FileType } from '../constants';
-import { AlbumWithFiles } from '../types';
+import { AlbumInterface, AlbumWithFiles } from '../types';
 
-export const getAlbumsWithFiles = async (
-  path?: string,
-  dateRanges?: string[][]
-): Promise<AlbumWithFiles[]> => {
-  const [albums, files, sourcesConfig] = await Promise.all([
+export const getAlbumsWithFiles = async ({
+  path,
+  dateRanges,
+}: {
+  path?: string;
+  dateRanges?: string[][];
+}): Promise<AlbumWithFiles[]> => {
+  const [albums, files] = await Promise.all([
     getAlbums(path),
     getFiles(path, dateRanges),
-    getSourcesConfig(),
   ]);
 
-  return albums.map((album) => ({
+  if (dateRanges) {
+    const albumsMap: Record<string, AlbumInterface> = {};
+    albums.forEach((album) => {
+      albumsMap[album.path] = album;
+    });
+
+    const albumWithFiles: AlbumWithFiles[] = [];
+
+    files
+      .sort((file1, file2) => file2.datetime.localeCompare(file1.datetime))
+      .forEach((file) => {
+        if (
+          albumWithFiles.length === 0 ||
+          albumWithFiles[albumWithFiles.length - 1].album.path !== file.path
+        ) {
+          albumWithFiles.push({ album: albumsMap[file.path], files: [file] });
+        } else {
+          albumWithFiles[albumWithFiles.length - 1].files.push(file);
+        }
+      });
+
+    return albumWithFiles;
+  }
+
+  return (path === '/' ? [...albums].reverse() : albums).map((album) => ({
     album,
     level: album.path.split('/').length,
-    files: files
-      .filter((file) => file.path === album.path)
-      .map((file) => {
-        const url = sourcesConfig[file.filename]?.url || file.filename;
-        const type = Object.values(FileType).includes(
-          sourcesConfig[file.filename]?.type as FileType
-        )
-          ? (sourcesConfig[file.filename]?.type as FileType)
-          : FileType.image;
-        const datetime = getDatetimeFromFilename(file.filename);
-
-        return {
-          ...file,
-          url,
-          type,
-          description: `${file.description}${
-            file.description && datetime && ', '
-          }${datetime}`,
-        };
-      }),
+    files: files.filter((file) => file.path === album.path),
   }));
 };

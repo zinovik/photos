@@ -15,7 +15,7 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
     await loadAlbums();
   }
 
-  return [...loadedAlbums].filter(
+  return loadedAlbums.filter(
     (album) =>
       !path ||
       (path === '/'

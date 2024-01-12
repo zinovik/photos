@@ -1,5 +1,4 @@
-import { Host } from '../constants';
-import { AlbumWithFiles, FileInterface } from '../types';
+import { FileType, Host } from '../constants';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
@@ -28,10 +27,8 @@ export const getFilename = (url: string): string =>
 export const isImageUrl = (url: string): boolean =>
   url.substring(url.length - 3) !== 'mp4';
 
-const getDatetimeValues = (
-  url: string
-): '' | [string, string, string, string, string] => {
-  const dateTimeParsed = url.match(
+export const getDatetimeFromFilename = (filename: string): string => {
+  const dateTimeParsed = filename.match(
     new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})')
   );
 
@@ -41,27 +38,17 @@ const getDatetimeValues = (
 
   const [, year, month, date, hour, minute] = dateTimeParsed;
 
-  return [year, month, date, hour, minute];
+  return `${year}${month}${date}_${hour}${minute}`;
 };
 
-export const getDatetimeFromFilename = (url: string): string => {
-  const datetimeValues = getDatetimeValues(url);
-
-  if (datetimeValues === '') return '';
-
-  const [year, month, date, hour, minute] = datetimeValues;
+export const formatDatetime = (datetime: string): string => {
+  const date = datetime.slice(6, 8);
+  const month = datetime.slice(4, 6);
+  const year = datetime.slice(0, 4);
+  const hour = datetime.slice(9, 11);
+  const minute = datetime.slice(11, 13);
 
   return `${date}.${month}.${year} ${hour}:${minute}`;
-};
-
-export const getDatetimeCodeFromFilename = (url: string): string => {
-  const datetimeValues = getDatetimeValues(url);
-
-  if (datetimeValues === '') return '';
-
-  const [year, month, date, hour, minute] = datetimeValues;
-
-  return `${year}${month}${date}${hour}${minute}`;
 };
 
 export const getThumbnail = (url: string, width: number): string => {
@@ -76,34 +63,7 @@ export const getThumbnail = (url: string, width: number): string => {
 
 export const getLevel = (path: string): number => path.split('/').length;
 
-export const sortAlbumsWithFilesByFilenames = (
-  albumsWithFiles: AlbumWithFiles[]
-): AlbumWithFiles[] =>
-  albumsWithFiles
-    .filter((album) => album.files.length > 0)
-    .reduce(
-      (acc, album) => [...acc, ...album.files.map((file) => ({ ...file }))],
-      [] as FileInterface[]
-    )
-    .sort((file1, file2) =>
-      getDatetimeCodeFromFilename(file2.filename).localeCompare(
-        getDatetimeCodeFromFilename(file1.filename)
-      )
-    )
-    .reduce((acc, file) => {
-      if (acc.length === 0 || acc[acc.length - 1].album.path !== file.path) {
-        const { album } = albumsWithFiles.find(
-          (albumWithFiles) => albumWithFiles.album.path === file.path
-        ) as AlbumWithFiles;
-
-        return [...acc, { album, files: [file] }];
-      }
-
-      const accExceptLast = acc.slice(0, acc.length - 1);
-      const accLast = acc[acc.length - 1];
-
-      return [
-        ...accExceptLast,
-        { ...accLast, files: [...accLast.files, file] },
-      ];
-    }, [] as AlbumWithFiles[]);
+export const getFileType = (type?: string): FileType =>
+  Object.values(FileType).includes(type as FileType)
+    ? (type as FileType)
+    : FileType.image;

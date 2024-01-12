@@ -4,7 +4,6 @@ import { AlbumPage } from '../pages/AlbumPage';
 import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
-import { sortAlbumsWithFilesByFilenames } from '../services/helper';
 
 export const AlbumRouter = () => {
   const { album, '*': albums = '' } = useParams();
@@ -23,10 +22,8 @@ export const AlbumRouter = () => {
       ?.split(',')
       .map((dateRange) => dateRange.split('-'));
 
-    getAlbumsWithFiles(path, dateRanges).then((result) =>
-      setAlbumWithFiles(
-        dateRanges ? sortAlbumsWithFilesByFilenames(result) : result
-      )
+    getAlbumsWithFiles({ path, dateRanges }).then((result) =>
+      setAlbumWithFiles(result)
     );
   }, [path, dateRangesParameter]);
 

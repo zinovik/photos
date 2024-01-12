@@ -3,6 +3,7 @@ export interface FileInterface {
   filename: string;
   type: 'image' | 'video';
   url: string;
+  datetime: string;
   fix?: boolean;
   description?: string;
   text?: string | string[];

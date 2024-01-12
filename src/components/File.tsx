@@ -4,7 +4,7 @@ import { Image } from './Image';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { getThumbnail } from '../services/helper';
+import { formatDatetime, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 
@@ -21,8 +21,12 @@ export const File = ({
   isSkipFileText,
   isTextAfterFile,
 }: Props) => {
-  const { url, type, fix, description, text } = file;
+  const { url, type, fix, description, datetime, text } = file;
   const thumbnailUrl = fix ? url : getThumbnail(url, window.innerWidth);
+
+  const descriptionWithDatetime = `${description}${
+    description && datetime && ', '
+  }${formatDatetime(datetime)}`;
 
   return (
     <div id={file.filename} style={{ minHeight: 200 }}>
@@ -33,17 +37,17 @@ export const File = ({
           {type === FileType.image && (
             <Image
               url={thumbnailUrl}
-              description={description}
+              description={descriptionWithDatetime}
               clickUrl={clickUrl}
             />
           )}
           {type === FileType.video && (
-            <Video url={thumbnailUrl} description={description} />
+            <Video url={thumbnailUrl} description={descriptionWithDatetime} />
           )}
         </div>
       </LazyLoad>
 
-      <FileDescription description={description} />
+      <FileDescription description={descriptionWithDatetime} />
 
       {isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
     </div>
