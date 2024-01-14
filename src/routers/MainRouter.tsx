@@ -30,12 +30,17 @@ export const MainRouter = () => {
     );
   }, [path, dateRangesParameter]);
 
+  const clearAlbum = () => {
+    setAlbumWithFiles([]);
+  };
+
   return dateRangesParameter || path !== '/' ? (
     <AlbumPage
       albumsWithFiles={albumsWithFiles}
       path={path}
       hash={hash}
       file={file}
+      clearAlbum={clearAlbum}
     />
   ) : (
     <HomePage albumsWithFiles={albumsWithFiles} />

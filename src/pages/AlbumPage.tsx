@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Album } from '../components/Album';
 import { getLinks } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
@@ -9,9 +9,23 @@ interface Props {
   path: string;
   hash: string;
   file: string | null;
+  clearAlbum: Function;
 }
 
-export const AlbumPage = ({ albumsWithFiles, path, hash, file }: Props) => {
+export const AlbumPage = ({
+  albumsWithFiles,
+  path,
+  hash,
+  file,
+  clearAlbum,
+}: Props) => {
+  const navigate = useNavigate();
+
+  const goHome = () => {
+    clearAlbum();
+    navigate('/');
+  };
+
   const links = getLinks(path);
 
   useEffect(() => {
@@ -30,7 +44,9 @@ export const AlbumPage = ({ albumsWithFiles, path, hash, file }: Props) => {
   return (
     <>
       <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
-        <Link to="/">home</Link>
+        <button onClick={goHome} className="link">
+          home
+        </button>
         {links.map((link) => (
           <span key={link.url}>
             {' / '}
