@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { File } from '../components/File';
 import { Markdown } from '../components/Markdown';
@@ -9,8 +9,6 @@ interface Props {
 }
 
 export const HomePage = ({ albumsWithFiles }: Props) => {
-  useEffect(() => window.scrollTo(0, 0), []);
-
   if (albumsWithFiles.length === 0) return <>⏳ Loading...</>;
 
   return (

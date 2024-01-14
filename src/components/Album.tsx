@@ -24,12 +24,7 @@ export const Album = ({
 
   return (
     <>
-      {isCurrentOpenedAlbum && (
-        <>
-          <Title level={level}>{album.title}</Title>
-          {!isTopLevelAlbum && <Agenda agenda={albumAgenda} />}
-        </>
-      )}
+      {isCurrentOpenedAlbum && <Title level={level}>{album.title}</Title>}
 
       {!isCurrentOpenedAlbum && (
         <Title level={level}>
@@ -37,6 +32,10 @@ export const Album = ({
             {`${album.title} →`}
           </Link>
         </Title>
+      )}
+
+      {isCurrentOpenedAlbum && !isTopLevelAlbum && (
+        <Agenda agenda={albumAgenda} />
       )}
 
       <Markdown text={album.text} />

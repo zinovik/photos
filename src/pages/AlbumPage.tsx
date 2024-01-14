@@ -14,8 +14,6 @@ interface Props {
 export const AlbumPage = ({ albumsWithFiles, path, hash, file }: Props) => {
   const links = getLinks(path);
 
-  useEffect(() => window.scrollTo(0, 0), []);
-
   useEffect(() => {
     if (!hash && !file) return;
     const element = document.getElementById(file || hash.substring(1));

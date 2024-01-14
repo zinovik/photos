@@ -38,9 +38,7 @@ export const getAlbumsWithFiles = async ({
     return albumWithFiles;
   }
 
-  const isHomePage = path === '/';
-
-  return (isHomePage ? [...albums].reverse() : albums).map((album) => ({
+  return (path === '/' ? [...albums].reverse() : albums).map((album) => ({
     album,
     level: album.path.split('/').length,
     files: files.filter(

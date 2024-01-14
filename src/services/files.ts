@@ -42,10 +42,10 @@ export const getFiles = async (
       (!path ||
         (path === '/' ? file.isTitle : isThisOrChildPath(file.path, path))) &&
       (!dateRanges ||
-        dateRanges.some(([from, to]) => {
-          const fileDatetime = file.datetime.slice(0, from.length);
-
-          return fileDatetime >= from && (!to || fileDatetime <= to);
-        }))
+        dateRanges.some(
+          ([from, to]) =>
+            file.datetime.slice(0, from.length) >= from &&
+            (!to || file.datetime.slice(0, to.length) <= to)
+        ))
   );
 };
