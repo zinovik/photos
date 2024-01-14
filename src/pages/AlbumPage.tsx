@@ -55,7 +55,7 @@ export const AlbumPage = ({ albumsWithFiles, path, hash, file }: Props) => {
           >
             <Album
               albumWithFiles={albumWithFiles}
-              path={path}
+              isCurrentOpenedAlbum={albumWithFiles.album.path === path}
               albumAgenda={albumAgenda}
             />
           </div>

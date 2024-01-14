@@ -38,9 +38,15 @@ export const getAlbumsWithFiles = async ({
     return albumWithFiles;
   }
 
-  return (path === '/' ? [...albums].reverse() : albums).map((album) => ({
+  const isHomePage = path === '/';
+
+  return (isHomePage ? [...albums].reverse() : albums).map((album) => ({
     album,
     level: album.path.split('/').length,
-    files: files.filter((file) => file.path === album.path),
+    files: files.filter(
+      (file) =>
+        (file.path.indexOf(album.path) === 0 && file.isTitle) ||
+        file.path === album.path
+    ),
   }));
 };

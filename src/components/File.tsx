@@ -21,8 +21,8 @@ export const File = ({
   isSkipFileText,
   isTextAfterFile,
 }: Props) => {
-  const { url, type, fix, description, datetime, text } = file;
-  const thumbnailUrl = fix ? url : getThumbnail(url, window.innerWidth);
+  const { url, type, isNoThumbnail, description, datetime, text } = file;
+  const thumbnailUrl = isNoThumbnail ? url : getThumbnail(url, window.innerWidth);
 
   const descriptionWithDatetime = `${description}${
     description && datetime && ', '

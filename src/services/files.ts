@@ -2,7 +2,6 @@ import {
   getDatetimeFromFilename,
   getFileType,
   isThisOrChildPath,
-  isTopLevelPath,
 } from './helper';
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
 import { FileInterface } from '../types';
@@ -41,9 +40,7 @@ export const getFiles = async (
   return loadedFiles.filter(
     (file) =>
       (!path ||
-        (path === '/'
-          ? isTopLevelPath(file.path)
-          : isThisOrChildPath(file.path, path))) &&
+        (path === '/' ? file.isTitle : isThisOrChildPath(file.path, path))) &&
       (!dateRanges ||
         dateRanges.some(([from, to]) => {
           const fileDatetime = file.datetime.slice(0, from.length);

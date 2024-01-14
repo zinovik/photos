@@ -4,7 +4,8 @@ export interface FileInterface {
   type: 'image' | 'video';
   url: string;
   datetime: string;
-  fix?: boolean;
+  isTitle?: boolean;
+  isNoThumbnail?: boolean;
   description?: string;
   text?: string | string[];
   isVertical?: boolean;

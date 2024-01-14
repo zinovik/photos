@@ -9,25 +9,29 @@ import { AgendaInterface, AlbumWithFiles } from '../types';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
-  path: string;
+  isCurrentOpenedAlbum: boolean;
   albumAgenda: AgendaInterface[];
 }
 
-export const Album = ({ albumWithFiles, path, albumAgenda }: Props) => {
+export const Album = ({
+  albumWithFiles,
+  isCurrentOpenedAlbum,
+  albumAgenda,
+}: Props) => {
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
   const isTopLevelAlbum = level === 1;
 
   return (
     <>
-      {album.path === path && (
+      {isCurrentOpenedAlbum && (
         <>
           <Title level={level}>{album.title}</Title>
           {!isTopLevelAlbum && <Agenda agenda={albumAgenda} />}
         </>
       )}
 
-      {album.path !== path && (
+      {!isCurrentOpenedAlbum && (
         <Title level={level}>
           <Link id={album.path} to={`/${album.path}`}>
             {`${album.title} →`}
