@@ -13,6 +13,7 @@ interface Props {
   clickUrl?: string; // if provided - go to on click
   isSkipFileText?: boolean; // used for the home page
   isTextAfterFile?: boolean;
+  isCurrent?: boolean;
 }
 
 export const File = ({
@@ -20,6 +21,7 @@ export const File = ({
   clickUrl,
   isSkipFileText,
   isTextAfterFile,
+  isCurrent,
 }: Props) => {
   const { url, type, isNoThumbnail, description, datetime, text } = file;
   const thumbnailUrl = isNoThumbnail
@@ -31,11 +33,22 @@ export const File = ({
   }${formatDatetime(datetime)}`;
 
   return (
-    <div id={file.filename} style={{ minHeight: 200 }}>
-      {!isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
-
-      <LazyLoad offset={500}>
-        <div style={{ textAlign: 'center' }}>
+    <>
+      {isCurrent && (
+        <div
+          style={{
+            position: 'fixed',
+            height: '100%',
+            width: '100%',
+            top: 0,
+            left: 0,
+            backgroundColor: 'black',
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           {type === FileType.image && (
             <Image
               url={thumbnailUrl}
@@ -47,11 +60,30 @@ export const File = ({
             <Video url={thumbnailUrl} description={descriptionWithDatetime} />
           )}
         </div>
-      </LazyLoad>
+      )}
 
-      <FileDescription description={descriptionWithDatetime} />
+      <div id={file.filename} style={{ minHeight: 200 }}>
+        {!isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
 
-      {isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
-    </div>
+        <LazyLoad offset={500}>
+          <div style={{ textAlign: 'center' }}>
+            {type === FileType.image && (
+              <Image
+                url={thumbnailUrl}
+                description={descriptionWithDatetime}
+                clickUrl={clickUrl}
+              />
+            )}
+            {type === FileType.video && (
+              <Video url={thumbnailUrl} description={descriptionWithDatetime} />
+            )}
+          </div>
+        </LazyLoad>
+
+        <FileDescription description={descriptionWithDatetime} />
+
+        {isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
+      </div>
+    </>
   );
 };

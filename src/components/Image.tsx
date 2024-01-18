@@ -44,6 +44,7 @@ export const Image = ({ url, description, clickUrl }: Props) => {
       style={{
         objectFit: 'contain',
         maxWidth: '100%',
+        maxHeight: '100%',
         textAlign: 'center',
         cursor: 'pointer',
       }}

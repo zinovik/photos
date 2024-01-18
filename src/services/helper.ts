@@ -41,14 +41,21 @@ export const getDatetimeFromFilename = (filename: string): string => {
   return `${year}${month}${date}_${hour}${minute}`;
 };
 
-export const formatDatetime = (datetime: string): string => {
+export const formatDatetime = (datetime?: string): string => {
+  if (!datetime) return '';
+
   const date = datetime.slice(6, 8);
   const month = datetime.slice(4, 6);
   const year = datetime.slice(0, 4);
   const hour = datetime.slice(9, 11);
   const minute = datetime.slice(11, 13);
 
-  return `${date}.${month}.${year} ${hour}:${minute}`;
+  const datePart = `${date ? `${date}.` : ''}${
+    month ? `${month}.` : ''
+  }${year}`;
+  const timePart = ` ${hour}:${minute}`;
+
+  return `${datePart}${hour && minute ? timePart : ''}`;
 };
 
 export const getThumbnail = (url: string, width: number): string => {

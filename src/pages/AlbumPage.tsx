@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Album } from '../components/Album';
-import { getLinks } from '../services/helper';
+import { formatDatetime, getLinks } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
   path: string;
-  hash: string;
-  file: string | null;
+  dateRanges: string[][] | undefined;
+  currentFile: string | null;
   clearAlbum: Function;
 }
 
 export const AlbumPage = ({
   albumsWithFiles,
   path,
-  hash,
-  file,
+  dateRanges,
+  currentFile,
   clearAlbum,
 }: Props) => {
   const navigate = useNavigate();
@@ -27,12 +27,6 @@ export const AlbumPage = ({
   };
 
   const links = getLinks(path);
-
-  useEffect(() => {
-    if (!hash && !file) return;
-    const element = document.getElementById(file || hash.substring(1));
-    if (element) element.scrollIntoView();
-  }, [albumsWithFiles, hash, file]);
 
   const albumAgenda: AgendaInterface[] = albumsWithFiles
     .slice(1)
@@ -53,6 +47,14 @@ export const AlbumPage = ({
             <Link to={link.url}>{link.text}</Link>
           </span>
         ))}
+        <div style={{ color: 'darkgray' }}>
+          {dateRanges
+            ?.map(
+              ([from, to]) =>
+                `${formatDatetime(from)} - ${formatDatetime(to) || 'now'}`
+            )
+            .join(', ')}
+        </div>
       </nav>
 
       <main>
@@ -71,6 +73,7 @@ export const AlbumPage = ({
               albumWithFiles={albumWithFiles}
               isCurrentOpenedAlbum={albumWithFiles.album.path === path}
               albumAgenda={albumAgenda}
+              currentFile={currentFile}
             />
           </div>
         ))}

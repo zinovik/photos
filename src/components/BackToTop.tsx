@@ -7,8 +7,8 @@ export const BackToTop = () => {
 
   useEffect(() => {
     const checkScrollTop = () => {
-      if (!showScroll && window.pageYOffset > MIN_HEIGHT) setShowScroll(true);
-      if (showScroll && window.pageYOffset <= MIN_HEIGHT) setShowScroll(false);
+      if (!showScroll && window.scrollY > MIN_HEIGHT) setShowScroll(true);
+      if (showScroll && window.scrollY <= MIN_HEIGHT) setShowScroll(false);
     };
     checkScrollTop();
 

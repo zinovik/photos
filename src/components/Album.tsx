@@ -11,12 +11,14 @@ interface Props {
   albumWithFiles: AlbumWithFiles;
   isCurrentOpenedAlbum: boolean;
   albumAgenda: AgendaInterface[];
+  currentFile: string | null;
 }
 
 export const Album = ({
   albumWithFiles,
   isCurrentOpenedAlbum,
   albumAgenda,
+  currentFile,
 }: Props) => {
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
@@ -41,7 +43,12 @@ export const Album = ({
       <Markdown text={album.text} />
 
       {files.map((file) => (
-        <File file={file} isTextAfterFile={isTopLevelAlbum} key={file.url} />
+        <File
+          file={file}
+          isTextAfterFile={isTopLevelAlbum}
+          key={file.url}
+          isCurrent={file.filename === currentFile}
+        />
       ))}
 
       {isTopLevelAlbum && <Agenda agenda={albumAgenda} />}
