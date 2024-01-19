@@ -45,7 +45,7 @@ export const Album = ({
       {files.map((file) => (
         <File
           file={file}
-          isTextAfterFile={isTopLevelAlbum}
+          isAlbumCover={isTopLevelAlbum}
           key={file.url}
           isCurrent={file.filename === currentFile}
         />

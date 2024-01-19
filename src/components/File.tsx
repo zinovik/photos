@@ -4,25 +4,19 @@ import { Image } from './Image';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { formatDatetime, getThumbnail } from '../services/helper';
+import { formatDatetime, getFilename, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface Props {
   file: FileInterface;
-  clickUrl?: string; // if provided - go to on click
-  isSkipFileText?: boolean; // used for the home page
-  isTextAfterFile?: boolean;
+  isHomePage?: boolean;
+  isAlbumCover?: boolean;
   isCurrent?: boolean;
 }
 
-export const File = ({
-  file,
-  clickUrl,
-  isSkipFileText,
-  isTextAfterFile,
-  isCurrent,
-}: Props) => {
+export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
   const { url, type, isNoThumbnail, description, datetime, text } = file;
   const thumbnailUrl = isNoThumbnail
     ? url
@@ -31,6 +25,18 @@ export const File = ({
   const descriptionWithDatetime = `${description}${
     description && datetime && ', '
   }${formatDatetime(datetime)}`;
+
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleImageClick = (): void => {
+    if (isAlbumCover) navigate(file.path.split('/')[0]);
+    else {
+      const filename = getFilename(url);
+      searchParams.set('file', filename);
+      setSearchParams(searchParams);
+    }
+  };
 
   return (
     <>
@@ -53,7 +59,7 @@ export const File = ({
             <Image
               url={thumbnailUrl}
               description={descriptionWithDatetime}
-              clickUrl={clickUrl}
+              onClick={handleImageClick}
             />
           )}
           {type === FileType.video && (
@@ -62,8 +68,11 @@ export const File = ({
         </div>
       )}
 
-      <div id={file.filename} style={{ minHeight: 200 }}>
-        {!isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
+      <div
+        id={`${file.filename}${isAlbumCover ? '-title' : ''}`}
+        style={{ minHeight: 200 }}
+      >
+        {!isAlbumCover && !isHomePage && <Markdown text={text} />}
 
         <LazyLoad offset={500}>
           <div style={{ textAlign: 'center' }}>
@@ -71,7 +80,7 @@ export const File = ({
               <Image
                 url={thumbnailUrl}
                 description={descriptionWithDatetime}
-                clickUrl={clickUrl}
+                onClick={handleImageClick}
               />
             )}
             {type === FileType.video && (
@@ -82,7 +91,7 @@ export const File = ({
 
         <FileDescription description={descriptionWithDatetime} />
 
-        {isTextAfterFile && !isSkipFileText && <Markdown text={text} />}
+        {isAlbumCover && !isHomePage && <Markdown text={text} />}
       </div>
     </>
   );

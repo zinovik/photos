@@ -20,12 +20,7 @@ export const HomePage = ({ albumsWithFiles }: Props) => {
           </h1>
 
           {files.map((file) => (
-            <File
-              file={file}
-              clickUrl={album.path}
-              key={file.url}
-              isSkipFileText
-            />
+            <File file={file} key={file.url} isHomePage isAlbumCover />
           ))}
 
           <Markdown text={album.text} />

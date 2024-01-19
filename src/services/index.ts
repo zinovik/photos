@@ -1,6 +1,7 @@
 import { getAlbums } from './albums';
 import { getFiles } from './files';
 import { AlbumInterface, AlbumWithFiles } from '../types';
+import { isThisOrChildPath } from './helper';
 
 export const getAlbumsWithFiles = async ({
   path,
@@ -38,12 +39,14 @@ export const getAlbumsWithFiles = async ({
     return albumWithFiles;
   }
 
-  return (path === '/' ? [...albums].reverse() : albums).map((album) => ({
+  const isHomePath = path === '/';
+  const albumsOrdered = isHomePath ? [...albums].reverse() : albums;
+
+  return albumsOrdered.map((album) => ({
     album,
-    level: album.path.split('/').length,
     files: files.filter(
       (file) =>
-        (file.path.indexOf(album.path) === 0 && file.isTitle) ||
+        (isThisOrChildPath(file.path, album.path) && file.isTitle) ||
         file.path === album.path
     ),
   }));

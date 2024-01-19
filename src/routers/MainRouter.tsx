@@ -7,12 +7,10 @@ import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
 
 export const MainRouter = () => {
-  const [currentFile, setCurrentFile] = useState(null as string | null);
-
   const [dateRanges, setDateRanges] = useState(
     undefined as string[][] | undefined
   );
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dateRangesParameter = searchParams.get(PARAMETER_DATE_RANGES);
   const scrolledToFile = searchParams.get(PARAMETER_FILE) ?? '';
 
@@ -22,6 +20,8 @@ export const MainRouter = () => {
   const { '*': route = '' } = useParams();
   const path =
     `${route}`.replace(/\/+$/, '') || (dateRangesParameter ? '' : '/');
+
+  const [previousRoute, setPreviousRoute] = useState(route);
 
   const [albumsWithFiles, setAlbumWithFiles] = useState([] as AlbumWithFiles[]);
 
@@ -38,39 +38,46 @@ export const MainRouter = () => {
   }, [path, dateRangesParameter]);
 
   useEffect(() => {
-    const clearCurrentFile = (event: Event) => {
-      window.removeEventListener('scroll', clearCurrentFile);
-      setCurrentFile(null);
+    const removeFileParam = (event: Event) => {
+      searchParams.delete('file');
+      setSearchParams(searchParams);
       event.stopPropagation();
+      window.removeEventListener('scroll', removeFileParam);
     };
 
     const scrolledTo = scrolledToFile || scrolledToAlbum;
+
     if (scrolledTo) {
-      const element = document.getElementById(scrolledTo);
+      setTimeout(() => {
+        const element = document.getElementById(scrolledTo);
+        if (!element) return;
 
-      if (element)
-        setTimeout(() => {
-          element.scrollIntoView({
-            block: scrolledToFile ? 'center' : 'nearest',
-          });
-          setTimeout(
-            () => window.addEventListener('scroll', clearCurrentFile),
-            400 // delay after scrolling to add a scroll listener
-          );
-        }, 400); // delay after page loading to scroll to the right place
-    } else window.scrollTo(0, 0);
+        element.scrollIntoView({
+          block: scrolledToFile ? 'center' : 'nearest',
+        });
+        setTimeout(
+          () => window.addEventListener('scroll', removeFileParam),
+          500 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
+        );
+      }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
+    }
 
-    return () => window.removeEventListener('scroll', clearCurrentFile);
-  }, [albumsWithFiles, scrolledToAlbum, scrolledToFile, setCurrentFile]);
+    return () => window.removeEventListener('scroll', removeFileParam);
+  }, [scrolledToAlbum, scrolledToFile, searchParams, setSearchParams]);
 
-  useEffect(() => setCurrentFile(scrolledToFile), [scrolledToFile]);
+  useEffect(() => {
+    if (route !== previousRoute) {
+      setPreviousRoute(route);
+      if (!scrolledToFile && !scrolledToAlbum) window.scrollTo(0, 0);
+    }
+  }, [scrolledToFile, scrolledToAlbum, route, previousRoute, setPreviousRoute]);
 
   return dateRangesParameter || path !== '/' ? (
     <AlbumPage
       albumsWithFiles={albumsWithFiles}
       path={path}
       dateRanges={dateRanges}
-      currentFile={currentFile}
+      currentFile={scrolledToFile}
       clearAlbum={() => setAlbumWithFiles([])}
     />
   ) : (

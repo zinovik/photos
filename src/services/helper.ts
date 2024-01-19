@@ -3,10 +3,10 @@ import { FileType, Host } from '../constants';
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
 export const isThisOrChildPath = (
-  albumPath: string,
-  currentPath: string
+  childPath: string,
+  parentPath: string
 ): boolean =>
-  albumPath === currentPath || albumPath.startsWith(`${currentPath}/`);
+  childPath === parentPath || childPath.startsWith(`${parentPath}/`);
 
 export const getLinks = (path: string): { text: string; url: string }[] =>
   path
