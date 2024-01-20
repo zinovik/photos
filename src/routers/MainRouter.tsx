@@ -43,16 +43,17 @@ export const MainRouter = () => {
   }, [path, dateRangesParameter]);
 
   useEffect(() => {
-    console.log('useEffect', scrolledToFile);
+    console.log('useEffect', scrolledToFile, albumsWithFiles.length);
 
     if (albumsWithFiles.length === 0) return;
 
-    const removeFileParam = () => {
+    const removeFileParam = (event: Event) => {
       console.log('removeFileParam');
       searchParams.delete('file');
       setSearchParams(searchParams);
       console.log('removeEventListener removeFileParam');
       window.removeEventListener('scroll', removeFileParam);
+      event.stopPropagation();
     };
 
     const scrolledTo = scrolledToFile || scrolledToAlbum;
