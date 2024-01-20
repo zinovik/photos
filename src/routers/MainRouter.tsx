@@ -46,18 +46,16 @@ export const MainRouter = () => {
     const removeFileParam = (event: Event) => {
       searchParams.delete('file');
       setSearchParams(searchParams);
-      event.stopPropagation();
-      window.removeEventListener('scroll', removeFileParam);
     };
 
     const scrolledTo = scrolledToFile || scrolledToAlbum;
 
     if (scrolledTo) {
-      window.removeEventListener('scroll', removeFileParam);
-
       setTimeout(() => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
+
+        window.removeEventListener('scroll', removeFileParam);
 
         element.scrollIntoView({
           block: scrolledToFile ? 'center' : 'nearest',
