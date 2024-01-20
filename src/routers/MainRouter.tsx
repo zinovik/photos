@@ -65,7 +65,7 @@ export const MainRouter = () => {
         if (scrolledToFile) {
           setTimeout(
             () => window.addEventListener('scroll', removeFileParam),
-            500 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
+            1000 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
           );
         }
       }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
