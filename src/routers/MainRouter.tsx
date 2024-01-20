@@ -7,6 +7,8 @@ import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
 
 export const MainRouter = () => {
+  const [isHomePage, setIsHomePage] = useState(false as boolean | undefined);
+
   const [dateRanges, setDateRanges] = useState(
     undefined as string[][] | undefined
   );
@@ -32,8 +34,11 @@ export const MainRouter = () => {
 
     setDateRanges(dateRanges);
 
-    getAlbumsWithFiles({ path, dateRanges }).then((result) =>
-      setAlbumWithFiles(result)
+    getAlbumsWithFiles({ path, dateRanges }).then(
+      ({ albumsWithFiles, isHomePath }) => {
+        setAlbumWithFiles(albumsWithFiles);
+        setIsHomePage(isHomePath);
+      }
     );
   }, [path, dateRangesParameter]);
 
@@ -48,6 +53,8 @@ export const MainRouter = () => {
     const scrolledTo = scrolledToFile || scrolledToAlbum;
 
     if (scrolledTo) {
+      window.removeEventListener('scroll', removeFileParam);
+
       setTimeout(() => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
@@ -55,12 +62,16 @@ export const MainRouter = () => {
         element.scrollIntoView({
           block: scrolledToFile ? 'center' : 'nearest',
         });
-        setTimeout(
-          () => window.addEventListener('scroll', removeFileParam),
-          500 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
-        );
+        if (scrolledToFile) {
+          setTimeout(
+            () => window.addEventListener('scroll', removeFileParam),
+            500 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
+          );
+        }
       }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
     }
+
+    if (!scrolledToFile) window.removeEventListener('scroll', removeFileParam);
 
     return () => window.removeEventListener('scroll', removeFileParam);
   }, [scrolledToAlbum, scrolledToFile, searchParams, setSearchParams]);
@@ -72,15 +83,14 @@ export const MainRouter = () => {
     }
   }, [scrolledToFile, scrolledToAlbum, route, previousRoute, setPreviousRoute]);
 
-  return dateRangesParameter || path !== '/' ? (
+  return isHomePage ? (
+    <HomePage albumsWithFiles={albumsWithFiles} />
+  ) : (
     <AlbumPage
       albumsWithFiles={albumsWithFiles}
       path={path}
       dateRanges={dateRanges}
       currentFile={scrolledToFile}
-      clearAlbum={() => setAlbumWithFiles([])}
     />
-  ) : (
-    <HomePage albumsWithFiles={albumsWithFiles} />
   );
 };

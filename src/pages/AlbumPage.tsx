@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Album } from '../components/Album';
 import { formatDatetime, getLinks } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
@@ -9,7 +9,6 @@ interface Props {
   path: string;
   dateRanges: string[][] | undefined;
   currentFile: string | null;
-  clearAlbum: Function;
 }
 
 export const AlbumPage = ({
@@ -17,15 +16,7 @@ export const AlbumPage = ({
   path,
   dateRanges,
   currentFile,
-  clearAlbum,
 }: Props) => {
-  const navigate = useNavigate();
-
-  const goHome = () => {
-    clearAlbum();
-    navigate('/');
-  };
-
   const links = getLinks(path);
 
   const albumAgenda: AgendaInterface[] = albumsWithFiles
@@ -38,9 +29,7 @@ export const AlbumPage = ({
   return (
     <>
       <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
-        <button onClick={goHome} className="link">
-          home
-        </button>
+        <Link to={'/'}>home</Link>
         {links.map((link) => (
           <span key={link.url}>
             {' / '}

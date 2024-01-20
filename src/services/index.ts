@@ -9,7 +9,7 @@ export const getAlbumsWithFiles = async ({
 }: {
   path?: string;
   dateRanges?: string[][];
-}): Promise<AlbumWithFiles[]> => {
+}): Promise<{ albumsWithFiles: AlbumWithFiles[]; isHomePath?: boolean }> => {
   const [albums, files] = await Promise.all([
     getAlbums(path),
     getFiles(path, dateRanges),
@@ -21,33 +21,36 @@ export const getAlbumsWithFiles = async ({
       albumsMap[album.path] = album;
     });
 
-    const albumWithFiles: AlbumWithFiles[] = [];
+    const albumsWithFiles: AlbumWithFiles[] = [];
 
     files
       .sort((file1, file2) => file2.datetime.localeCompare(file1.datetime))
       .forEach((file) => {
         if (
-          albumWithFiles.length === 0 ||
-          albumWithFiles[albumWithFiles.length - 1].album.path !== file.path
+          albumsWithFiles.length === 0 ||
+          albumsWithFiles[albumsWithFiles.length - 1].album.path !== file.path
         ) {
-          albumWithFiles.push({ album: albumsMap[file.path], files: [file] });
+          albumsWithFiles.push({ album: albumsMap[file.path], files: [file] });
         } else {
-          albumWithFiles[albumWithFiles.length - 1].files.push(file);
+          albumsWithFiles[albumsWithFiles.length - 1].files.push(file);
         }
       });
 
-    return albumWithFiles;
+    return { albumsWithFiles };
   }
 
   const isHomePath = path === '/';
   const albumsOrdered = isHomePath ? [...albums].reverse() : albums;
 
-  return albumsOrdered.map((album) => ({
-    album,
-    files: files.filter(
-      (file) =>
-        (isThisOrChildPath(file.path, album.path) && file.isTitle) ||
-        file.path === album.path
-    ),
-  }));
+  return {
+    albumsWithFiles: albumsOrdered.map((album) => ({
+      album,
+      files: files.filter(
+        (file) =>
+          (isThisOrChildPath(file.path, album.path) && file.isTitle) ||
+          file.path === album.path
+      ),
+    })),
+    isHomePath,
+  };
 };
