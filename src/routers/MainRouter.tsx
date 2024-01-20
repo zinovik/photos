@@ -46,6 +46,7 @@ export const MainRouter = () => {
     const removeFileParam = (event: Event) => {
       searchParams.delete('file');
       setSearchParams(searchParams);
+      window.removeEventListener('scroll', removeFileParam);
     };
 
     const scrolledTo = scrolledToFile || scrolledToAlbum;
@@ -70,8 +71,6 @@ export const MainRouter = () => {
     }
 
     if (!scrolledToFile) window.removeEventListener('scroll', removeFileParam);
-
-    return () => window.removeEventListener('scroll', removeFileParam);
   }, [scrolledToAlbum, scrolledToFile, searchParams, setSearchParams]);
 
   useEffect(() => {
