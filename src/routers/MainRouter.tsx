@@ -45,11 +45,13 @@ export const MainRouter = () => {
   useEffect(() => {
     console.log('useEffect', scrolledToFile);
 
+    if (albumsWithFiles.length === 0) return;
+
     const removeFileParam = () => {
       console.log('removeFileParam');
       searchParams.delete('file');
       setSearchParams(searchParams);
-      console.log('removeEventListener');
+      console.log('removeEventListener removeFileParam');
       window.removeEventListener('scroll', removeFileParam);
     };
 
@@ -60,7 +62,7 @@ export const MainRouter = () => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
 
-        console.log('removeEventListener');
+        console.log('removeEventListener before scrollIntoView');
         window.removeEventListener('scroll', removeFileParam);
 
         console.log('scrollIntoView');
@@ -80,10 +82,21 @@ export const MainRouter = () => {
     }
 
     if (!scrolledToFile) {
-      console.log('removeEventListener');
+      console.log('removeEventListener !scrolledToFile');
       window.removeEventListener('scroll', removeFileParam);
     }
-  }, [scrolledToAlbum, scrolledToFile, searchParams, setSearchParams]);
+
+    return () => {
+      console.log('removeEventListener useEffect callback');
+      window.removeEventListener('scroll', removeFileParam);
+    };
+  }, [
+    albumsWithFiles,
+    scrolledToAlbum,
+    scrolledToFile,
+    searchParams,
+    setSearchParams,
+  ]);
 
   useEffect(() => {
     if (route !== previousRoute) {
