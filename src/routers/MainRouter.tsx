@@ -43,9 +43,13 @@ export const MainRouter = () => {
   }, [path, dateRangesParameter]);
 
   useEffect(() => {
-    const removeFileParam = (event: Event) => {
+    console.log('useEffect', scrolledToFile);
+
+    const removeFileParam = () => {
+      console.log('removeFileParam');
       searchParams.delete('file');
       setSearchParams(searchParams);
+      console.log('removeEventListener');
       window.removeEventListener('scroll', removeFileParam);
     };
 
@@ -56,21 +60,29 @@ export const MainRouter = () => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
 
+        console.log('removeEventListener');
         window.removeEventListener('scroll', removeFileParam);
 
+        console.log('scrollIntoView');
         element.scrollIntoView({
           block: scrolledToFile ? 'center' : 'nearest',
         });
         if (scrolledToFile) {
           setTimeout(
-            () => window.addEventListener('scroll', removeFileParam),
+            () => {
+              console.log('addEventListener');
+              window.addEventListener('scroll', removeFileParam);
+            },
             1000 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
           );
         }
       }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
     }
 
-    if (!scrolledToFile) window.removeEventListener('scroll', removeFileParam);
+    if (!scrolledToFile) {
+      console.log('removeEventListener');
+      window.removeEventListener('scroll', removeFileParam);
+    }
   }, [scrolledToAlbum, scrolledToFile, searchParams, setSearchParams]);
 
   useEffect(() => {
