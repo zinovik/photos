@@ -11,7 +11,7 @@ export const Image = ({ url, description, onClick }: Props) => {
   const [errors, setErrors] = useState(0);
 
   const handleImageError = (): void => {
-    console.log('Image loading error! Reloading...');
+    console.warn('Image loading error! Reloading...');
 
     if (errors >= 4) return;
 

@@ -43,17 +43,13 @@ export const MainRouter = () => {
   }, [path, dateRangesParameter]);
 
   useEffect(() => {
-    console.log('useEffect', scrolledToFile, albumsWithFiles.length);
-
     if (albumsWithFiles.length === 0) return;
 
     const removeFileParam = (event: Event) => {
-      console.log('removeFileParam');
       searchParams.delete('file');
       setSearchParams(searchParams);
-      console.log('removeEventListener removeFileParam');
-      window.removeEventListener('scroll', removeFileParam);
       event.stopPropagation();
+      window.removeEventListener('scroll', removeFileParam);
     };
 
     const scrolledTo = scrolledToFile || scrolledToAlbum;
@@ -63,34 +59,23 @@ export const MainRouter = () => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
 
-        console.log('removeEventListener before scrollIntoView');
         window.removeEventListener('scroll', removeFileParam);
 
-        console.log('scrollIntoView');
         element.scrollIntoView({
           block: scrolledToFile ? 'center' : 'nearest',
         });
         if (scrolledToFile) {
           setTimeout(
-            () => {
-              console.log('addEventListener');
-              window.addEventListener('scroll', removeFileParam);
-            },
+            () => window.addEventListener('scroll', removeFileParam),
             1000 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
           );
         }
       }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
     }
 
-    if (!scrolledToFile) {
-      console.log('removeEventListener !scrolledToFile');
-      window.removeEventListener('scroll', removeFileParam);
-    }
+    if (!scrolledToFile) window.removeEventListener('scroll', removeFileParam);
 
-    return () => {
-      console.log('removeEventListener useEffect callback');
-      window.removeEventListener('scroll', removeFileParam);
-    };
+    return () => window.removeEventListener('scroll', removeFileParam);
   }, [
     albumsWithFiles,
     scrolledToAlbum,
