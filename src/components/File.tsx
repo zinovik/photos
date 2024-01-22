@@ -8,6 +8,7 @@ import { formatDatetime, getFilename, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { isLoggedIn, updateFile } from '../services/api';
 
 interface Props {
   file: FileInterface;
@@ -66,6 +67,31 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
             <Video url={thumbnailUrl} description={descriptionWithDatetime} />
           )}
         </div>
+      )}
+
+      {isLoggedIn() && (
+        <button
+          onClick={async () => {
+            const newPath = prompt('path', file.path) || '';
+            const newDescription =
+              prompt('description', description ?? '') || '';
+            const newText = (
+              prompt('text', Array.isArray(text) ? text.join('---') : text) ??
+              ''
+            ).split('---');
+
+            await updateFile({
+              filename: getFilename(url),
+              path: newPath,
+              description: newDescription,
+              text: newText.length > 1 ? newText : newText[0],
+            });
+
+            alert('done');
+          }}
+        >
+          edit
+        </button>
       )}
 
       <div

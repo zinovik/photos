@@ -6,6 +6,7 @@ import { File } from './File';
 import { Agenda } from './Agenda';
 import { getLevel } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
+import { isLoggedIn, updateAlbum } from '../services/api';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
@@ -26,6 +27,32 @@ export const Album = ({
 
   return (
     <>
+      {isLoggedIn() && (
+        <button
+          onClick={async () => {
+            const newPath = prompt('path', album.path) || '';
+            const newTitle = prompt('title', album.title) || '';
+            const newText = (
+              prompt(
+                'text',
+                Array.isArray(album.text) ? album.text.join('---') : album.text
+              ) ?? ''
+            ).split('---');
+
+            await updateAlbum({
+              path: album.path,
+              newPath: newPath,
+              title: newTitle,
+              text: newText.length > 1 ? newText : newText[0],
+            });
+
+            alert('done');
+          }}
+        >
+          edit
+        </button>
+      )}
+
       {isCurrentOpenedAlbum && <Title level={level}>{album.title}</Title>}
 
       {!isCurrentOpenedAlbum && (
