@@ -30,21 +30,30 @@ export const Album = ({
       {isLoggedIn() && (
         <button
           onClick={async () => {
-            const newPath = prompt('path', album.path) || '';
-            const newTitle = prompt('title', album.title) || '';
-            const newText = (
-              prompt(
-                'text',
-                Array.isArray(album.text) ? album.text.join('---') : album.text
-              ) ?? ''
-            ).split('---');
+            const newPath = prompt('path', album.path);
+            const newTitle = prompt('title', album.title);
+            const oldTextString = Array.isArray(album.text)
+              ? album.text.join('---')
+              : album.text;
+            const newTextString = prompt('text', oldTextString);
 
-            await updateAlbum({
-              path: album.path,
-              newPath: newPath,
-              title: newTitle,
-              text: newText.length > 1 ? newText : newText[0],
-            });
+            if (
+              newPath !== null &&
+              newTitle !== null &&
+              newTextString !== null &&
+              (newPath !== album.path ||
+                newTitle !== album.title ||
+                newTextString !== oldTextString)
+            ) {
+              await updateAlbum({
+                path: album.path,
+                newPath: newPath,
+                title: newTitle,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+              });
+            }
 
             alert('done');
           }}

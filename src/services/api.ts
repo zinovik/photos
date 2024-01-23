@@ -1,6 +1,6 @@
 import { API_URL } from '../constants';
 
-export let apiToken = null;
+let apiToken: string | null = null;
 
 export const apiLogin = async (googleToken?: string) => {
   if (!googleToken) return;
@@ -13,7 +13,11 @@ export const apiLogin = async (googleToken?: string) => {
     body: JSON.stringify({ token: googleToken }),
   });
 
-  apiToken = await response.json();
+  const json = await response.json();
+
+  apiToken = json.access_token;
+
+  alert(response.status >= 400 ? 'error' : 'success');
 };
 
 export const updateAlbum = async ({
@@ -48,9 +52,7 @@ export const updateAlbum = async ({
     }),
   });
 
-  const responseBody = await response.json();
-
-  console.log(responseBody);
+  if (response.status >= 400) alert('error');
 };
 
 export const updateFile = async ({
@@ -84,9 +86,7 @@ export const updateFile = async ({
     }),
   });
 
-  const responseBody = await response.json();
-
-  console.log(responseBody);
+  if (response.status >= 400) alert('error');
 };
 
 export const isLoggedIn = () => apiToken !== null;

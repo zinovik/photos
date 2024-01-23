@@ -72,20 +72,31 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
       {isLoggedIn() && (
         <button
           onClick={async () => {
-            const newPath = prompt('path', file.path) || '';
-            const newDescription =
-              prompt('description', description ?? '') || '';
-            const newText = (
-              prompt('text', Array.isArray(text) ? text.join('---') : text) ??
-              ''
-            ).split('---');
+            const newPath = prompt('path', file.path);
+            const newDescription = prompt('description', description ?? '');
+            const oldTextString = Array.isArray(text) ? text.join('---') : text;
+            const newTextString = prompt(
+              'text',
+              Array.isArray(text) ? text.join('---') : text
+            );
 
-            await updateFile({
-              filename: getFilename(url),
-              path: newPath,
-              description: newDescription,
-              text: newText.length > 1 ? newText : newText[0],
-            });
+            if (
+              newPath !== null &&
+              newDescription !== null &&
+              newTextString !== null &&
+              (newPath !== file.path ||
+                newDescription !== description ||
+                newTextString !== oldTextString)
+            ) {
+              await updateFile({
+                filename: getFilename(url),
+                path: newPath,
+                description: newDescription,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+              });
+            }
 
             alert('done');
           }}

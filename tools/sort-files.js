@@ -1,20 +1,9 @@
-const fs = require("fs");
-const { exec } = require("child_process");
-const { promisify } = require("util");
+const fs = require('fs');
+const { exec } = require('child_process');
+const { promisify } = require('util');
 
-const ALBUMS_TO_SORT_BY_ALBUM = [
-  "zanzibar",
-  "naliboki",
-  "sakartvelo",
-  "zalessie",
-  "sri-lanka",
-];
-const ALBUMS_TO_SORT_BY_FILENAME = ["uzbekistan", "board-games"];
-const ALBUMS_FILE = "./albums.json";
-const FILES_FILE = "./files.json";
-
-const isEveryPathEqualsOrChildAnyAlbumInList = (albums, paths) =>
-  paths.every((path) => albums.some((album) => path.indexOf(album) === 0));
+const ALBUMS_FILE = './albums.json';
+const FILES_FILE = './files.json';
 
 (async () => {
   const buffers = await Promise.all([
@@ -28,40 +17,17 @@ const isEveryPathEqualsOrChildAnyAlbumInList = (albums, paths) =>
 
   const albumPaths = albums.map((album) => album.path);
 
-  const filesSorted = [...files].sort((f1, f2) => {
-    if (
-      isEveryPathEqualsOrChildAnyAlbumInList(ALBUMS_TO_SORT_BY_ALBUM, [
-        f1.path,
-        f2.path,
-      ])
-    ) {
-      return f1.path === f2.path
-        ? (f2.order || 0) - (f1.order || 0)
-        : albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path);
-    }
+  const filesSorted = [...files].sort((f1, f2) =>
+    f1.path.split('/')[0] === f2.path.split('/')[0] // the same root path
+      ? f1.filename.localeCompare(f2.filename)
+      : albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path)
+  );
 
-    if (
-      isEveryPathEqualsOrChildAnyAlbumInList(ALBUMS_TO_SORT_BY_FILENAME, [
-        f1.path,
-        f2.path,
-      ])
-    ) {
-      // the same root album
-      if (f1.path.split("/")[0] === f2.path.split("/")[0]) {
-        return f1.filename.localeCompare(f2.filename);
-      }
-
-      return albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path);
-    }
-
-    return 0;
-  });
-
-  console.log("Writing file...");
+  console.log('Writing file...');
   fs.writeFileSync(FILES_FILE, JSON.stringify(filesSorted));
 
-  console.log("Formatting file...");
+  console.log('Formatting file...');
   await promisify(exec)(`npx prettier ${FILES_FILE} --write`);
 
-  console.log("Done!");
+  console.log('Done!');
 })();
