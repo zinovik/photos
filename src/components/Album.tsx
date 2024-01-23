@@ -32,9 +32,10 @@ export const Album = ({
           onClick={async () => {
             const newPath = prompt('path', album.path);
             const newTitle = prompt('title', album.title);
-            const oldTextString = Array.isArray(album.text)
-              ? album.text.join('---')
-              : album.text;
+            const oldTextString =
+              (Array.isArray(album.text)
+                ? album.text.join('---')
+                : album.text) ?? '';
             const newTextString = prompt('text', oldTextString);
 
             if (

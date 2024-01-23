@@ -74,7 +74,8 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
           onClick={async () => {
             const newPath = prompt('path', file.path);
             const newDescription = prompt('description', description ?? '');
-            const oldTextString = Array.isArray(text) ? text.join('---') : text;
+            const oldTextString =
+              (Array.isArray(text) ? text.join('---') : text) ?? '';
             const newTextString = prompt(
               'text',
               Array.isArray(text) ? text.join('---') : text
