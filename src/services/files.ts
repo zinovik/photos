@@ -6,20 +6,29 @@ import {
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
 import { FileInterface } from '../types';
 
-let loadedFiles: FileInterface[] = [];
+type SourcesConfig = Record<
+  string,
+  { url: string; type: 'image' | 'video' } | undefined
+>;
 
-const loadAndMergeFiles = async (): Promise<void> => {
+let loadedFiles: Omit<Omit<FileInterface, 'datetime'>, 'url'>[] = [];
+let sourcesConfig: SourcesConfig = {};
+let loadedAndMergedFiles: FileInterface[] = [];
+
+const loadFiles = async (): Promise<void> => {
   const [filesResponse, sourcesConfigResponse] = await Promise.all([
     fetch(FILES_URL),
     fetch(SOURCES_CONFIG_URL),
   ]);
 
-  const [files, sourcesConfig] = await Promise.all([
+  [loadedFiles, sourcesConfig] = await Promise.all([
     filesResponse.json(),
     sourcesConfigResponse.json(),
   ]);
+};
 
-  loadedFiles = files.map(
+const mergeFiles = () => {
+  loadedAndMergedFiles = loadedFiles.map(
     (file: Omit<Omit<FileInterface, 'datetime'>, 'url'>) => ({
       ...file,
       url: sourcesConfig[file.filename]?.url || file.filename,
@@ -33,11 +42,12 @@ export const getFiles = async (
   path?: string,
   dateRanges?: string[][]
 ): Promise<FileInterface[]> => {
-  if (loadedFiles.length === 0) {
-    await loadAndMergeFiles();
+  if (loadedAndMergedFiles.length === 0) {
+    await loadFiles();
+    mergeFiles();
   }
 
-  return loadedFiles.filter(
+  return loadedAndMergedFiles.filter(
     (file) =>
       (!path ||
         (path === '/' ? file.isTitle : isThisOrChildPath(file.path, path))) &&
@@ -48,4 +58,9 @@ export const getFiles = async (
             (!to || file.datetime.slice(0, to.length) <= to)
         ))
   );
+};
+
+export const setFiles = (files: FileInterface[]) => {
+  loadedFiles = files;
+  mergeFiles();
 };

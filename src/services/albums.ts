@@ -23,3 +23,7 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
         : isThisOrChildPath(album.path, path))
   );
 };
+
+export const setAlbums = (albums: AlbumInterface[]) => {
+  loadedAlbums = albums;
+};

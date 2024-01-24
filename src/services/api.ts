@@ -1,4 +1,6 @@
 import { API_URL } from '../constants';
+import { setAlbums } from './albums';
+import { setFiles } from './files';
 
 let apiToken: string | null = null;
 
@@ -53,6 +55,10 @@ export const updateAlbum = async ({
   });
 
   if (response.status >= 400) alert('error');
+
+  const albums = await response.json();
+
+  setAlbums(albums);
 };
 
 export const updateFile = async ({
@@ -87,6 +93,10 @@ export const updateFile = async ({
   });
 
   if (response.status >= 400) alert('error');
+
+  const files = await response.json();
+
+  setFiles(files);
 };
 
 export const isLoggedIn = () => apiToken !== null;
