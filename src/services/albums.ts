@@ -24,6 +24,25 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
   );
 };
 
-export const setAlbums = (albums: AlbumInterface[]) => {
-  loadedAlbums = albums;
+export const replaceAlbum = ({
+  path,
+  newPath,
+  title,
+  text,
+}: {
+  path: string;
+  newPath: string;
+  title: string;
+  text: string | string[];
+}) => {
+  loadedAlbums = loadedAlbums.map((album) =>
+    album.path === path
+      ? {
+          ...album,
+          path: newPath,
+          title: title,
+          text: text || undefined,
+        }
+      : album
+  );
 };

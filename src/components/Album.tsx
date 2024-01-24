@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Title } from './Title';
 import { Markdown } from './Markdown';
@@ -7,6 +7,7 @@ import { Agenda } from './Agenda';
 import { getLevel } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
 import { isLoggedIn, updateAlbum } from '../services/api';
+import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
@@ -21,6 +22,8 @@ export const Album = ({
   albumAgenda,
   currentFile,
 }: Props) => {
+  const forceUpdate = useContext(ForceUpdateContext);
+
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
   const isTopLevelAlbum = level === 1;
@@ -31,32 +34,33 @@ export const Album = ({
         <button
           onClick={async () => {
             const newPath = prompt('path', album.path);
+            if (newPath === null) return;
             const newTitle = prompt('title', album.title);
+            if (newTitle === null) return;
             const oldTextString =
               (Array.isArray(album.text)
                 ? album.text.join('---')
                 : album.text) ?? '';
             const newTextString = prompt('text', oldTextString);
+            if (newTextString === null) return;
 
             if (
-              newPath !== null &&
-              newTitle !== null &&
-              newTextString !== null &&
-              (newPath !== album.path ||
-                newTitle !== album.title ||
-                newTextString !== oldTextString)
-            ) {
-              await updateAlbum({
-                path: album.path,
-                newPath: newPath,
-                title: newTitle,
-                text: newTextString.includes('---')
-                  ? newTextString.split('---')
-                  : newTextString,
-              });
-            }
+              newPath === album.path &&
+              newTitle === album.title &&
+              newTextString === oldTextString
+            )
+              return;
 
-            alert('done');
+            const isSuccess = await updateAlbum({
+              path: album.path,
+              newPath: newPath,
+              title: newTitle,
+              text: newTextString.includes('---')
+                ? newTextString.split('---')
+                : newTextString,
+            });
+            alert(isSuccess ? 'success' : 'error');
+            forceUpdate();
           }}
         >
           edit

@@ -60,7 +60,26 @@ export const getFiles = async (
   );
 };
 
-export const setFiles = (files: FileInterface[]) => {
-  loadedFiles = files;
+export const replaceFile = ({
+  filename,
+  path,
+  description,
+  text,
+}: {
+  filename: string;
+  path: string;
+  description: string;
+  text: string | string[];
+}) => {
+  loadedFiles = loadedFiles.map((file) =>
+    file.filename === filename
+      ? {
+          ...file,
+          path,
+          description,
+          text: text || undefined,
+        }
+      : file
+  );
   mergeFiles();
 };

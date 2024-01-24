@@ -1,6 +1,6 @@
-const files = require("../files.json");
-const sourcesConfig = require("../sources-config.json");
-const albums = require("../albums.json");
+const files = require('../files.json');
+const sourcesConfig = require('../sources-config.json');
+const albums = require('../albums.json');
 
 files.forEach((file) => {
   if (!Object.keys(sourcesConfig).includes(file.filename))

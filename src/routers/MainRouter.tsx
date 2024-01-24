@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer, createContext } from 'react';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { AlbumPage } from '../pages/AlbumPage';
 import { HomePage } from '../pages/HomePage';
@@ -6,7 +6,11 @@ import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
 
+export const ForceUpdateContext = createContext(() => null as any);
+
 export const MainRouter = () => {
+  const [updateKey, forceUpdate] = useReducer((x) => x + 1, 0);
+
   const [isHomePage, setIsHomePage] = useState(false as boolean | undefined);
 
   const [dateRanges, setDateRanges] = useState(
@@ -40,7 +44,7 @@ export const MainRouter = () => {
         setIsHomePage(isHomePath);
       }
     );
-  }, [path, dateRangesParameter]);
+  }, [path, dateRangesParameter, updateKey]);
 
   useEffect(() => {
     if (albumsWithFiles.length === 0) return;
@@ -91,14 +95,18 @@ export const MainRouter = () => {
     }
   }, [scrolledToFile, scrolledToAlbum, route, previousRoute, setPreviousRoute]);
 
-  return isHomePage ? (
-    <HomePage albumsWithFiles={albumsWithFiles} />
-  ) : (
-    <AlbumPage
-      albumsWithFiles={albumsWithFiles}
-      path={path}
-      dateRanges={dateRanges}
-      currentFile={scrolledToFile}
-    />
+  return (
+    <ForceUpdateContext.Provider value={() => forceUpdate()}>
+      {isHomePage ? (
+        <HomePage albumsWithFiles={albumsWithFiles} />
+      ) : (
+        <AlbumPage
+          albumsWithFiles={albumsWithFiles}
+          path={path}
+          dateRanges={dateRanges}
+          currentFile={scrolledToFile}
+        />
+      )}
+    </ForceUpdateContext.Provider>
   );
 };

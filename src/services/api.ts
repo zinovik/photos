@@ -1,11 +1,17 @@
-import { API_URL } from '../constants';
-import { setAlbums } from './albums';
-import { setFiles } from './files';
+import { API_URL, IS_LOCAL_DEVELOPMENT } from '../constants';
+import { replaceAlbum } from './albums';
+import { replaceFile } from './files';
 
 let apiToken: string | null = null;
 
-export const apiLogin = async (googleToken?: string) => {
-  if (!googleToken) return;
+export const apiLogin = async (googleToken?: string): Promise<boolean> => {
+  if (!googleToken) return false;
+
+  if (IS_LOCAL_DEVELOPMENT) {
+    apiToken = 'mock-token';
+
+    return true;
+  }
 
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -19,7 +25,7 @@ export const apiLogin = async (googleToken?: string) => {
 
   apiToken = json.access_token;
 
-  alert(response.status >= 400 ? 'error' : 'success');
+  return response.status < 400;
 };
 
 export const updateAlbum = async ({
@@ -32,13 +38,15 @@ export const updateAlbum = async ({
   newPath: string;
   title: string;
   text: string | string[];
-}) => {
-  console.log({
+}): Promise<boolean> => {
+  replaceAlbum({
     path,
     newPath,
     title,
     text,
   });
+
+  if (IS_LOCAL_DEVELOPMENT) return true;
 
   const response = await fetch(`${API_URL}/gallery/album`, {
     method: 'POST',
@@ -46,19 +54,17 @@ export const updateAlbum = async ({
       Authorization: `Bearer ${apiToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      path,
-      newPath,
-      title,
-      text,
-    }),
+    body: JSON.stringify([
+      {
+        path,
+        newPath,
+        title,
+        text,
+      },
+    ]),
   });
 
-  if (response.status >= 400) alert('error');
-
-  const albums = await response.json();
-
-  setAlbums(albums);
+  return response.status < 400;
 };
 
 export const updateFile = async ({
@@ -71,12 +77,15 @@ export const updateFile = async ({
   path: string;
   description: string;
   text: string | string[];
-}) => {
-  console.log({
+}): Promise<boolean> => {
+  replaceFile({
     filename,
+    path,
     description,
     text,
   });
+
+  if (IS_LOCAL_DEVELOPMENT) return true;
 
   const response = await fetch(`${API_URL}/gallery/file`, {
     method: 'POST',
@@ -84,19 +93,17 @@ export const updateFile = async ({
       Authorization: `Bearer ${apiToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      filename,
-      path,
-      description,
-      text,
-    }),
+    body: JSON.stringify([
+      {
+        filename,
+        path,
+        description,
+        text,
+      },
+    ]),
   });
 
-  if (response.status >= 400) alert('error');
-
-  const files = await response.json();
-
-  setFiles(files);
+  return response.status < 400;
 };
 
 export const isLoggedIn = () => apiToken !== null;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import LazyLoad from 'react-lazy-load';
 import { Image } from './Image';
 import { Video } from './Video';
@@ -9,6 +9,7 @@ import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { isLoggedIn, updateFile } from '../services/api';
+import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
   file: FileInterface;
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
+  const forceUpdate = useContext(ForceUpdateContext);
+
   const { url, type, isNoThumbnail, description, datetime, text } = file;
   const thumbnailUrl = isNoThumbnail
     ? url
@@ -73,33 +76,34 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
         <button
           onClick={async () => {
             const newPath = prompt('path', file.path);
+            if (newPath === null) return;
             const newDescription = prompt('description', description ?? '');
+            if (newDescription === null) return;
             const oldTextString =
               (Array.isArray(text) ? text.join('---') : text) ?? '';
             const newTextString = prompt(
               'text',
               Array.isArray(text) ? text.join('---') : text
             );
+            if (newTextString === null) return;
 
             if (
-              newPath !== null &&
-              newDescription !== null &&
-              newTextString !== null &&
-              (newPath !== file.path ||
-                newDescription !== description ||
-                newTextString !== oldTextString)
-            ) {
-              await updateFile({
-                filename: getFilename(url),
-                path: newPath,
-                description: newDescription,
-                text: newTextString.includes('---')
-                  ? newTextString.split('---')
-                  : newTextString,
-              });
-            }
+              newPath === file.path &&
+              newDescription === description &&
+              newTextString === oldTextString
+            )
+              return;
 
-            alert('done');
+            const isSuccess = await updateFile({
+              filename: getFilename(url),
+              path: newPath,
+              description: newDescription,
+              text: newTextString.includes('---')
+                ? newTextString.split('---')
+                : newTextString,
+            });
+            alert(isSuccess ? 'success' : 'error');
+            forceUpdate();
           }}
         >
           edit

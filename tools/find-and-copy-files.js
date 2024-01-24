@@ -1,12 +1,12 @@
-const { exec } = require("child_process");
-const { promisify } = require("util");
-const fs = require("fs");
-const files = require("../files.json");
+const { exec } = require('child_process');
+const { promisify } = require('util');
+const fs = require('fs');
+const files = require('../files.json');
 
-const PATH = "gigs";
+const PATH = 'gigs';
 
-const SOURCE_PATH = "/home/max/photos";
-const DESTINATION_PATH = "/home/max/Downloads/123";
+const SOURCE_PATH = '/home/max/photos';
+const DESTINATION_PATH = '/home/max/Downloads/123';
 
 (async () => {
   const { stdout: treeOutput } = await promisify(exec)(
@@ -15,7 +15,7 @@ const DESTINATION_PATH = "/home/max/Downloads/123";
   );
 
   const filePaths = treeOutput
-    .split("\n")
+    .split('\n')
     .map((filePath) => filePath.substring(filePath.indexOf(SOURCE_PATH)));
 
   const filenames = files
