@@ -104,14 +104,10 @@ export const MainRouter = () => {
         {(albums.length !== 0 || files.length !== 0) && (
           <>
             {albums.map((album) => (
-              <div>
-                {album.path} ({album.title})
-              </div>
+              <div>{`Album: ${album.newPath} | ${album.title} | ${album.text}`}</div>
             ))}
             {files.map((file) => (
-              <div>
-                {file.filename} ({file.description})
-              </div>
+              <div>{`File: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
             ))}
             <button
               onClick={async () => {
