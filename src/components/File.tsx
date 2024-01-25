@@ -8,7 +8,7 @@ import { formatDatetime, getFilename, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { isLoggedIn, updateFile } from '../services/api';
+import { isLoggedIn, addUpdatedFile } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -94,7 +94,7 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
             )
               return;
 
-            const isSuccess = await updateFile({
+            addUpdatedFile({
               filename: getFilename(url),
               path: newPath,
               description: newDescription,
@@ -102,7 +102,6 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
                 ? newTextString.split('---')
                 : newTextString,
             });
-            alert(isSuccess ? 'success' : 'error');
             forceUpdate();
           }}
         >

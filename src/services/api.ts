@@ -32,7 +32,23 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
   return response.status < 400;
 };
 
-const apiUpdate = async (): Promise<boolean> => {
+export const apiUpdate = async (): Promise<boolean> => {
+  if (IS_LOCAL_DEVELOPMENT) {
+    console.log(
+      JSON.stringify({
+        update: {
+          albums: state.updatedAlbums,
+          files: state.updatedFiles,
+        },
+      })
+    );
+
+    state.updatedAlbums = [];
+    state.updatedFiles = [];
+
+    return true;
+  }
+
   const response = await fetch(`${API_URL}/gallery`, {
     method: 'POST',
     headers: {
@@ -53,9 +69,7 @@ const apiUpdate = async (): Promise<boolean> => {
   return response.status < 400;
 };
 
-export const updateAlbum = async (
-  updatedAlbum: UpdatedAlbum
-): Promise<boolean> => {
+export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
   let isUpdated = false;
   state.updatedAlbums = state.updatedAlbums.map((alreadyUpdatedAlbum) => {
     if (alreadyUpdatedAlbum.newPath === updatedAlbum.path) {
@@ -67,15 +81,9 @@ export const updateAlbum = async (
   if (!isUpdated) state.updatedAlbums.push(updatedAlbum);
 
   updateAlbumLoaded(updatedAlbum);
-
-  if (IS_LOCAL_DEVELOPMENT) return true;
-
-  return await apiUpdate(); // TODO: Move to separate action
 };
 
-export const updateFile = async (
-  updatedFile: UpdatedFile
-): Promise<boolean> => {
+export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
   let isUpdated = false;
   state.updatedFiles = state.updatedFiles.map((alreadyUpdatedFile) => {
     if (alreadyUpdatedFile.filename === updatedFile.filename) {
@@ -87,10 +95,6 @@ export const updateFile = async (
   if (!isUpdated) state.updatedFiles.push(updatedFile);
 
   updateFileLoaded(updatedFile);
-
-  if (IS_LOCAL_DEVELOPMENT) return true;
-
-  return await apiUpdate(); // TODO: Move to separate action
 };
 
 export const isLoggedIn = () => state.apiToken !== null;

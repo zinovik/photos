@@ -6,7 +6,7 @@ import { File } from './File';
 import { Agenda } from './Agenda';
 import { getLevel } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
-import { isLoggedIn, updateAlbum } from '../services/api';
+import { isLoggedIn, addUpdatedAlbum } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -51,7 +51,7 @@ export const Album = ({
             )
               return;
 
-            const isSuccess = await updateAlbum({
+            addUpdatedAlbum({
               path: album.path,
               newPath: newPath,
               title: newTitle,
@@ -59,7 +59,6 @@ export const Album = ({
                 ? newTextString.split('---')
                 : newTextString,
             });
-            alert(isSuccess ? 'success' : 'error');
             forceUpdate();
           }}
         >

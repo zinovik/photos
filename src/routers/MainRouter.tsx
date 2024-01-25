@@ -5,6 +5,7 @@ import { HomePage } from '../pages/HomePage';
 import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
+import { apiUpdate, getUpdated } from '../services/api';
 
 export const ForceUpdateContext = createContext(() => null as any);
 
@@ -95,18 +96,46 @@ export const MainRouter = () => {
     }
   }, [scrolledToFile, scrolledToAlbum, route, previousRoute, setPreviousRoute]);
 
+  const { albums, files } = getUpdated();
+
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
-      {isHomePage ? (
-        <HomePage albumsWithFiles={albumsWithFiles} />
-      ) : (
-        <AlbumPage
-          albumsWithFiles={albumsWithFiles}
-          path={path}
-          dateRanges={dateRanges}
-          currentFile={scrolledToFile}
-        />
-      )}
+      <>
+        {(albums.length !== 0 || files.length !== 0) && (
+          <>
+            {albums.map((album) => (
+              <div>
+                {album.path} ({album.title})
+              </div>
+            ))}
+            {files.map((file) => (
+              <div>
+                {file.filename} ({file.description})
+              </div>
+            ))}
+            <button
+              onClick={async () => {
+                const isSuccess = await apiUpdate();
+                alert(isSuccess ? 'success' : 'error');
+                forceUpdate();
+              }}
+            >
+              Update
+            </button>
+          </>
+        )}
+
+        {isHomePage ? (
+          <HomePage albumsWithFiles={albumsWithFiles} />
+        ) : (
+          <AlbumPage
+            albumsWithFiles={albumsWithFiles}
+            path={path}
+            dateRanges={dateRanges}
+            currentFile={scrolledToFile}
+          />
+        )}
+      </>
     </ForceUpdateContext.Provider>
   );
 };
