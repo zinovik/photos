@@ -4,7 +4,7 @@ import {
   isThisOrChildPath,
 } from './helper';
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
-import { FileInterface } from '../types';
+import { FileInterface, UpdatedFile } from '../types';
 
 type SourcesConfig = Record<
   string,
@@ -60,24 +60,14 @@ export const getFiles = async (
   );
 };
 
-export const replaceFile = ({
-  filename,
-  path,
-  description,
-  text,
-}: {
-  filename: string;
-  path: string;
-  description: string;
-  text: string | string[];
-}) => {
+export const updateFileLoaded = (updatedFile: UpdatedFile) => {
   loadedFiles = loadedFiles.map((file) =>
-    file.filename === filename
+    file.filename === updatedFile.filename
       ? {
           ...file,
-          path,
-          description,
-          text: text || undefined,
+          path: updatedFile.path,
+          description: updatedFile.description,
+          text: updatedFile.text || undefined,
         }
       : file
   );

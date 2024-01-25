@@ -1,6 +1,6 @@
 import { isThisOrChildPath, isTopLevelPath } from './helper';
 import { ALBUMS_URL } from '../constants';
-import { AlbumInterface } from '../types';
+import { AlbumInterface, UpdatedAlbum } from '../types';
 
 let loadedAlbums: AlbumInterface[] = [];
 
@@ -24,24 +24,14 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
   );
 };
 
-export const replaceAlbum = ({
-  path,
-  newPath,
-  title,
-  text,
-}: {
-  path: string;
-  newPath: string;
-  title: string;
-  text: string | string[];
-}) => {
+export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
   loadedAlbums = loadedAlbums.map((album) =>
-    album.path === path
+    album.path === updatedAlbum.path
       ? {
           ...album,
-          path: newPath,
-          title: title,
-          text: text || undefined,
+          path: updatedAlbum.newPath,
+          title: updatedAlbum.title,
+          text: updatedAlbum.text || undefined,
         }
       : album
   );

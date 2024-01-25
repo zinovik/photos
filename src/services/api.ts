@@ -1,15 +1,19 @@
 import { API_URL, IS_LOCAL_DEVELOPMENT } from '../constants';
-import { replaceAlbum } from './albums';
-import { replaceFile } from './files';
+import { UpdatedAlbum, UpdatedFile } from '../types';
+import { updateAlbumLoaded } from './albums';
+import { updateFileLoaded } from './files';
 
-let apiToken: string | null = null;
+const state = {
+  apiToken: null as string | null,
+  updatedAlbums: [] as UpdatedAlbum[],
+  updatedFiles: [] as UpdatedFile[],
+};
 
 export const apiLogin = async (googleToken?: string): Promise<boolean> => {
   if (!googleToken) return false;
 
   if (IS_LOCAL_DEVELOPMENT) {
-    apiToken = 'mock-token';
-
+    state.apiToken = 'mock-token';
     return true;
   }
 
@@ -23,87 +27,75 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
 
   const json = await response.json();
 
-  apiToken = json.access_token;
+  state.apiToken = json.access_token;
 
   return response.status < 400;
 };
 
-export const updateAlbum = async ({
-  path,
-  newPath,
-  title,
-  text,
-}: {
-  path: string;
-  newPath: string;
-  title: string;
-  text: string | string[];
-}): Promise<boolean> => {
-  replaceAlbum({
-    path,
-    newPath,
-    title,
-    text,
+const apiUpdate = async (): Promise<boolean> => {
+  const response = await fetch(`${API_URL}/gallery`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${state.apiToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      update: {
+        albums: state.updatedAlbums,
+        files: state.updatedFiles,
+      },
+    }),
   });
+
+  state.updatedAlbums = [];
+  state.updatedFiles = [];
+
+  return response.status < 400;
+};
+
+export const updateAlbum = async (
+  updatedAlbum: UpdatedAlbum
+): Promise<boolean> => {
+  let isUpdated = false;
+  state.updatedAlbums = state.updatedAlbums.map((alreadyUpdatedAlbum) => {
+    if (alreadyUpdatedAlbum.newPath === updatedAlbum.path) {
+      isUpdated = true;
+      return updatedAlbum;
+    }
+    return alreadyUpdatedAlbum;
+  });
+  if (!isUpdated) state.updatedAlbums.push(updatedAlbum);
+
+  updateAlbumLoaded(updatedAlbum);
 
   if (IS_LOCAL_DEVELOPMENT) return true;
 
-  const response = await fetch(`${API_URL}/gallery/album`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify([
-      {
-        path,
-        newPath,
-        title,
-        text,
-      },
-    ]),
-  });
-
-  return response.status < 400;
+  return await apiUpdate(); // TODO: Move to separate action
 };
 
-export const updateFile = async ({
-  filename,
-  path,
-  description,
-  text,
-}: {
-  filename: string;
-  path: string;
-  description: string;
-  text: string | string[];
-}): Promise<boolean> => {
-  replaceFile({
-    filename,
-    path,
-    description,
-    text,
+export const updateFile = async (
+  updatedFile: UpdatedFile
+): Promise<boolean> => {
+  let isUpdated = false;
+  state.updatedFiles = state.updatedFiles.map((alreadyUpdatedFile) => {
+    if (alreadyUpdatedFile.filename === updatedFile.filename) {
+      isUpdated = true;
+      return updatedFile;
+    }
+    return alreadyUpdatedFile;
   });
+  if (!isUpdated) state.updatedFiles.push(updatedFile);
+
+  updateFileLoaded(updatedFile);
 
   if (IS_LOCAL_DEVELOPMENT) return true;
 
-  const response = await fetch(`${API_URL}/gallery/file`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify([
-      {
-        filename,
-        path,
-        description,
-        text,
-      },
-    ]),
-  });
-
-  return response.status < 400;
+  return await apiUpdate(); // TODO: Move to separate action
 };
 
-export const isLoggedIn = () => apiToken !== null;
+export const isLoggedIn = () => state.apiToken !== null;
+
+export const getUpdated = () => ({
+  albums: state.updatedAlbums,
+  files: state.updatedFiles,
+});
