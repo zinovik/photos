@@ -5,7 +5,7 @@ import { HomePage } from '../pages/HomePage';
 import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
-import { apiUpdate, getUpdated } from '../services/api';
+import { apiSend, getUpdated } from '../services/api';
 
 export const ForceUpdateContext = createContext(() => null as any);
 
@@ -104,14 +104,14 @@ export const MainRouter = () => {
         {(albums.length !== 0 || files.length !== 0) && (
           <>
             {albums.map((album) => (
-              <div>{`Album: ${album.newPath} | ${album.title} | ${album.text}`}</div>
+              <div>{`Album Update: ${album.newPath} | ${album.title} | ${album.text}`}</div>
             ))}
             {files.map((file) => (
-              <div>{`File: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
+              <div>{`File Update: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
             ))}
             <button
               onClick={async () => {
-                const isSuccess = await apiUpdate();
+                const isSuccess = await apiSend();
                 alert(isSuccess ? 'success' : 'error');
                 forceUpdate();
               }}

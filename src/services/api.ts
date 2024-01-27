@@ -5,6 +5,8 @@ import { updateFileLoaded } from './files';
 
 const state = {
   apiToken: null as string | null,
+  addedAlbums: [] as any[],
+  addedFiles: [] as any[],
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
 };
@@ -32,10 +34,14 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
   return response.status < 400;
 };
 
-export const apiUpdate = async (): Promise<boolean> => {
+export const apiSend = async (): Promise<boolean> => {
   if (IS_LOCAL_DEVELOPMENT) {
     console.log(
       JSON.stringify({
+        add: {
+          albums: state.addedAlbums,
+          files: state.addedFiles,
+        },
         update: {
           albums: state.updatedAlbums,
           files: state.updatedFiles,
@@ -43,6 +49,8 @@ export const apiUpdate = async (): Promise<boolean> => {
       })
     );
 
+    state.addedAlbums = [];
+    state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
 
@@ -56,6 +64,10 @@ export const apiUpdate = async (): Promise<boolean> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+      add: {
+        albums: state.addedAlbums,
+        files: state.addedFiles,
+      },
       update: {
         albums: state.updatedAlbums,
         files: state.updatedFiles,
@@ -63,10 +75,20 @@ export const apiUpdate = async (): Promise<boolean> => {
     }),
   });
 
+  state.addedAlbums = [];
+  state.addedFiles = [];
   state.updatedAlbums = [];
   state.updatedFiles = [];
 
   return response.status < 400;
+};
+
+export const addAddedAlbum = (addedAlbum: any): void => {
+  //
+};
+
+export const addAddedFile = (addedAlbum: any): void => {
+  //
 };
 
 export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {

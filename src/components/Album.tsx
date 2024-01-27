@@ -6,7 +6,7 @@ import { File } from './File';
 import { Agenda } from './Agenda';
 import { getLevel } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
-import { isLoggedIn, addUpdatedAlbum } from '../services/api';
+import { isLoggedIn, addUpdatedAlbum, addAddedAlbum } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -31,39 +31,48 @@ export const Album = ({
   return (
     <>
       {isLoggedIn() && (
-        <button
-          onClick={async () => {
-            const newPath = prompt('path', album.path);
-            if (newPath === null) return;
-            const newTitle = prompt('title', album.title);
-            if (newTitle === null) return;
-            const oldTextString =
-              (Array.isArray(album.text)
-                ? album.text.join('---')
-                : album.text) ?? '';
-            const newTextString = prompt('text', oldTextString);
-            if (newTextString === null) return;
+        <>
+          <button
+            onClick={() => {
+              const newPath = prompt('path', album.path);
+              if (newPath === null) return;
+              const newTitle = prompt('title', album.title);
+              if (newTitle === null) return;
+              const oldTextString =
+                (Array.isArray(album.text)
+                  ? album.text.join('---')
+                  : album.text) ?? '';
+              const newTextString = prompt('text', oldTextString);
+              if (newTextString === null) return;
 
-            if (
-              newPath === album.path &&
-              newTitle === album.title &&
-              newTextString === oldTextString
-            )
-              return;
+              if (
+                newPath === album.path &&
+                newTitle === album.title &&
+                newTextString === oldTextString
+              )
+                return;
 
-            addUpdatedAlbum({
-              path: album.path,
-              newPath: newPath,
-              title: newTitle,
-              text: newTextString.includes('---')
-                ? newTextString.split('---')
-                : newTextString,
-            });
-            forceUpdate();
-          }}
-        >
-          edit
-        </button>
+              addUpdatedAlbum({
+                path: album.path,
+                newPath: newPath,
+                title: newTitle,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+              });
+              forceUpdate();
+            }}
+          >
+            edit
+          </button>
+          <button
+            onClick={() => {
+              addAddedAlbum('test');
+            }}
+          >
+            add
+          </button>
+        </>
       )}
 
       {isCurrentOpenedAlbum && <Title level={level}>{album.title}</Title>}

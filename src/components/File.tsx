@@ -8,7 +8,7 @@ import { formatDatetime, getFilename, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { isLoggedIn, addUpdatedFile } from '../services/api';
+import { isLoggedIn, addUpdatedFile, addAddedFile } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -73,40 +73,49 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
       )}
 
       {isLoggedIn() && (
-        <button
-          onClick={async () => {
-            const newPath = prompt('path', file.path);
-            if (newPath === null) return;
-            const newDescription = prompt('description', description ?? '');
-            if (newDescription === null) return;
-            const oldTextString =
-              (Array.isArray(text) ? text.join('---') : text) ?? '';
-            const newTextString = prompt(
-              'text',
-              Array.isArray(text) ? text.join('---') : text
-            );
-            if (newTextString === null) return;
+        <>
+          <button
+            onClick={() => {
+              const newPath = prompt('path', file.path);
+              if (newPath === null) return;
+              const newDescription = prompt('description', description ?? '');
+              if (newDescription === null) return;
+              const oldTextString =
+                (Array.isArray(text) ? text.join('---') : text) ?? '';
+              const newTextString = prompt(
+                'text',
+                Array.isArray(text) ? text.join('---') : text
+              );
+              if (newTextString === null) return;
 
-            if (
-              newPath === file.path &&
-              newDescription === description &&
-              newTextString === oldTextString
-            )
-              return;
+              if (
+                newPath === file.path &&
+                newDescription === description &&
+                newTextString === oldTextString
+              )
+                return;
 
-            addUpdatedFile({
-              filename: getFilename(url),
-              path: newPath,
-              description: newDescription,
-              text: newTextString.includes('---')
-                ? newTextString.split('---')
-                : newTextString,
-            });
-            forceUpdate();
-          }}
-        >
-          edit
-        </button>
+              addUpdatedFile({
+                filename: getFilename(url),
+                path: newPath,
+                description: newDescription,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+              });
+              forceUpdate();
+            }}
+          >
+            edit
+          </button>
+          <button
+            onClick={() => {
+              addAddedFile('test');
+            }}
+          >
+            add
+          </button>
+        </>
       )}
 
       <div

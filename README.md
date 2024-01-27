@@ -7,6 +7,7 @@ interface AlbumInterface {
   path: string;
   title: string;
   text?: string | string[];
+  isSorted?: true;
 }
 ```
 
@@ -19,11 +20,11 @@ interface FileInterface {
   type: 'image' | 'video';
   url: string;
   datetime: string;
-  isTitle?: boolean;
-  isNoThumbnail?: boolean;
+  isTitle?: true;
+  isNoThumbnail?: true;
   description?: string;
   text?: string | string[];
-  isVertical?: boolean;
+  isVertical?: true;
 }
 ```
 
