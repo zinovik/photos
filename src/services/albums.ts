@@ -1,6 +1,6 @@
 import { isThisOrChildPath, isTopLevelPath } from './helper';
 import { ALBUMS_URL } from '../constants';
-import { AlbumInterface, UpdatedAlbum } from '../types';
+import { AddedAlbum, AlbumInterface, UpdatedAlbum } from '../types';
 
 let loadedAlbums: AlbumInterface[] = [];
 
@@ -22,6 +22,10 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
         ? isTopLevelPath(album.path)
         : isThisOrChildPath(album.path, path))
   );
+};
+
+export const addAlbumLoaded = (addedAlbum: AddedAlbum): void => {
+  // TODO
 };
 
 export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {

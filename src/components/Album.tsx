@@ -67,7 +67,26 @@ export const Album = ({
           </button>
           <button
             onClick={() => {
-              addAddedAlbum('test');
+              const pathPart = prompt('pathPart');
+              if (pathPart === null) return;
+              const title = prompt('title');
+              if (title === null) return;
+              const newTextString = prompt('text');
+              if (newTextString === null) return;
+              const relation = prompt('relation', 'after|before|in');
+              if (!['after', 'before', 'in'].includes(relation as string))
+                return;
+
+              addAddedAlbum({
+                pathPart,
+                title,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+                relatedPath: album.path,
+                relation: relation as 'after' | 'before' | 'in',
+              });
+              forceUpdate();
             }}
           >
             add

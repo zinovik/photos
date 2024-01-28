@@ -96,17 +96,26 @@ export const MainRouter = () => {
     }
   }, [scrolledToFile, scrolledToAlbum, route, previousRoute, setPreviousRoute]);
 
-  const { albums, files } = getUpdated();
+  const { addedAlbums, addedFiles, updatedAlbums, updatedFiles } = getUpdated();
 
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       <>
-        {(albums.length !== 0 || files.length !== 0) && (
+        {(addedAlbums.length !== 0 ||
+          addedFiles.length !== 0 ||
+          updatedAlbums.length !== 0 ||
+          updatedFiles.length !== 0) && (
           <>
-            {albums.map((album) => (
+            {addedAlbums.map((album) => (
+              <div>{`Album Add: ${album.pathPart} | ${album.title} | ${album.text}`}</div>
+            ))}
+            {addedFiles.map((file) => (
+              <div>{`File Add: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
+            ))}
+            {updatedAlbums.map((album) => (
               <div>{`Album Update: ${album.newPath} | ${album.title} | ${album.text}`}</div>
             ))}
-            {files.map((file) => (
+            {updatedFiles.map((file) => (
               <div>{`File Update: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
             ))}
             <button

@@ -110,7 +110,24 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
           </button>
           <button
             onClick={() => {
-              addAddedFile('test');
+              const filename = prompt('filename');
+              if (filename === null) return;
+              const path = prompt('path');
+              if (path === null) return;
+              const description = prompt('description');
+              if (description === null) return;
+              const newTextString = prompt('text');
+              if (newTextString === null) return;
+
+              addAddedFile({
+                filename,
+                path,
+                description,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+              });
+              forceUpdate();
             }}
           >
             add

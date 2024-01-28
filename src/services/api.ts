@@ -1,12 +1,12 @@
 import { API_URL, IS_LOCAL_DEVELOPMENT } from '../constants';
-import { UpdatedAlbum, UpdatedFile } from '../types';
-import { updateAlbumLoaded } from './albums';
-import { updateFileLoaded } from './files';
+import { AddedAlbum, AddedFile, UpdatedAlbum, UpdatedFile } from '../types';
+import { addAlbumLoaded, updateAlbumLoaded } from './albums';
+import { addFileLoaded, updateFileLoaded } from './files';
 
 const state = {
   apiToken: null as string | null,
-  addedAlbums: [] as any[],
-  addedFiles: [] as any[],
+  addedAlbums: [] as AddedAlbum[],
+  addedFiles: [] as AddedFile[],
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
 };
@@ -83,12 +83,16 @@ export const apiSend = async (): Promise<boolean> => {
   return response.status < 400;
 };
 
-export const addAddedAlbum = (addedAlbum: any): void => {
-  //
+export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
+  state.addedAlbums.push(addedAlbum);
+
+  addAlbumLoaded(addedAlbum);
 };
 
-export const addAddedFile = (addedAlbum: any): void => {
-  //
+export const addAddedFile = (addedFile: AddedFile): void => {
+  state.addedFiles.push(addedFile);
+
+  addFileLoaded(addedFile);
 };
 
 export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
@@ -122,6 +126,8 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
 export const isLoggedIn = () => state.apiToken !== null;
 
 export const getUpdated = () => ({
-  albums: state.updatedAlbums,
-  files: state.updatedFiles,
+  addedAlbums: state.addedAlbums,
+  addedFiles: state.addedFiles,
+  updatedAlbums: state.updatedAlbums,
+  updatedFiles: state.updatedFiles,
 });

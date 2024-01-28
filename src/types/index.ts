@@ -6,6 +6,21 @@ export interface AlbumWithFiles {
   files: FileInterface[];
 }
 
+export interface AddedAlbum {
+  pathPart: string;
+  title: string;
+  text: string | string[];
+  relatedPath: string;
+  relation: 'after' | 'before' | 'in';
+}
+
+export interface AddedFile {
+  filename: string;
+  path: string;
+  description: string;
+  text: string | string[];
+}
+
 export interface UpdatedAlbum {
   path: string;
   newPath: string;

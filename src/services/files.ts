@@ -4,7 +4,7 @@ import {
   isThisOrChildPath,
 } from './helper';
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
-import { FileInterface, UpdatedFile } from '../types';
+import { AddedFile, FileInterface, UpdatedFile } from '../types';
 
 type SourcesConfig = Record<
   string,
@@ -58,6 +58,10 @@ export const getFiles = async (
             (!to || file.datetime.slice(0, to.length) <= to)
         ))
   );
+};
+
+export const addFileLoaded = (addedFile: AddedFile): void => {
+  // TODO
 };
 
 export const updateFileLoaded = (updatedFile: UpdatedFile) => {
