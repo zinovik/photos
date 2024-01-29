@@ -33,28 +33,30 @@ export const HomePage = ({ albumsWithFiles }: Props) => {
         </div>
       ))}
 
-      {IS_LOCAL_DEVELOPMENT ? (
-        <button
-          onClick={async () => {
-            const isSuccess = await apiLogin('mock-google-token');
-            alert(isSuccess ? 'success' : 'error');
-            forceUpdate();
-          }}
-        >
-          Sign in with Google mock
-        </button>
-      ) : (
-        <GoogleLogin
-          onSuccess={async (credentialResponse: CredentialResponse) => {
-            const isSuccess = await apiLogin(credentialResponse.credential);
-            alert(isSuccess ? 'success' : 'error');
-            forceUpdate();
-          }}
-          onError={() => {
-            console.error('Login Failed');
-          }}
-        />
-      )}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {IS_LOCAL_DEVELOPMENT ? (
+          <button
+            onClick={async () => {
+              const isSuccess = await apiLogin('mock-google-token');
+              alert(isSuccess ? 'success' : 'error');
+              forceUpdate();
+            }}
+          >
+            Sign in with Google mock
+          </button>
+        ) : (
+          <GoogleLogin
+            onSuccess={async (credentialResponse: CredentialResponse) => {
+              const isSuccess = await apiLogin(credentialResponse.credential);
+              alert(isSuccess ? 'success' : 'error');
+              forceUpdate();
+            }}
+            onError={() => {
+              console.error('Login Failed');
+            }}
+          />
+        )}
+      </div>
     </main>
   );
 };

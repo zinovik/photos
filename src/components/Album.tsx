@@ -6,7 +6,12 @@ import { File } from './File';
 import { Agenda } from './Agenda';
 import { getLevel } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
-import { isLoggedIn, addUpdatedAlbum, addAddedAlbum } from '../services/api';
+import {
+  isLoggedIn,
+  addUpdatedAlbum,
+  addAddedAlbum,
+  addAddedFile,
+} from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -63,7 +68,7 @@ export const Album = ({
               forceUpdate();
             }}
           >
-            edit
+            edit album
           </button>
           <button
             onClick={() => {
@@ -89,7 +94,32 @@ export const Album = ({
               forceUpdate();
             }}
           >
-            add
+            add album
+          </button>
+          <button
+            onClick={() => {
+              const filename = prompt('filename');
+              if (filename === null) return;
+              const type = prompt('type', 'image|video');
+              if (!['image', 'video'.includes(type as string)]) return;
+              const description = prompt('description');
+              if (description === null) return;
+              const newTextString = prompt('text');
+              if (newTextString === null) return;
+
+              addAddedFile({
+                path: album.path,
+                filename,
+                type: type as 'image' | 'video',
+                description,
+                text: newTextString.includes('---')
+                  ? newTextString.split('---')
+                  : newTextString,
+              });
+              forceUpdate();
+            }}
+          >
+            add file
           </button>
         </>
       )}

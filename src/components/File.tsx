@@ -8,7 +8,7 @@ import { formatDatetime, getFilename, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { isLoggedIn, addUpdatedFile, addAddedFile } from '../services/api';
+import { isLoggedIn, addUpdatedFile } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -106,31 +106,7 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
               forceUpdate();
             }}
           >
-            edit
-          </button>
-          <button
-            onClick={() => {
-              const filename = prompt('filename');
-              if (filename === null) return;
-              const path = prompt('path');
-              if (path === null) return;
-              const description = prompt('description');
-              if (description === null) return;
-              const newTextString = prompt('text');
-              if (newTextString === null) return;
-
-              addAddedFile({
-                filename,
-                path,
-                description,
-                text: newTextString.includes('---')
-                  ? newTextString.split('---')
-                  : newTextString,
-              });
-              forceUpdate();
-            }}
-          >
-            add
+            edit file
           </button>
         </>
       )}

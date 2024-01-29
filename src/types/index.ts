@@ -15,8 +15,9 @@ export interface AddedAlbum {
 }
 
 export interface AddedFile {
-  filename: string;
   path: string;
+  filename: string;
+  type: 'image' | 'video';
   description: string;
   text: string | string[];
 }

@@ -61,7 +61,14 @@ export const getFiles = async (
 };
 
 export const addFileLoaded = (addedFile: AddedFile): void => {
-  // TODO
+  loadedFiles = [
+    ...loadedFiles,
+    {
+      ...addedFile,
+      text: addedFile.text || undefined,
+    },
+  ];
+  mergeFiles();
 };
 
 export const updateFileLoaded = (updatedFile: UpdatedFile) => {

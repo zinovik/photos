@@ -125,7 +125,7 @@ export const MainRouter = () => {
                 forceUpdate();
               }}
             >
-              Update
+              save changes
             </button>
           </>
         )}

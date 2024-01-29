@@ -25,7 +25,31 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
 };
 
 export const addAlbumLoaded = (addedAlbum: AddedAlbum): void => {
-  // TODO
+  const albumsWithAdded = [...loadedAlbums];
+
+  const relatedPathIndex = albumsWithAdded.findIndex(
+    (album) => album.path === addedAlbum.relatedPath
+  );
+
+  if (relatedPathIndex === -1) return;
+
+  albumsWithAdded.splice(
+    relatedPathIndex + (addedAlbum.relation === 'before' ? 0 : 1),
+    0,
+    {
+      title: addedAlbum.title,
+      text: addedAlbum.text || undefined,
+      path:
+        addedAlbum.relation === 'in'
+          ? `${addedAlbum.relatedPath}/${addedAlbum.pathPart}`
+          : `${addedAlbum.relatedPath.slice(
+              0,
+              addedAlbum.relatedPath.lastIndexOf('/')
+            )}/${addedAlbum.pathPart}`,
+    }
+  );
+
+  loadedAlbums = albumsWithAdded;
 };
 
 export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
