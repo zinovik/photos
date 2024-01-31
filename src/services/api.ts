@@ -25,6 +25,7 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ token: googleToken }),
+    credentials: 'include',
   });
 
   const json = await response.json();
@@ -73,6 +74,7 @@ export const apiSend = async (): Promise<boolean> => {
         files: state.updatedFiles,
       },
     }),
+    credentials: 'include',
   });
 
   state.addedAlbums = [];
