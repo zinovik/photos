@@ -4,7 +4,7 @@ import { addAlbumLoaded, updateAlbumLoaded } from './albums';
 import { addFileLoaded, updateFileLoaded } from './files';
 
 const state = {
-  apiToken: null as string | null,
+  email: null as string | null,
   addedAlbums: [] as AddedAlbum[],
   addedFiles: [] as AddedFile[],
   updatedAlbums: [] as UpdatedAlbum[],
@@ -15,7 +15,7 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
   if (!googleToken) return false;
 
   if (IS_LOCAL_DEVELOPMENT) {
-    state.apiToken = 'mock-token';
+    state.email = 'test@email.com';
     return true;
   }
 
@@ -28,9 +28,9 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
     credentials: 'include',
   });
 
-  const json = await response.json();
+  const user = await response.json();
 
-  state.apiToken = json.access_token;
+  state.email = user && user.email;
 
   return response.status < 400;
 };
@@ -61,7 +61,6 @@ export const apiSend = async (): Promise<boolean> => {
   const response = await fetch(`${API_URL}/gallery`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${state.apiToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -125,7 +124,7 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
   updateFileLoaded(updatedFile);
 };
 
-export const isLoggedIn = () => state.apiToken !== null;
+export const isLoggedIn = () => state.email !== null;
 
 export const getUpdated = () => ({
   addedAlbums: state.addedAlbums,
