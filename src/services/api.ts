@@ -28,7 +28,8 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
     credentials: 'include',
   });
 
-  const user = await response.json();
+  const { user, csrf } = await response.json();
+  localStorage.setItem('csrf', csrf);
 
   state.email = user && user.email;
 
@@ -62,6 +63,7 @@ export const apiSend = async (): Promise<boolean> => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: localStorage.getItem('csrf') || '',
     },
     body: JSON.stringify({
       add: {
