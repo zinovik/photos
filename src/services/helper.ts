@@ -1,4 +1,5 @@
 import { FileType, Host } from '../constants';
+import { AlbumInterface, FileInterface } from '../types';
 
 export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
@@ -74,3 +75,39 @@ export const getFileType = (type?: string): FileType =>
   Object.values(FileType).includes(type as FileType)
     ? (type as FileType)
     : FileType.image;
+
+export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
+  const sortedAlbums = albums
+    .filter((album) => album.isSorted)
+    .map((album) => album.path);
+
+  return [...albums].sort((a1, a2) => {
+    if (a1.path.split('/')[0] !== a2.path.split('/')[0]) {
+      return 0;
+    }
+
+    // the same root path
+
+    // is sorted album
+    if (sortedAlbums.includes(a1.path.split('/')[0]))
+      return a1.path.localeCompare(a2.path);
+
+    if (a2.path.includes(a1.path)) return -1;
+    if (a1.path.includes(a2.path)) return 1;
+
+    return 0;
+  });
+};
+
+export const sortFiles = (
+  files: FileInterface[],
+  albums: AlbumInterface[]
+): FileInterface[] => {
+  const albumPaths = albums.map((album) => album.path);
+
+  return [...files].sort((f1, f2) =>
+    f1.path.split('/')[0] === f2.path.split('/')[0] // the same root path
+      ? f1.filename.localeCompare(f2.filename)
+      : albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path)
+  );
+};

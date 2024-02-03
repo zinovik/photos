@@ -1,4 +1,4 @@
-import { isThisOrChildPath, isTopLevelPath } from './helper';
+import { isThisOrChildPath, isTopLevelPath, sortAlbums } from './helper';
 import { ALBUMS_URL } from '../constants';
 import { AddedAlbum, AlbumInterface, UpdatedAlbum } from '../types';
 
@@ -49,11 +49,11 @@ export const addAlbumLoaded = (addedAlbum: AddedAlbum): void => {
     }
   );
 
-  loadedAlbums = albumsWithAdded;
+  loadedAlbums = sortAlbums(albumsWithAdded);
 };
 
 export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
-  loadedAlbums = loadedAlbums.map((album) =>
+  const loadedAlbumsUpdated = loadedAlbums.map((album) =>
     album.path === updatedAlbum.path
       ? {
           ...album,
@@ -63,4 +63,6 @@ export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
         }
       : album
   );
+
+  loadedAlbums = sortAlbums(loadedAlbumsUpdated);
 };

@@ -2,6 +2,7 @@ import {
   getDatetimeFromFilename,
   getFileType,
   isThisOrChildPath,
+  sortFiles,
 } from './helper';
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
 import { AddedFile, FileInterface, UpdatedFile } from '../types';
@@ -27,8 +28,11 @@ const loadFiles = async (): Promise<void> => {
   ]);
 };
 
-const mergeFiles = () => {
-  loadedAndMergedFiles = loadedFiles.map(
+const mergeFiles = (
+  files: Omit<Omit<FileInterface, 'datetime'>, 'url'>[],
+  sourcesConfig: SourcesConfig
+) => {
+  const mergedFiles = files.map(
     (file: Omit<Omit<FileInterface, 'datetime'>, 'url'>) => ({
       ...file,
       url: sourcesConfig[file.filename]?.url || file.filename,
@@ -36,6 +40,8 @@ const mergeFiles = () => {
       datetime: getDatetimeFromFilename(file.filename),
     })
   );
+
+  return mergedFiles;
 };
 
 export const getFiles = async (
@@ -44,7 +50,7 @@ export const getFiles = async (
 ): Promise<FileInterface[]> => {
   if (loadedAndMergedFiles.length === 0) {
     await loadFiles();
-    mergeFiles();
+    loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
   }
 
   return loadedAndMergedFiles.filter(
@@ -68,7 +74,9 @@ export const addFileLoaded = (addedFile: AddedFile): void => {
       text: addedFile.text || undefined,
     },
   ];
-  mergeFiles();
+  const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
+
+  loadedAndMergedFiles = sortFiles(mergedFiles, []); // TODO
 };
 
 export const updateFileLoaded = (updatedFile: UpdatedFile) => {
@@ -82,5 +90,7 @@ export const updateFileLoaded = (updatedFile: UpdatedFile) => {
         }
       : file
   );
-  mergeFiles();
+  const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
+
+  loadedAndMergedFiles = sortFiles(mergedFiles, []); // TODO
 };
