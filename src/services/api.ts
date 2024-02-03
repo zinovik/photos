@@ -76,12 +76,16 @@ export const apiSend = async (): Promise<boolean> => {
     credentials: 'include',
   });
 
-  state.addedAlbums = [];
-  state.addedFiles = [];
-  state.updatedAlbums = [];
-  state.updatedFiles = [];
+  if (response.status < 400) {
+    state.addedAlbums = [];
+    state.addedFiles = [];
+    state.updatedAlbums = [];
+    state.updatedFiles = [];
 
-  return response.status < 400;
+    return true;
+  }
+
+  return false;
 };
 
 export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
