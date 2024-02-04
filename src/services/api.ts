@@ -89,7 +89,7 @@ export const apiSend = async (): Promise<boolean> => {
         albums: state.updatedAlbums,
         files: state.updatedFiles,
       },
-      removed: {
+      remove: {
         albums: state.removedAlbums,
         files: state.removedFiles,
       },
