@@ -1,7 +1,14 @@
 import { API_URL, IS_LOCAL_DEVELOPMENT } from '../constants';
-import { AddedAlbum, AddedFile, UpdatedAlbum, UpdatedFile } from '../types';
-import { addAlbumLoaded, updateAlbumLoaded } from './albums';
-import { addFileLoaded, updateFileLoaded } from './files';
+import {
+  AddedAlbum,
+  AddedFile,
+  RemovedAlbum,
+  RemovedFile,
+  UpdatedAlbum,
+  UpdatedFile,
+} from '../types';
+import { addAlbumLoaded, removeAlbumLoaded, updateAlbumLoaded } from './albums';
+import { addFileLoaded, removeFileLoaded, updateFileLoaded } from './files';
 
 const state = {
   email: null as string | null,
@@ -9,6 +16,8 @@ const state = {
   addedFiles: [] as AddedFile[],
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
+  removedAlbums: [] as RemovedAlbum[],
+  removedFiles: [] as RemovedFile[],
 };
 
 export const apiLogin = async (googleToken?: string): Promise<boolean> => {
@@ -48,6 +57,10 @@ export const apiSend = async (): Promise<boolean> => {
           albums: state.updatedAlbums,
           files: state.updatedFiles,
         },
+        removed: {
+          albums: state.removedAlbums,
+          files: state.removedFiles,
+        },
       })
     );
 
@@ -55,6 +68,8 @@ export const apiSend = async (): Promise<boolean> => {
     state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
+    state.removedAlbums = [];
+    state.removedFiles = [];
 
     return true;
   }
@@ -74,6 +89,10 @@ export const apiSend = async (): Promise<boolean> => {
         albums: state.updatedAlbums,
         files: state.updatedFiles,
       },
+      removed: {
+        albums: state.removedAlbums,
+        files: state.removedFiles,
+      },
     }),
     credentials: 'include',
   });
@@ -83,6 +102,8 @@ export const apiSend = async (): Promise<boolean> => {
     state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
+    state.removedAlbums = [];
+    state.removedFiles = [];
 
     return true;
   }
@@ -130,6 +151,18 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
   updateFileLoaded(updatedFile);
 };
 
+export const addRemovedAlbum = (removedAlbum: RemovedAlbum): void => {
+  state.removedAlbums.push(removedAlbum);
+
+  removeAlbumLoaded(removedAlbum);
+};
+
+export const addRemovedFile = (removedFile: RemovedFile): void => {
+  state.removedFiles.push(removedFile);
+
+  removeFileLoaded(removedFile);
+};
+
 export const isLoggedIn = () => state.email !== null;
 
 export const getUpdated = () => ({
@@ -137,4 +170,6 @@ export const getUpdated = () => ({
   addedFiles: state.addedFiles,
   updatedAlbums: state.updatedAlbums,
   updatedFiles: state.updatedFiles,
+  removedAlbums: state.removedAlbums,
+  removedFiles: state.removedFiles,
 });

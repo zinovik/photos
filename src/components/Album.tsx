@@ -11,6 +11,7 @@ import {
   addUpdatedAlbum,
   addAddedAlbum,
   addAddedFile,
+  addRemovedAlbum,
 } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
@@ -100,8 +101,6 @@ export const Album = ({
             onClick={() => {
               const filename = prompt('filename');
               if (filename === null) return;
-              const type = prompt('type', 'image|video');
-              if (!['image', 'video'.includes(type as string)]) return;
               const description = prompt('description');
               if (description === null) return;
               const newTextString = prompt('text');
@@ -110,7 +109,6 @@ export const Album = ({
               addAddedFile({
                 path: album.path,
                 filename,
-                type: type as 'image' | 'video',
                 description,
                 text: newTextString.includes('---')
                   ? newTextString.split('---')
@@ -120,6 +118,18 @@ export const Album = ({
             }}
           >
             add file
+          </button>
+          <button
+            onClick={() => {
+              if (!window.confirm(`Remove ${album.path}?`)) return;
+
+              addRemovedAlbum({
+                path: album.path,
+              });
+              forceUpdate();
+            }}
+          >
+            remove album
           </button>
         </>
       )}

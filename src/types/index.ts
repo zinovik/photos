@@ -17,7 +17,6 @@ export interface AddedAlbum {
 export interface AddedFile {
   path: string;
   filename: string;
-  type: 'image' | 'video';
   description: string;
   text: string | string[];
 }
@@ -34,6 +33,14 @@ export interface UpdatedFile {
   path: string;
   description: string;
   text: string | string[];
+}
+
+export interface RemovedAlbum {
+  path: string;
+}
+
+export interface RemovedFile {
+  filename: string;
 }
 
 export * from './AlbumInterface';

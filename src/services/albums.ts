@@ -1,6 +1,11 @@
 import { isThisOrChildPath, isTopLevelPath, sortAlbums } from './helper';
 import { ALBUMS_URL } from '../constants';
-import { AddedAlbum, AlbumInterface, UpdatedAlbum } from '../types';
+import {
+  AddedAlbum,
+  AlbumInterface,
+  RemovedAlbum,
+  UpdatedAlbum,
+} from '../types';
 
 let loadedAlbums: AlbumInterface[] = [];
 
@@ -65,4 +70,10 @@ export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
   );
 
   loadedAlbums = sortAlbums(loadedAlbumsUpdated);
+};
+
+export const removeAlbumLoaded = (removedAlbum: RemovedAlbum) => {
+  loadedAlbums = loadedAlbums.filter(
+    (album) => album.path !== removedAlbum.path
+  );
 };

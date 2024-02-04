@@ -5,14 +5,15 @@ import {
   sortFiles,
 } from './helper';
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
-import { AddedFile, FileInterface, UpdatedFile } from '../types';
+import { AddedFile, FileInterface, RemovedFile, UpdatedFile } from '../types';
 
 type SourcesConfig = Record<
   string,
   { url: string; type: 'image' | 'video' } | undefined
 >;
 
-let loadedFiles: Omit<Omit<FileInterface, 'datetime'>, 'url'>[] = [];
+let loadedFiles: Omit<Omit<Omit<FileInterface, 'datetime'>, 'url'>, 'type'>[] =
+  [];
 let sourcesConfig: SourcesConfig = {};
 let loadedAndMergedFiles: FileInterface[] = [];
 
@@ -29,17 +30,15 @@ const loadFiles = async (): Promise<void> => {
 };
 
 const mergeFiles = (
-  files: Omit<Omit<FileInterface, 'datetime'>, 'url'>[],
+  files: Omit<Omit<Omit<FileInterface, 'datetime'>, 'url'>, 'type'>[],
   sourcesConfig: SourcesConfig
 ) => {
-  const mergedFiles = files.map(
-    (file: Omit<Omit<FileInterface, 'datetime'>, 'url'>) => ({
-      ...file,
-      url: sourcesConfig[file.filename]?.url || file.filename,
-      type: getFileType(sourcesConfig[file.filename]?.type),
-      datetime: getDatetimeFromFilename(file.filename),
-    })
-  );
+  const mergedFiles = files.map((file) => ({
+    ...file,
+    url: sourcesConfig[file.filename]?.url || file.filename,
+    type: getFileType(sourcesConfig[file.filename]?.type),
+    datetime: getDatetimeFromFilename(file.filename),
+  }));
 
   return mergedFiles;
 };
@@ -93,4 +92,11 @@ export const updateFileLoaded = (updatedFile: UpdatedFile) => {
   const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 
   loadedAndMergedFiles = sortFiles(mergedFiles, []); // TODO
+};
+
+export const removeFileLoaded = (removedFile: RemovedFile) => {
+  loadedFiles = loadedFiles.filter(
+    (file) => file.filename !== removedFile.filename
+  );
+  loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 };

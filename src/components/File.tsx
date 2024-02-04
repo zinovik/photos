@@ -4,11 +4,11 @@ import { Image } from './Image';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { formatDatetime, getFilename, getThumbnail } from '../services/helper';
+import { formatDatetime, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { isLoggedIn, addUpdatedFile } from '../services/api';
+import { isLoggedIn, addUpdatedFile, addRemovedFile } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -36,8 +36,7 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
   const handleImageClick = (): void => {
     if (isAlbumCover) navigate(file.path.split('/')[0]);
     else {
-      const filename = getFilename(url);
-      searchParams.set('file', filename);
+      searchParams.set('file', file.filename);
       setSearchParams(searchParams);
     }
   };
@@ -96,7 +95,7 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
                 return;
 
               addUpdatedFile({
-                filename: getFilename(url),
+                filename: file.filename,
                 path: newPath,
                 description: newDescription,
                 text: newTextString.includes('---')
@@ -107,6 +106,18 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
             }}
           >
             edit file
+          </button>
+          <button
+            onClick={() => {
+              if (!window.confirm(`Remove ${file.filename}?`)) return;
+
+              addRemovedFile({
+                filename: file.filename,
+              });
+              forceUpdate();
+            }}
+          >
+            remove file
           </button>
         </>
       )}
