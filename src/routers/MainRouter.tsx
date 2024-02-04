@@ -5,7 +5,12 @@ import { HomePage } from '../pages/HomePage';
 import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
-import { apiSend, getUpdated } from '../services/api';
+import {
+  apiMediaUrlsUpdater,
+  apiSend,
+  getUpdated,
+  isLoggedIn,
+} from '../services/api';
 
 export const ForceUpdateContext = createContext(() => null as any);
 
@@ -143,6 +148,18 @@ export const MainRouter = () => {
               save changes
             </button>
           </>
+        )}
+        {isLoggedIn() && (
+          <div>
+            <button
+              onClick={async () => {
+                const isSuccess = await apiMediaUrlsUpdater();
+                alert(isSuccess ? 'success' : 'error');
+              }}
+            >
+              media urls updater
+            </button>
+          </div>
         )}
 
         {isHomePage ? (

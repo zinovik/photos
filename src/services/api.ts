@@ -111,6 +111,18 @@ export const apiSend = async (): Promise<boolean> => {
   return false;
 };
 
+export const apiMediaUrlsUpdater = async (): Promise<boolean> => {
+  const response = await fetch(`${API_URL}/gallery/media-urls-updater`, {
+    method: 'POST',
+    headers: {
+      Authorization: localStorage.getItem('csrf') || '',
+    },
+    credentials: 'include',
+  });
+
+  return response.status < 400;
+};
+
 export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
   state.addedAlbums.push(addedAlbum);
 
