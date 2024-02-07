@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import LazyLoad from 'react-lazy-load';
 import { Image } from './Image';
 import { Video } from './Video';
@@ -8,8 +8,7 @@ import { formatDatetime, getThumbnail } from '../services/helper';
 import { FileType } from '../constants';
 import { FileInterface } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { isLoggedIn, addUpdatedFile, addRemovedFile } from '../services/api';
-import { ForceUpdateContext } from '../routers/MainRouter';
+import { AdminFile } from './AdminFile';
 
 interface Props {
   file: FileInterface;
@@ -19,8 +18,6 @@ interface Props {
 }
 
 export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
-  const forceUpdate = useContext(ForceUpdateContext);
-
   const { url, type, isNoThumbnail, description, datetime, text } = file;
   const thumbnailUrl = isNoThumbnail
     ? url
@@ -43,6 +40,8 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
 
   return (
     <>
+      <AdminFile file={file} />
+
       {isCurrent && (
         <div
           style={{
@@ -71,57 +70,6 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
         </div>
       )}
 
-      {isLoggedIn() && (
-        <>
-          <button
-            onClick={() => {
-              const newPath = prompt('path', file.path);
-              if (newPath === null) return;
-              const newDescription = prompt('description', description ?? '');
-              if (newDescription === null) return;
-              const oldTextString =
-                (Array.isArray(text) ? text.join('---') : text) ?? '';
-              const newTextString = prompt(
-                'text',
-                Array.isArray(text) ? text.join('---') : text
-              );
-              if (newTextString === null) return;
-
-              if (
-                newPath === file.path &&
-                newDescription === description &&
-                newTextString === oldTextString
-              )
-                return;
-
-              addUpdatedFile({
-                filename: file.filename,
-                path: newPath,
-                description: newDescription,
-                text: newTextString.includes('---')
-                  ? newTextString.split('---')
-                  : newTextString,
-              });
-              forceUpdate();
-            }}
-          >
-            edit file
-          </button>
-          <button
-            onClick={() => {
-              if (!window.confirm(`Remove ${file.filename}?`)) return;
-
-              addRemovedFile({
-                filename: file.filename,
-              });
-              forceUpdate();
-            }}
-          >
-            remove file
-          </button>
-        </>
-      )}
-
       <div
         id={`${file.filename}${isAlbumCover ? '-title' : ''}`}
         style={{ minHeight: 200 }}
@@ -144,8 +92,6 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
         </LazyLoad>
 
         <FileDescription description={descriptionWithDatetime} />
-
-        {isAlbumCover && !isHomePage && <Markdown text={text} />}
       </div>
     </>
   );

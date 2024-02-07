@@ -23,16 +23,16 @@ export interface AddedFile {
 
 export interface UpdatedAlbum {
   path: string;
-  newPath: string;
-  title: string;
-  text: string | string[];
+  newPath?: string;
+  title?: string;
+  text?: string | string[];
 }
 
 export interface UpdatedFile {
   filename: string;
-  path: string;
-  description: string;
-  text: string | string[];
+  path?: string;
+  description?: string;
+  text?: string | string[];
 }
 
 export interface RemovedAlbum {

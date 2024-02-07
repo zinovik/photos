@@ -65,6 +65,13 @@ export const getFiles = async (
   );
 };
 
+export const removeFileLoaded = (removedFile: RemovedFile) => {
+  loadedFiles = loadedFiles.filter(
+    (file) => file.filename !== removedFile.filename
+  );
+  loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
+};
+
 export const addFileLoaded = (addedFile: AddedFile): void => {
   loadedFiles = [
     ...loadedFiles,
@@ -83,20 +90,17 @@ export const updateFileLoaded = (updatedFile: UpdatedFile) => {
     file.filename === updatedFile.filename
       ? {
           ...file,
-          path: updatedFile.path,
-          description: updatedFile.description,
-          text: updatedFile.text || undefined,
+          ...(updatedFile.path ? { path: updatedFile.path } : {}),
+          ...(updatedFile.description
+            ? { description: updatedFile.description }
+            : {}),
+          ...(updatedFile.text !== undefined
+            ? { text: updatedFile.text || undefined }
+            : {}),
         }
       : file
   );
   const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 
   loadedAndMergedFiles = sortFiles(mergedFiles, []); // TODO
-};
-
-export const removeFileLoaded = (removedFile: RemovedFile) => {
-  loadedFiles = loadedFiles.filter(
-    (file) => file.filename !== removedFile.filename
-  );
-  loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 };

@@ -5,12 +5,7 @@ import { HomePage } from '../pages/HomePage';
 import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
-import {
-  apiMediaUrlsUpdater,
-  apiSend,
-  getUpdated,
-  isLoggedIn,
-} from '../services/api';
+import { AdminChanges } from '../components/AdminChanges';
 
 export const ForceUpdateContext = createContext(() => null as any);
 
@@ -101,66 +96,10 @@ export const MainRouter = () => {
     }
   }, [scrolledToFile, scrolledToAlbum, route, previousRoute, setPreviousRoute]);
 
-  const {
-    addedAlbums,
-    addedFiles,
-    updatedAlbums,
-    updatedFiles,
-    removedAlbums,
-    removedFiles,
-  } = getUpdated();
-
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       <>
-        {(addedAlbums.length !== 0 ||
-          addedFiles.length !== 0 ||
-          updatedAlbums.length !== 0 ||
-          updatedFiles.length !== 0 ||
-          removedAlbums.length !== 0 ||
-          removedFiles.length !== 0) && (
-          <>
-            {addedAlbums.map((album) => (
-              <div>{`Album Add: ${album.pathPart} | ${album.title} | ${album.text}`}</div>
-            ))}
-            {addedFiles.map((file) => (
-              <div>{`File Add: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
-            ))}
-            {updatedAlbums.map((album) => (
-              <div>{`Album Update: ${album.newPath} | ${album.title} | ${album.text}`}</div>
-            ))}
-            {updatedFiles.map((file) => (
-              <div>{`File Update: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
-            ))}
-            {removedAlbums.map((album) => (
-              <div>{`Album Remove: ${album.path}`}</div>
-            ))}
-            {removedFiles.map((file) => (
-              <div>{`File Removed: ${file.filename}`}</div>
-            ))}
-            <button
-              onClick={async () => {
-                const isSuccess = await apiSend();
-                alert(isSuccess ? 'success' : 'error');
-                forceUpdate();
-              }}
-            >
-              save changes
-            </button>
-          </>
-        )}
-        {isLoggedIn() && (
-          <div>
-            <button
-              onClick={async () => {
-                const isSuccess = await apiMediaUrlsUpdater();
-                alert(isSuccess ? 'success' : 'error');
-              }}
-            >
-              media urls updater
-            </button>
-          </div>
-        )}
+        <AdminChanges />
 
         {isHomePage ? (
           <HomePage albumsWithFiles={albumsWithFiles} />

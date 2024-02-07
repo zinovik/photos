@@ -12,12 +12,12 @@ import { addFileLoaded, removeFileLoaded, updateFileLoaded } from './files';
 
 const state = {
   email: null as string | null,
+  removedAlbums: [] as RemovedAlbum[],
+  removedFiles: [] as RemovedFile[],
   addedAlbums: [] as AddedAlbum[],
   addedFiles: [] as AddedFile[],
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
-  removedAlbums: [] as RemovedAlbum[],
-  removedFiles: [] as RemovedFile[],
 };
 
 export const apiLogin = async (googleToken?: string): Promise<boolean> => {
@@ -47,29 +47,14 @@ export const apiLogin = async (googleToken?: string): Promise<boolean> => {
 
 export const apiSend = async (): Promise<boolean> => {
   if (IS_LOCAL_DEVELOPMENT) {
-    console.log(
-      JSON.stringify({
-        add: {
-          albums: state.addedAlbums,
-          files: state.addedFiles,
-        },
-        update: {
-          albums: state.updatedAlbums,
-          files: state.updatedFiles,
-        },
-        removed: {
-          albums: state.removedAlbums,
-          files: state.removedFiles,
-        },
-      })
-    );
+    console.log(state);
 
+    state.removedAlbums = [];
+    state.removedFiles = [];
     state.addedAlbums = [];
     state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
-    state.removedAlbums = [];
-    state.removedFiles = [];
 
     return true;
   }
@@ -81,6 +66,10 @@ export const apiSend = async (): Promise<boolean> => {
       Authorization: localStorage.getItem('csrf') || '',
     },
     body: JSON.stringify({
+      remove: {
+        albums: state.removedAlbums,
+        files: state.removedFiles,
+      },
       add: {
         albums: state.addedAlbums,
         files: state.addedFiles,
@@ -89,21 +78,17 @@ export const apiSend = async (): Promise<boolean> => {
         albums: state.updatedAlbums,
         files: state.updatedFiles,
       },
-      remove: {
-        albums: state.removedAlbums,
-        files: state.removedFiles,
-      },
     }),
     credentials: 'include',
   });
 
   if (response.status < 400) {
+    state.removedAlbums = [];
+    state.removedFiles = [];
     state.addedAlbums = [];
     state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
-    state.removedAlbums = [];
-    state.removedFiles = [];
 
     return true;
   }
@@ -178,10 +163,10 @@ export const addRemovedFile = (removedFile: RemovedFile): void => {
 export const isLoggedIn = () => state.email !== null;
 
 export const getUpdated = () => ({
+  removedAlbums: state.removedAlbums,
+  removedFiles: state.removedFiles,
   addedAlbums: state.addedAlbums,
   addedFiles: state.addedFiles,
   updatedAlbums: state.updatedAlbums,
   updatedFiles: state.updatedFiles,
-  removedAlbums: state.removedAlbums,
-  removedFiles: state.removedFiles,
 });

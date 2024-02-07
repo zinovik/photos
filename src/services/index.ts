@@ -1,7 +1,7 @@
 import { getAlbums } from './albums';
 import { getFiles } from './files';
 import { AlbumInterface, AlbumWithFiles } from '../types';
-import { isThisOrChildPath } from './helper';
+import { getLevel, isThisOrChildPath } from './helper';
 
 export const getAlbumsWithFiles = async ({
   path,
@@ -47,7 +47,9 @@ export const getAlbumsWithFiles = async ({
       album,
       files: files.filter(
         (file) =>
-          (isThisOrChildPath(file.path, album.path) && file.isTitle) ||
+          (file.isTitle &&
+            getLevel(album.path) === 1 &&
+            isThisOrChildPath(file.path, album.path)) ||
           file.path === album.path
       ),
     })),

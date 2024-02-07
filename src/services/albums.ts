@@ -29,6 +29,12 @@ export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
   );
 };
 
+export const removeAlbumLoaded = (removedAlbum: RemovedAlbum) => {
+  loadedAlbums = loadedAlbums.filter(
+    (album) => album.path !== removedAlbum.path
+  );
+};
+
 export const addAlbumLoaded = (addedAlbum: AddedAlbum): void => {
   const albumsWithAdded = [...loadedAlbums];
 
@@ -62,18 +68,14 @@ export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
     album.path === updatedAlbum.path
       ? {
           ...album,
-          path: updatedAlbum.newPath,
-          title: updatedAlbum.title,
-          text: updatedAlbum.text || undefined,
+          ...(updatedAlbum.newPath ? { path: updatedAlbum.newPath } : {}),
+          ...(updatedAlbum.title ? { title: updatedAlbum.title } : {}),
+          ...(updatedAlbum.text
+            ? { text: updatedAlbum.text || undefined }
+            : {}),
         }
       : album
   );
 
   loadedAlbums = sortAlbums(loadedAlbumsUpdated);
-};
-
-export const removeAlbumLoaded = (removedAlbum: RemovedAlbum) => {
-  loadedAlbums = loadedAlbums.filter(
-    (album) => album.path !== removedAlbum.path
-  );
 };
