@@ -17,12 +17,9 @@ interface AlbumInterface {
 interface FileInterface {
   path: string;
   filename: string;
-  type: 'image' | 'video';
-  url: string;
-  datetime: string;
   isTitle?: true;
   isNoThumbnail?: true;
-  description?: string;
+  description: string;
   text?: string | string[];
   isVertical?: true;
 }
@@ -31,10 +28,7 @@ interface FileInterface {
 **SOURCES_CONFIG_URL** - an object with the file sources:
 
 ```typescript
-type SourcesConfig = Record<
-  string,
-  { url: string; type: 'image' | 'video' } | undefined
->;
+type SourcesConfig = Record<string, string | undefined>;
 ```
 
 ### create bucket, setup cors, check the bucket's cors:

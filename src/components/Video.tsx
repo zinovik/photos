@@ -3,7 +3,7 @@ import { Host } from '../constants';
 
 interface Props {
   url: string;
-  description?: string;
+  description: string;
 }
 
 export const Video = ({ url, description }: Props) => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 interface Props {
   url: string;
-  description?: string;
+  description: string;
   onClick: () => void;
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface Props {
-  description?: string;
+  description: string;
 }
 
 export const FileDescription = ({ description }: Props) =>

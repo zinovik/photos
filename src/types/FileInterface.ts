@@ -6,7 +6,7 @@ export interface FileInterface {
   datetime: string;
   isTitle?: true;
   isNoThumbnail?: true;
-  description?: string;
+  description: string;
   text?: string | string[];
   isVertical?: true;
 }

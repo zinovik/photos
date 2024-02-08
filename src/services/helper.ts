@@ -71,9 +71,9 @@ export const getThumbnail = (url: string, width: number): string => {
 
 export const getLevel = (path: string): number => path.split('/').length;
 
-export const getFileType = (type?: string): FileType =>
-  Object.values(FileType).includes(type as FileType)
-    ? (type as FileType)
+export const getFileType = (filename: string): FileType =>
+  ['mp4'].includes(filename.split('.').pop() || '')
+    ? FileType.video
     : FileType.image;
 
 export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {

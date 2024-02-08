@@ -7,10 +7,7 @@ import {
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
 import { AddedFile, FileInterface, RemovedFile, UpdatedFile } from '../types';
 
-type SourcesConfig = Record<
-  string,
-  { url: string; type: 'image' | 'video' } | undefined
->;
+type SourcesConfig = Record<string, string | undefined>;
 
 let loadedFiles: Omit<Omit<Omit<FileInterface, 'datetime'>, 'url'>, 'type'>[] =
   [];
@@ -35,8 +32,8 @@ const mergeFiles = (
 ) => {
   const mergedFiles = files.map((file) => ({
     ...file,
-    url: sourcesConfig[file.filename]?.url || file.filename,
-    type: getFileType(sourcesConfig[file.filename]?.type),
+    url: sourcesConfig[file.filename] || file.filename,
+    type: getFileType(file.filename),
     datetime: getDatetimeFromFilename(file.filename),
   }));
 
