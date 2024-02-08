@@ -1,4 +1,9 @@
-import { isThisOrChildPath, isTopLevelPath, sortAlbums } from './helper';
+import {
+  getLevel,
+  isThisOrChildPath,
+  isTopLevelPath,
+  sortAlbums,
+} from './helper';
 import { ALBUMS_URL } from '../constants';
 import {
   AddedAlbum,
@@ -53,6 +58,8 @@ export const addAlbumLoaded = (addedAlbum: AddedAlbum): void => {
       path:
         addedAlbum.relation === 'in'
           ? `${addedAlbum.relatedPath}/${addedAlbum.pathPart}`
+          : getLevel(addedAlbum.relatedPath) === 1
+          ? addedAlbum.pathPart
           : `${addedAlbum.relatedPath.slice(
               0,
               addedAlbum.relatedPath.lastIndexOf('/')
