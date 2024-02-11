@@ -86,24 +86,24 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
     .map((album) => album.path);
 
   return [...albums].sort((a1, a2) => {
-    if (a1.path.split('/').length === 1 && a2.path.split('/').length === 1) {
+    const a1PathParts = a1.path.split('/');
+    const a2PathParts = a2.path.split('/');
+
+    if (a1PathParts.length === 1 && a2PathParts.length === 1) {
       return 0;
     }
 
-    if (a1.path.split('/')[0] !== a2.path.split('/')[0]) {
+    if (a1PathParts[0] !== a2PathParts[0]) {
       return (
-        topLevelAlbums.indexOf(a1.path.split('/')[0]) -
-        topLevelAlbums.indexOf(a2.path.split('/')[0])
+        topLevelAlbums.indexOf(a1PathParts[0]) -
+        topLevelAlbums.indexOf(a2PathParts[0])
       );
     }
 
     // the same root path
 
     // is sorted album
-    if (sortedAlbums.includes(a1.path.split('/')[0])) {
-      const a1PathParts = a1.path.split('/');
-      const a2PathParts = a2.path.split('/');
-
+    if (sortedAlbums.includes(a1PathParts[0])) {
       if (a1PathParts.length === a2PathParts.length)
         return a1.path.localeCompare(a2.path);
 
@@ -113,7 +113,7 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
         if (a1PathParts[i] !== a2PathParts[i]) {
           if (a1PathParts[i] === undefined) return -1;
           if (a2PathParts[i] === undefined) return 1;
-          return a2PathParts[i].localeCompare(a1PathParts[i]);
+          return a1PathParts[i].localeCompare(a2PathParts[i]);
         }
       }
     }
