@@ -81,9 +81,20 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
     .filter((album) => album.isSorted)
     .map((album) => album.path);
 
+  const topLevelAlbums = albums
+    .filter((album) => album.path.split('/').length === 1)
+    .map((album) => album.path);
+
   return [...albums].sort((a1, a2) => {
-    if (a1.path.split('/')[0] !== a2.path.split('/')[0]) {
+    if (a1.path.split('/').length === 1 && a2.path.split('/').length === 1) {
       return 0;
+    }
+
+    if (a1.path.split('/')[0] !== a2.path.split('/')[0]) {
+      return (
+        topLevelAlbums.indexOf(a1.path.split('/')[0]) -
+        topLevelAlbums.indexOf(a2.path.split('/')[0])
+      );
     }
 
     // the same root path
@@ -101,8 +112,8 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
       for (let i = 0; i < minPathParts; i++) {
         if (a1PathParts[i] !== a2PathParts[i]) {
           if (a1PathParts[i] === undefined) return -1;
-          if (a2PathParts[i] === undefined) return -1;
-          return a2PathParts[i].localeCompare(a2PathParts[i]);
+          if (a2PathParts[i] === undefined) return 1;
+          return a2PathParts[i].localeCompare(a1PathParts[i]);
         }
       }
     }
