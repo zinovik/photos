@@ -77,7 +77,7 @@ export const updateAlbumLoaded = (updatedAlbum: UpdatedAlbum) => {
           ...album,
           ...(updatedAlbum.newPath ? { path: updatedAlbum.newPath } : {}),
           ...(updatedAlbum.title ? { title: updatedAlbum.title } : {}),
-          ...(updatedAlbum.text
+          ...(updatedAlbum.text !== undefined
             ? { text: updatedAlbum.text || undefined }
             : {}),
         }
