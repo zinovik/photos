@@ -34,7 +34,7 @@ export const Album = ({
       {!isCurrentOpenedAlbum && (
         <Title level={level}>
           <Link id={album.path} to={`/${album.path}`}>
-            {`${album.title} →`}
+            {album.title}
           </Link>
         </Title>
       )}
