@@ -76,7 +76,11 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
       >
         {!isAlbumCover && !isHomePage && <Markdown text={text} />}
 
-        <LazyLoad offset={500}>
+        <LazyLoad
+          offset={
+            Math.min(window.innerWidth, 880) * (file.isVertical ? 1.333 : 0.75)
+          }
+        >
           <div style={{ textAlign: 'center' }}>
             {type === FileType.image && (
               <Image

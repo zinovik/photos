@@ -5,12 +5,17 @@ import {
   sortFiles,
 } from './helper';
 import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
-import { AddedFile, FileInterface, RemovedFile, UpdatedFile } from '../types';
+import {
+  AddedFile,
+  AlbumInterface,
+  FileInterface,
+  RemovedFile,
+  UpdatedFile,
+} from '../types';
 
 type SourcesConfig = Record<string, string | undefined>;
 
-let loadedFiles: Omit<Omit<Omit<FileInterface, 'datetime'>, 'url'>, 'type'>[] =
-  [];
+let loadedFiles: Omit<FileInterface, 'datetime' | 'url' | 'type'>[] = [];
 let sourcesConfig: SourcesConfig = {};
 let loadedAndMergedFiles: FileInterface[] = [];
 
@@ -27,7 +32,7 @@ const loadFiles = async (): Promise<void> => {
 };
 
 const mergeFiles = (
-  files: Omit<Omit<Omit<FileInterface, 'datetime'>, 'url'>, 'type'>[],
+  files: Omit<FileInterface, 'datetime' | 'url' | 'type'>[],
   sourcesConfig: SourcesConfig
 ) => {
   const mergedFiles = files.map((file) => ({
@@ -69,7 +74,10 @@ export const removeFileLoaded = (removedFile: RemovedFile) => {
   loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 };
 
-export const addFileLoaded = (addedFile: AddedFile): void => {
+export const addFileLoaded = (
+  addedFile: AddedFile,
+  albums: AlbumInterface[]
+): void => {
   loadedFiles = [
     ...loadedFiles,
     {
@@ -79,10 +87,13 @@ export const addFileLoaded = (addedFile: AddedFile): void => {
   ];
   const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 
-  loadedAndMergedFiles = sortFiles(mergedFiles, []); // TODO
+  loadedAndMergedFiles = sortFiles(mergedFiles, albums);
 };
 
-export const updateFileLoaded = (updatedFile: UpdatedFile) => {
+export const updateFileLoaded = (
+  updatedFile: UpdatedFile,
+  albums: AlbumInterface[]
+) => {
   loadedFiles = loadedFiles.map((file) =>
     file.filename === updatedFile.filename
       ? {
@@ -99,5 +110,5 @@ export const updateFileLoaded = (updatedFile: UpdatedFile) => {
   );
   const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
 
-  loadedAndMergedFiles = sortFiles(mergedFiles, []); // TODO
+  loadedAndMergedFiles = sortFiles(mergedFiles, albums);
 };

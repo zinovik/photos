@@ -20,18 +20,18 @@ const loadAlbums = async (): Promise<void> => {
   loadedAlbums = await response.json();
 };
 
-export const getAlbums = async (path?: string): Promise<AlbumInterface[]> => {
+export const getAlbums = async (path: string): Promise<AlbumInterface[]> => {
   if (loadedAlbums.length === 0) {
     await loadAlbums();
   }
 
-  return loadedAlbums.filter(
-    (album) =>
-      !path ||
-      (path === '/'
-        ? isTopLevelPath(album.path)
-        : isThisOrChildPath(album.path, path))
-  );
+  return path === ''
+    ? loadedAlbums
+    : loadedAlbums.filter((album) =>
+        path === '/'
+          ? isTopLevelPath(album.path)
+          : isThisOrChildPath(album.path, path)
+      );
 };
 
 export const removeAlbumLoaded = (removedAlbum: RemovedAlbum) => {

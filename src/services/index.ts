@@ -7,7 +7,7 @@ export const getAlbumsWithFiles = async ({
   path,
   dateRanges,
 }: {
-  path?: string;
+  path: string;
   dateRanges?: string[][];
 }): Promise<{ albumsWithFiles: AlbumWithFiles[]; isHomePath?: boolean }> => {
   const [albums, files] = await Promise.all([

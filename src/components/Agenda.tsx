@@ -23,7 +23,7 @@ export const Agenda = ({ agenda }: Props) => {
           style={{ paddingLeft: `${getLevel(path) - minLevel + 1}rem` }}
         >
           <Link to={`/${path}`}>{title}</Link>{' '}
-          <HashLink to={`#${path}`}>#</HashLink>
+          <HashLink to={`#${path}`}>↓#</HashLink>
         </p>
       ))}
     </div>

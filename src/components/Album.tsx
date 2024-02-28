@@ -7,6 +7,7 @@ import { Agenda } from './Agenda';
 import { getLevel } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
 import { AdminAlbum } from './AdminAlbum';
+import { HashLink } from 'react-router-hash-link';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
@@ -35,7 +36,8 @@ export const Album = ({
         <Title level={level}>
           <Link id={album.path} to={`/${album.path}`}>
             {album.title}
-          </Link>
+          </Link>{' '}
+          <HashLink to={`#${album.path}`}>#</HashLink>
         </Title>
       )}
 

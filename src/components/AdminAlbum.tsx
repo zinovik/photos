@@ -84,7 +84,7 @@ export const AdminAlbum = ({ album }: Props) => {
             add album
           </button>
           <button
-            onClick={() => {
+            onClick={async () => {
               const filename = prompt('filename');
               if (filename === null) return;
               const description = prompt('description');
@@ -92,7 +92,7 @@ export const AdminAlbum = ({ album }: Props) => {
               const newTextString = prompt('text');
               if (newTextString === null) return;
 
-              addAddedFile({
+              await addAddedFile({
                 path: album.path,
                 filename,
                 description,

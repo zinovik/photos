@@ -17,7 +17,7 @@ export const AdminFile = ({ file }: Props) => {
       {isLoggedIn() && (
         <>
           <button
-            onClick={() => {
+            onClick={async () => {
               const newPath = prompt('path', file.path);
               if (newPath === null) return;
               const newDescription = prompt('description', description ?? '');
@@ -37,7 +37,7 @@ export const AdminFile = ({ file }: Props) => {
               )
                 return;
 
-              addUpdatedFile({
+              await addUpdatedFile({
                 filename: file.filename,
                 ...(newPath === file.path ? {} : { path: newPath }),
                 ...(newDescription === description

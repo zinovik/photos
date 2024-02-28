@@ -7,7 +7,12 @@ import {
   UpdatedAlbum,
   UpdatedFile,
 } from '../types';
-import { addAlbumLoaded, removeAlbumLoaded, updateAlbumLoaded } from './albums';
+import {
+  addAlbumLoaded,
+  getAlbums,
+  removeAlbumLoaded,
+  updateAlbumLoaded,
+} from './albums';
 import { addFileLoaded, removeFileLoaded, updateFileLoaded } from './files';
 
 const state = {
@@ -114,10 +119,10 @@ export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
   addAlbumLoaded(addedAlbum);
 };
 
-export const addAddedFile = (addedFile: AddedFile): void => {
+export const addAddedFile = async (addedFile: AddedFile): Promise<void> => {
   state.addedFiles.push(addedFile);
 
-  addFileLoaded(addedFile);
+  addFileLoaded(addedFile, await getAlbums(''));
 };
 
 export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
@@ -134,7 +139,9 @@ export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
   updateAlbumLoaded(updatedAlbum);
 };
 
-export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
+export const addUpdatedFile = async (
+  updatedFile: UpdatedFile
+): Promise<void> => {
   let isUpdated = false;
   state.updatedFiles = state.updatedFiles.map((alreadyUpdatedFile) => {
     if (alreadyUpdatedFile.filename === updatedFile.filename) {
@@ -145,7 +152,7 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
   });
   if (!isUpdated) state.updatedFiles.push(updatedFile);
 
-  updateFileLoaded(updatedFile);
+  updateFileLoaded(updatedFile, await getAlbums(''));
 };
 
 export const addRemovedAlbum = (removedAlbum: RemovedAlbum): void => {
