@@ -6,7 +6,7 @@ import { getAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
 import { AdminChanges } from '../components/AdminChanges';
-import { BackToTop } from '../components/BackToTop';
+
 export const ForceUpdateContext = createContext(() => null as any);
 
 export const MainRouter = () => {
@@ -111,7 +111,6 @@ export const MainRouter = () => {
             currentFile={scrolledToFile}
           />
         )}
-        <BackToTop />
       </>
     </ForceUpdateContext.Provider>
   );
