@@ -63,6 +63,7 @@ export const AlbumPage = ({
               isCurrentOpenedAlbum={albumWithFiles.album.path === path}
               albumAgenda={albumAgenda}
               currentFile={currentFile}
+              isHiddenHashLink={Boolean(dateRanges)}
             />
           </div>
         ))}
