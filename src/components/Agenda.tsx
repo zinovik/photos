@@ -26,6 +26,7 @@ export const Agenda = ({ agenda }: Props) => {
           <HashLink to={`#${path}`}>↓#</HashLink>
         </p>
       ))}
+      {agenda.length > 0 && <hr />}
     </div>
   );
 };
