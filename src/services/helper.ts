@@ -5,7 +5,7 @@ export const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
 export const isThisOrChildPath = (
   childPath: string,
-  parentPath: string
+  parentPath: string,
 ): boolean =>
   childPath === parentPath || childPath.startsWith(`${parentPath}/`);
 
@@ -30,7 +30,7 @@ export const isImageUrl = (url: string): boolean =>
 
 export const getDatetimeFromFilename = (filename: string): string => {
   const dateTimeParsed = filename.match(
-    new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})')
+    new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})'),
   );
 
   if (!Array.isArray(dateTimeParsed)) {
@@ -127,13 +127,13 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
 
 export const sortFiles = (
   files: FileInterface[],
-  albums: AlbumInterface[]
+  albums: AlbumInterface[],
 ): FileInterface[] => {
   const albumPaths = albums.map((album) => album.path);
 
   return [...files].sort((f1, f2) =>
     f1.path.split('/')[0] === f2.path.split('/')[0] // the same root path
       ? f1.filename.localeCompare(f2.filename)
-      : albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path)
+      : albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path),
   );
 };

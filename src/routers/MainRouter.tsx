@@ -15,7 +15,7 @@ export const MainRouter = () => {
   const [isHomePage, setIsHomePage] = useState(false as boolean | undefined);
 
   const [dateRanges, setDateRanges] = useState(
-    undefined as string[][] | undefined
+    undefined as string[][] | undefined,
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const dateRangesParameter = searchParams.get(PARAMETER_DATE_RANGES);
@@ -43,9 +43,11 @@ export const MainRouter = () => {
       ({ albumsWithFiles, isHomePath }) => {
         setAlbumWithFiles(albumsWithFiles);
         setIsHomePage(isHomePath);
-      }
+      },
     );
   }, [path, dateRangesParameter, updateKey]);
+
+  const [isScrollHandlerRemoved, setIsScrollHandlerRemoved] = useState(false);
 
   useEffect(() => {
     if (albumsWithFiles.length === 0) return;
@@ -60,6 +62,8 @@ export const MainRouter = () => {
     const scrolledTo = scrolledToFile || scrolledToAlbum;
 
     if (scrolledTo) {
+      if (scrolledToFile) setIsScrollHandlerRemoved(true);
+
       setTimeout(() => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
@@ -71,8 +75,11 @@ export const MainRouter = () => {
         });
         if (scrolledToFile) {
           setTimeout(
-            () => window.addEventListener('scroll', removeFileParam),
-            1000 // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
+            () => {
+              window.addEventListener('scroll', removeFileParam);
+              setIsScrollHandlerRemoved(false);
+            },
+            1500, // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
           );
         }
       }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
@@ -100,6 +107,18 @@ export const MainRouter = () => {
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       <>
         <AdminChanges />
+
+        {isScrollHandlerRemoved && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: 0,
+              zIndex: 11,
+            }}
+          >
+            loading fullscreen image...
+          </div>
+        )}
 
         {isHomePage ? (
           <HomePage albumsWithFiles={albumsWithFiles} />
