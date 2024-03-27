@@ -47,8 +47,6 @@ export const MainRouter = () => {
     );
   }, [path, dateRangesParameter, updateKey]);
 
-  const [isScrollHandlerRemoved, setIsScrollHandlerRemoved] = useState(false);
-
   useEffect(() => {
     if (albumsWithFiles.length === 0) return;
 
@@ -56,38 +54,39 @@ export const MainRouter = () => {
       searchParams.delete('file');
       setSearchParams(searchParams);
       event.stopPropagation();
-      window.removeEventListener('scroll', removeFileParam);
+      window.removeEventListener('wheel', removeFileParam);
+      window.removeEventListener('touchmove', removeFileParam);
     };
 
     const scrolledTo = scrolledToFile || scrolledToAlbum;
 
     if (scrolledTo) {
-      if (scrolledToFile) setIsScrollHandlerRemoved(true);
-
       setTimeout(() => {
         const element = document.getElementById(scrolledTo);
         if (!element) return;
 
-        window.removeEventListener('scroll', removeFileParam);
+        window.removeEventListener('wheel', removeFileParam);
+        window.removeEventListener('touchmove', removeFileParam);
 
         element.scrollIntoView({
           block: scrolledToFile ? 'center' : 'nearest',
         });
         if (scrolledToFile) {
-          setTimeout(
-            () => {
-              window.addEventListener('scroll', removeFileParam);
-              setIsScrollHandlerRemoved(false);
-            },
-            1500, // delay after scrolling to add a scroll listener ¯\_(ツ)_/¯
-          );
+          window.addEventListener('wheel', removeFileParam);
+          window.addEventListener('touchmove', removeFileParam);
         }
-      }, 500); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
+      }, 800); // delay after page loading to scroll to the right place ¯\_(ツ)_/¯
     }
 
-    if (!scrolledToFile) window.removeEventListener('scroll', removeFileParam);
+    if (!scrolledToFile) {
+      window.removeEventListener('wheel', removeFileParam);
+      window.removeEventListener('touchmove', removeFileParam);
+    }
 
-    return () => window.removeEventListener('scroll', removeFileParam);
+    return () => {
+      window.removeEventListener('wheel', removeFileParam);
+      window.removeEventListener('touchmove', removeFileParam);
+    };
   }, [
     albumsWithFiles,
     scrolledToAlbum,
@@ -107,18 +106,6 @@ export const MainRouter = () => {
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       <>
         <AdminChanges />
-
-        {isScrollHandlerRemoved && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: 0,
-              zIndex: 11,
-            }}
-          >
-            loading fullscreen image...
-          </div>
-        )}
 
         {isHomePage ? (
           <HomePage albumsWithFiles={albumsWithFiles} />
