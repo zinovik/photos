@@ -31,12 +31,13 @@ p {
   }
 }
 
-a:link, a:visited {
+a:link, a:visited, .link {
+  cursor: pointer;
   color: green;
   text-decoration: none;
 }
 
-a:hover, a:active {
+a:hover, a:active, .link:hover, .link:active {
   color: white;
 }
 

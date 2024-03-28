@@ -30,7 +30,7 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleImageClick = (): void => {
+  const handleFileClick = (): void => {
     if (isAlbumCover) navigate(file.path.split('/')[0]);
     else {
       searchParams.set('file', file.filename);
@@ -58,11 +58,7 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
           }}
         >
           {type === FileType.image && (
-            <Image
-              url={thumbnailUrl}
-              description={descriptionWithDatetime}
-              onClick={handleImageClick}
-            />
+            <Image url={thumbnailUrl} description={descriptionWithDatetime} />
           )}
           {type === FileType.video && (
             <Video url={thumbnailUrl} description={descriptionWithDatetime} />
@@ -86,11 +82,15 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
               <Image
                 url={thumbnailUrl}
                 description={descriptionWithDatetime}
-                onClick={handleImageClick}
+                onClick={handleFileClick}
               />
             )}
             {type === FileType.video && (
-              <Video url={thumbnailUrl} description={descriptionWithDatetime} />
+              <Video
+                url={thumbnailUrl}
+                description={descriptionWithDatetime}
+                onClick={handleFileClick}
+              />
             )}
           </div>
         </LazyLoad>

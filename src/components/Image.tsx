@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 interface Props {
   url: string;
   description: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const Image = ({ url, description, onClick }: Props) => {
@@ -24,7 +24,7 @@ export const Image = ({ url, description, onClick }: Props) => {
     <img
       src={src}
       alt={description}
-      onClick={onClick}
+      onClick={onClick || (() => null)}
       onError={handleImageError}
       style={{
         objectFit: 'contain',
