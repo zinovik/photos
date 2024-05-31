@@ -22,12 +22,6 @@ export const getLinks = (path: string): { text: string; url: string }[] =>
       };
     });
 
-export const getFilename = (url: string): string =>
-  url.split('/').slice(-1)[0] || '';
-
-export const isImageUrl = (url: string): boolean =>
-  url.substring(url.length - 3) !== 'mp4';
-
 export const getDatetimeFromFilename = (filename: string): string => {
   const dateTimeParsed = filename.match(
     new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})'),
