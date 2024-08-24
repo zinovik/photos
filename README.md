@@ -1,3 +1,60 @@
+![diagram](./diagram.png)
+
+```
+flowchart TB
+
+    subgraph github.io
+        Gallery(zinovik.github.io/gallery)
+        StorageJsonEditor(zinovik.github.io/storage-json-editor)
+    end
+
+    subgraph Local PC
+        Backup(backup-storage-files)
+        fasLocal(files.json<br/>albums.json<br/>sources-configs.json)
+        PhotosLocal(PHOTOS)
+    end
+
+    subgraph Google Cloud Platform
+        subgraph Google Cloud Storage
+            faStorage(files.json<br/>albums.json)
+            sStorage(sources-configs.json)
+            PhotosStorage(PHOTOS)
+        end
+        subgraph Google Cloud Functions
+            MediaUrlUpdater(media-url-updater)
+        end
+        subgraph Google Cloud Run
+            StorageJsonEditorApi(storage-json-editor-api)
+        end
+    end
+
+    GoogleAuth
+
+    PhotosLocal --> Backup
+    faStorage --> Backup
+    sStorage --> Backup
+    Backup --> PhotosStorage
+    Backup --> fasLocal
+
+    StorageJsonEditor --> StorageJsonEditorApi
+    GoogleAuth --> Gallery
+    GoogleAuth --> StorageJsonEditor
+    GoogleAuth --> StorageJsonEditorApi
+
+    faStorage --> Gallery
+    sStorage --> Gallery
+    PhotosStorage --> Gallery
+
+    Gallery --> StorageJsonEditorApi
+    StorageJsonEditorApi --> MediaUrlUpdater
+
+    PhotosStorage --> MediaUrlUpdater
+    MediaUrlUpdater --> faStorage
+    MediaUrlUpdater --> sStorage
+
+    StorageJsonEditorApi --> faStorage
+```
+
 This application requires 3 files:
 
 **ALBUMS_URL** - an array of albums:
