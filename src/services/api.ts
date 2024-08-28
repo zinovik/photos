@@ -64,7 +64,7 @@ export const apiSend = async (): Promise<boolean> => {
     return true;
   }
 
-  const response = await fetch(`${API_URL}/gallery`, {
+  const response = await fetch(`${API_URL}/edit`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export const apiSend = async (): Promise<boolean> => {
 };
 
 export const apiMediaUrlsUpdater = async (): Promise<boolean> => {
-  const response = await fetch(`${API_URL}/gallery/media-urls-updater`, {
+  const response = await fetch(`${API_URL}/edit/media-urls-updater`, {
     method: 'POST',
     headers: {
       Authorization: localStorage.getItem('csrf') || '',
