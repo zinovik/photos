@@ -5,7 +5,6 @@ flowchart TB
 
     subgraph github.io
         Gallery(zinovik.github.io/gallery)
-        StorageJsonEditor(zinovik.github.io/storage-json-editor)
     end
 
     subgraph Local PC
@@ -16,46 +15,38 @@ flowchart TB
 
     subgraph Google Cloud Platform
         subgraph Google Cloud Storage
-            faStorage(files.json<br/>albums.json)
-            sStorage(sources-configs.json)
+            fasStorage(files.json<br/>albums.json<br/>sources-configs.json)
             PhotosStorage(PHOTOS)
+        end
+        subgraph Google Cloud Run
+            GalleryApi(gallery-api)
         end
         subgraph Google Cloud Functions
             MediaUrlUpdater(media-url-updater)
-        end
-        subgraph Google Cloud Run
-            StorageJsonEditorApi(storage-json-editor-api)
         end
     end
 
     GoogleAuth
 
     PhotosLocal --> Backup
-    faStorage --> Backup
-    sStorage --> Backup
+    fasStorage --> Backup
     Backup --> PhotosStorage
     Backup --> fasLocal
 
-    StorageJsonEditor --> StorageJsonEditorApi
     GoogleAuth --> Gallery
-    GoogleAuth --> StorageJsonEditor
-    GoogleAuth --> StorageJsonEditorApi
+    GoogleAuth --> GalleryApi
 
-    faStorage --> Gallery
-    sStorage --> Gallery
+    fasStorage <--> GalleryApi
     PhotosStorage --> Gallery
 
-    Gallery --> StorageJsonEditorApi
-    StorageJsonEditorApi --> MediaUrlUpdater
+    GalleryApi <--> Gallery
+    GalleryApi --> MediaUrlUpdater
 
     PhotosStorage --> MediaUrlUpdater
-    MediaUrlUpdater --> faStorage
-    MediaUrlUpdater --> sStorage
-
-    StorageJsonEditorApi --> faStorage
+    MediaUrlUpdater --> fasStorage
 ```
 
-This application requires 3 files:
+This application requires 2 files:
 
 **ALBUMS_URL** - an array of albums:
 
@@ -80,12 +71,6 @@ interface FileInterface {
   text?: string | string[];
   isVertical?: true;
 }
-```
-
-**SOURCES_CONFIG_URL** - an object with the file sources:
-
-```typescript
-type SourcesConfig = Record<string, string | undefined>;
 ```
 
 ### create bucket, setup cors, check the bucket's cors:

@@ -14,13 +14,6 @@ export interface AddedAlbum {
   relation: 'after' | 'before' | 'in';
 }
 
-export interface AddedFile {
-  path: string;
-  filename: string;
-  description: string;
-  text: string | string[];
-}
-
 export interface UpdatedAlbum {
   path: string;
   newPath?: string;

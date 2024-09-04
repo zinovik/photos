@@ -1,7 +1,6 @@
 import { API_URL, IS_LOCAL_DEVELOPMENT } from '../constants';
 import {
   AddedAlbum,
-  AddedFile,
   RemovedAlbum,
   RemovedFile,
   UpdatedAlbum,
@@ -13,25 +12,19 @@ import {
   removeAlbumLoaded,
   updateAlbumLoaded,
 } from './albums';
-import { addFileLoaded, removeFileLoaded, updateFileLoaded } from './files';
+import { removeFileLoaded, updateFileLoaded } from './files';
 
 const state = {
   email: null as string | null,
   removedAlbums: [] as RemovedAlbum[],
   removedFiles: [] as RemovedFile[],
   addedAlbums: [] as AddedAlbum[],
-  addedFiles: [] as AddedFile[],
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
 };
 
 export const apiLogin = async (googleToken?: string): Promise<boolean> => {
   if (!googleToken) return false;
-
-  if (IS_LOCAL_DEVELOPMENT) {
-    state.email = 'test@email.com';
-    return true;
-  }
 
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -57,7 +50,6 @@ export const apiSend = async (): Promise<boolean> => {
     state.removedAlbums = [];
     state.removedFiles = [];
     state.addedAlbums = [];
-    state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
 
@@ -77,7 +69,6 @@ export const apiSend = async (): Promise<boolean> => {
       },
       add: {
         albums: state.addedAlbums,
-        files: state.addedFiles,
       },
       update: {
         albums: state.updatedAlbums,
@@ -91,7 +82,6 @@ export const apiSend = async (): Promise<boolean> => {
     state.removedAlbums = [];
     state.removedFiles = [];
     state.addedAlbums = [];
-    state.addedFiles = [];
     state.updatedAlbums = [];
     state.updatedFiles = [];
 
@@ -117,12 +107,6 @@ export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
   state.addedAlbums.push(addedAlbum);
 
   addAlbumLoaded(addedAlbum);
-};
-
-export const addAddedFile = async (addedFile: AddedFile): Promise<void> => {
-  state.addedFiles.push(addedFile);
-
-  addFileLoaded(addedFile, await getAlbums(''));
 };
 
 export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
@@ -173,7 +157,6 @@ export const getUpdated = () => ({
   removedAlbums: state.removedAlbums,
   removedFiles: state.removedFiles,
   addedAlbums: state.addedAlbums,
-  addedFiles: state.addedFiles,
   updatedAlbums: state.updatedAlbums,
   updatedFiles: state.updatedFiles,
 });

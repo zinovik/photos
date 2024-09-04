@@ -4,40 +4,26 @@ import {
   isThisOrChildPath,
   sortFiles,
 } from './helper';
-import { FILES_URL, SOURCES_CONFIG_URL } from '../constants';
+import { FILES_URL } from '../constants';
 import {
-  AddedFile,
   AlbumInterface,
   FileInterface,
   RemovedFile,
   UpdatedFile,
 } from '../types';
 
-type SourcesConfig = Record<string, string | undefined>;
-
-let loadedFiles: Omit<FileInterface, 'datetime' | 'url' | 'type'>[] = [];
-let sourcesConfig: SourcesConfig = {};
-let loadedAndMergedFiles: FileInterface[] = [];
+let loadedFiles: Omit<FileInterface, 'datetime' | 'type'>[] = [];
+let loadedFilesFilled: FileInterface[] = [];
 
 const loadFiles = async (): Promise<void> => {
-  const [filesResponse, sourcesConfigResponse] = await Promise.all([
-    fetch(FILES_URL),
-    fetch(SOURCES_CONFIG_URL),
-  ]);
+  const filesResponse = await fetch(FILES_URL);
 
-  [loadedFiles, sourcesConfig] = await Promise.all([
-    filesResponse.json(),
-    sourcesConfigResponse.json(),
-  ]);
+  loadedFiles = await filesResponse.json();
 };
 
-const mergeFiles = (
-  files: Omit<FileInterface, 'datetime' | 'url' | 'type'>[],
-  sourcesConfig: SourcesConfig
-) => {
+const fillFiles = (files: Omit<FileInterface, 'datetime' | 'type'>[]) => {
   const mergedFiles = files.map((file) => ({
     ...file,
-    url: sourcesConfig[file.filename] || file.filename,
     type: getFileType(file.filename),
     datetime: getDatetimeFromFilename(file.filename),
   }));
@@ -49,12 +35,12 @@ export const getFiles = async (
   path?: string,
   dateRanges?: string[][]
 ): Promise<FileInterface[]> => {
-  if (loadedAndMergedFiles.length === 0) {
+  if (loadedFilesFilled.length === 0) {
     await loadFiles();
-    loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
+    loadedFilesFilled = fillFiles(loadedFiles);
   }
 
-  return loadedAndMergedFiles.filter(
+  return loadedFilesFilled.filter(
     (file) =>
       (!path ||
         (path === '/' ? file.isTitle : isThisOrChildPath(file.path, path))) &&
@@ -71,23 +57,7 @@ export const removeFileLoaded = (removedFile: RemovedFile) => {
   loadedFiles = loadedFiles.filter(
     (file) => file.filename !== removedFile.filename
   );
-  loadedAndMergedFiles = mergeFiles(loadedFiles, sourcesConfig);
-};
-
-export const addFileLoaded = (
-  addedFile: AddedFile,
-  albums: AlbumInterface[]
-): void => {
-  loadedFiles = [
-    ...loadedFiles,
-    {
-      ...addedFile,
-      text: addedFile.text || undefined,
-    },
-  ];
-  const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
-
-  loadedAndMergedFiles = sortFiles(mergedFiles, albums);
+  loadedFilesFilled = fillFiles(loadedFiles);
 };
 
 export const updateFileLoaded = (
@@ -108,7 +78,7 @@ export const updateFileLoaded = (
         }
       : file
   );
-  const mergedFiles = mergeFiles(loadedFiles, sourcesConfig);
+  const mergedFiles = fillFiles(loadedFiles);
 
-  loadedAndMergedFiles = sortFiles(mergedFiles, albums);
+  loadedFilesFilled = sortFiles(mergedFiles, albums);
 };

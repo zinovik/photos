@@ -4,7 +4,6 @@ import {
   isLoggedIn,
   addUpdatedAlbum,
   addAddedAlbum,
-  addAddedFile,
   addRemovedAlbum,
 } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
@@ -82,28 +81,6 @@ export const AdminAlbum = ({ album }: Props) => {
             }}
           >
             add album
-          </button>
-          <button
-            onClick={async () => {
-              const filename = prompt('filename');
-              if (filename === null) return;
-              const description = prompt('description');
-              if (description === null) return;
-              const newTextString = prompt('text');
-              if (newTextString === null) return;
-
-              await addAddedFile({
-                path: album.path,
-                filename,
-                description,
-                text: newTextString.includes('---')
-                  ? newTextString.split('---')
-                  : newTextString,
-              });
-              forceUpdate();
-            }}
-          >
-            add file
           </button>
           <button
             onClick={() => {

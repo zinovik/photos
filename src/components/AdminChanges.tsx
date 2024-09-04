@@ -14,7 +14,6 @@ export const AdminChanges = () => {
     removedAlbums,
     removedFiles,
     addedAlbums,
-    addedFiles,
     updatedAlbums,
     updatedFiles,
   } = getUpdated();
@@ -24,7 +23,6 @@ export const AdminChanges = () => {
       {(removedAlbums.length !== 0 ||
         removedFiles.length !== 0 ||
         addedAlbums.length !== 0 ||
-        addedFiles.length !== 0 ||
         updatedAlbums.length !== 0 ||
         updatedFiles.length !== 0) && (
         <>
@@ -36,9 +34,6 @@ export const AdminChanges = () => {
           ))}
           {addedAlbums.map((album) => (
             <div>{`Album ADD: ${album.pathPart} | ${album.title} | ${album.text}`}</div>
-          ))}
-          {addedFiles.map((file) => (
-            <div>{`File ADD: ${file.filename} | ${file.path} | ${file.description} | ${file.text}`}</div>
           ))}
           {updatedAlbums.map((album) => (
             <div>{`Album UPDATE: ${JSON.stringify(album)}`}</div>
