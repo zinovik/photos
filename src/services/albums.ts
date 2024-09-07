@@ -15,13 +15,21 @@ import {
 let loadedAlbums: AlbumInterface[] = [];
 
 const loadAlbums = async (): Promise<void> => {
-  const response = await fetch(ALBUMS_URL);
+  const response = await fetch(ALBUMS_URL, {
+    headers: {
+      Authorization: localStorage.getItem('csrf') || '',
+    },
+    credentials: 'include',
+  });
 
   loadedAlbums = await response.json();
 };
 
-export const getAlbums = async (path: string): Promise<AlbumInterface[]> => {
-  if (loadedAlbums.length === 0) {
+export const getAlbums = async (
+  path: string,
+  isReload?: boolean
+): Promise<AlbumInterface[]> => {
+  if (loadedAlbums.length === 0 || isReload) {
     await loadAlbums();
   }
 

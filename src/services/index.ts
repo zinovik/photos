@@ -6,13 +6,15 @@ import { getLevel, isThisOrChildPath } from './helper';
 export const getAlbumsWithFiles = async ({
   path,
   dateRanges,
+  isReload,
 }: {
   path: string;
   dateRanges?: string[][];
+  isReload?: boolean;
 }): Promise<{ albumsWithFiles: AlbumWithFiles[]; isHomePath?: boolean }> => {
   const [albums, files] = await Promise.all([
-    getAlbums(path),
-    getFiles(path, dateRanges),
+    getAlbums(path, isReload),
+    getFiles({ path, dateRanges, isReload }),
   ]);
 
   if (dateRanges) {

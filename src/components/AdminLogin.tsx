@@ -3,18 +3,24 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { apiLogin } from '../services/api';
 import { IS_LOCAL_DEVELOPMENT } from '../constants';
 import { ForceUpdateContext } from '../routers/MainRouter';
+import { getAlbumsWithFiles } from '../services';
 
 export const AdminLogin = () => {
   const forceUpdate = useContext(ForceUpdateContext);
+
+  const clickHandler = async (token: string) => {
+    const isSuccess = await apiLogin(token);
+    alert(isSuccess ? 'success' : 'error');
+    await getAlbumsWithFiles({ path: '/', isReload: true });
+    forceUpdate();
+  };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       {IS_LOCAL_DEVELOPMENT ? (
         <button
           onClick={async () => {
-            const isSuccess = await apiLogin('mock-google-token');
-            alert(isSuccess ? 'success' : 'error');
-            forceUpdate();
+            await clickHandler('mock-google-token');
           }}
         >
           Sign in with Google mock
@@ -22,9 +28,8 @@ export const AdminLogin = () => {
       ) : (
         <GoogleLogin
           onSuccess={async (credentialResponse: CredentialResponse) => {
-            const isSuccess = await apiLogin(credentialResponse.credential);
-            alert(isSuccess ? 'success' : 'error');
-            forceUpdate();
+            if (!credentialResponse.credential) return;
+            await clickHandler(credentialResponse.credential);
           }}
           onError={() => {
             console.error('Login Failed');

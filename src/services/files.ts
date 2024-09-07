@@ -16,7 +16,12 @@ let loadedFiles: Omit<FileInterface, 'datetime' | 'type'>[] = [];
 let loadedFilesFilled: FileInterface[] = [];
 
 const loadFiles = async (): Promise<void> => {
-  const filesResponse = await fetch(FILES_URL);
+  const filesResponse = await fetch(FILES_URL, {
+    headers: {
+      Authorization: localStorage.getItem('csrf') || '',
+    },
+    credentials: 'include',
+  });
 
   loadedFiles = await filesResponse.json();
 };
@@ -31,11 +36,16 @@ const fillFiles = (files: Omit<FileInterface, 'datetime' | 'type'>[]) => {
   return mergedFiles;
 };
 
-export const getFiles = async (
-  path?: string,
-  dateRanges?: string[][]
-): Promise<FileInterface[]> => {
-  if (loadedFilesFilled.length === 0) {
+export const getFiles = async ({
+  path,
+  dateRanges,
+  isReload,
+}: {
+  path?: string;
+  dateRanges?: string[][];
+  isReload?: boolean;
+}): Promise<FileInterface[]> => {
+  if (loadedFilesFilled.length === 0 || isReload) {
     await loadFiles();
     loadedFilesFilled = fillFiles(loadedFiles);
   }

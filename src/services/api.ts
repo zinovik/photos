@@ -23,9 +23,7 @@ const state = {
   updatedFiles: [] as UpdatedFile[],
 };
 
-export const apiLogin = async (googleToken?: string): Promise<boolean> => {
-  if (!googleToken) return false;
-
+export const apiLogin = async (googleToken: string): Promise<boolean> => {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {

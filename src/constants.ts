@@ -20,5 +20,4 @@ export enum FileType {
 
 export enum Host {
   cloudinary = 'cloudinary.com',
-  mega = 'mega.nz',
 }
