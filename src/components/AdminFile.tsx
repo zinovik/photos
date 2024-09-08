@@ -37,7 +37,7 @@ export const AdminFile = ({ file }: Props) => {
               )
                 return;
 
-              await addUpdatedFile({
+              addUpdatedFile({
                 filename: file.filename,
                 ...(newPath === file.path ? {} : { path: newPath }),
                 ...(newDescription === description

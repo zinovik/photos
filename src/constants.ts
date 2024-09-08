@@ -10,8 +10,7 @@ export const API_URL = IS_LOCAL_DEVELOPMENT
 export const GOOGLE_OAUTH_PROVIDER_CLIENT_ID =
   '306312319198-u9h4e07khciuet8hnj00b8fvmq25rlj0.apps.googleusercontent.com';
 
-export const ALBUMS_URL = `${API_URL}/get/albums`;
-export const FILES_URL = `${API_URL}/get/files`;
+export const GET_URL = `${API_URL}/get`;
 
 export enum FileType {
   image = 'image',

@@ -8,11 +8,12 @@ import {
 } from '../types';
 import {
   addAlbumLoaded,
-  getAlbums,
   removeAlbumLoaded,
   updateAlbumLoaded,
-} from './albums';
-import { removeFileLoaded, updateFileLoaded } from './files';
+  removeFileLoaded,
+  updateFileLoaded,
+  loadedAlbums,
+} from './';
 
 const state = {
   email: null as string | null,
@@ -121,9 +122,7 @@ export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
   updateAlbumLoaded(updatedAlbum);
 };
 
-export const addUpdatedFile = async (
-  updatedFile: UpdatedFile
-): Promise<void> => {
+export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
   let isUpdated = false;
   state.updatedFiles = state.updatedFiles.map((alreadyUpdatedFile) => {
     if (alreadyUpdatedFile.filename === updatedFile.filename) {
@@ -134,7 +133,7 @@ export const addUpdatedFile = async (
   });
   if (!isUpdated) state.updatedFiles.push(updatedFile);
 
-  updateFileLoaded(updatedFile, await getAlbums(''));
+  updateFileLoaded(updatedFile, loadedAlbums);
 };
 
 export const addRemovedAlbum = (removedAlbum: RemovedAlbum): void => {
