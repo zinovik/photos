@@ -22,6 +22,7 @@ import { GET_URL } from '../constants';
 export let loadedAlbums: AlbumInterface[] = [];
 let loadedFiles: Omit<FileInterface, 'datetime' | 'type'>[] = [];
 let loadedFilesFilled: FileInterface[] = [];
+export let email: string;
 
 const load = async (): Promise<void> => {
   const response = await fetch(GET_URL, {
@@ -34,6 +35,7 @@ const load = async (): Promise<void> => {
   const responseJson = await response.json();
   loadedAlbums = responseJson.albums;
   loadedFiles = responseJson.files;
+  email = responseJson.email;
 };
 
 export const filterAlbums = ({

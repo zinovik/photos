@@ -2,7 +2,7 @@ import React, { useEffect, useState, useReducer, createContext } from 'react';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { AlbumPage } from '../pages/AlbumPage';
 import { HomePage } from '../pages/HomePage';
-import { getAlbumsWithFiles } from '../services';
+import { getAlbumsWithFiles, email } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
 import { AdminChanges } from '../components/AdminChanges';
@@ -15,7 +15,7 @@ export const MainRouter = () => {
   const [isHomePage, setIsHomePage] = useState(false as boolean | undefined);
 
   const [dateRanges, setDateRanges] = useState(
-    undefined as string[][] | undefined,
+    undefined as string[][] | undefined
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const dateRangesParameter = searchParams.get(PARAMETER_DATE_RANGES);
@@ -43,7 +43,7 @@ export const MainRouter = () => {
       ({ albumsWithFiles, isHomePath }) => {
         setAlbumWithFiles(albumsWithFiles);
         setIsHomePage(isHomePath);
-      },
+      }
     );
   }, [path, dateRangesParameter, updateKey]);
 
@@ -105,6 +105,7 @@ export const MainRouter = () => {
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       <>
+        {email && <div>{email}</div>}
         <AdminChanges />
 
         {isHomePage ? (
