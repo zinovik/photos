@@ -4,11 +4,10 @@ import { Image } from './Image';
 import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
-import { formatDatetime, getThumbnail } from '../services/helper';
-import { FileType } from '../constants';
-import { FileInterface } from '../types';
+import { FileInterface, FileType } from '../types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AdminFile } from './AdminFile';
+import { formatDatetime, getThumbnail } from '../utils';
 
 interface Props {
   file: FileInterface;

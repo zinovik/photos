@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Album } from '../components/Album';
-import { formatDatetime, getLinks } from '../services/helper';
 import { AgendaInterface, AlbumWithFiles } from '../types';
+import { formatDatetime, getLinks } from '../utils';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];

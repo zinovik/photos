@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { FileInterface } from '../types';
-import { isLoggedIn, addUpdatedFile, addRemovedFile } from '../services/api';
+import { getUser, addUpdatedFile, addRemovedFile } from '../state';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -14,7 +14,7 @@ export const AdminFile = ({ file }: Props) => {
 
   return (
     <>
-      {isLoggedIn() && (
+      {getUser() !== null && getUser()?.isEditAccess && (
         <>
           <button
             onClick={async () => {

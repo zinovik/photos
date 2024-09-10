@@ -1,11 +1,8 @@
 import React, { useContext } from 'react';
-import {
-  apiMediaUrlsUpdater,
-  apiSend,
-  getUpdated,
-  isLoggedIn,
-} from '../services/api';
+import { getUpdated, getUser } from '../state';
+import { apiLogout, apiMediaUrlsUpdater, apiSend } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
+import { getFilteredAlbumsWithFiles } from '../services';
 
 export const AdminChanges = () => {
   const forceUpdate = useContext(ForceUpdateContext);
@@ -17,6 +14,14 @@ export const AdminChanges = () => {
     updatedAlbums,
     updatedFiles,
   } = getUpdated();
+
+  const update = async (isSuccess: boolean) => {
+    alert(isSuccess ? 'success' : 'error');
+    await getFilteredAlbumsWithFiles({ path: '/', isReload: true });
+    forceUpdate();
+  };
+
+  const user = getUser();
 
   return (
     <>
@@ -44,8 +49,7 @@ export const AdminChanges = () => {
           <button
             onClick={async () => {
               const isSuccess = await apiSend();
-              alert(isSuccess ? 'success' : 'error');
-              forceUpdate();
+              await update(isSuccess);
             }}
           >
             save changes
@@ -53,17 +57,32 @@ export const AdminChanges = () => {
         </>
       )}
 
-      {isLoggedIn() && (
-        <div>
-          <button
-            onClick={async () => {
-              const isSuccess = await apiMediaUrlsUpdater();
-              alert(isSuccess ? 'success' : 'error');
-            }}
-          >
-            media urls updater
-          </button>
-        </div>
+      {user !== null && (
+        <>
+          <div>
+            {user.email}{' '}
+            <button
+              onClick={async () => {
+                const isSuccess = await apiLogout();
+                await update(isSuccess);
+              }}
+            >
+              logout
+            </button>
+          </div>
+          {user.isEditAccess && (
+            <div>
+              <button
+                onClick={async () => {
+                  const isSuccess = await apiMediaUrlsUpdater();
+                  await update(isSuccess);
+                }}
+              >
+                media urls updater
+              </button>
+            </div>
+          )}
+        </>
       )}
     </>
   );

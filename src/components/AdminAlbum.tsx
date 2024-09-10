@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { AlbumInterface } from '../types';
 import {
-  isLoggedIn,
+  getUser,
   addUpdatedAlbum,
   addAddedAlbum,
   addRemovedAlbum,
-} from '../services/api';
+} from '../state';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
 interface Props {
@@ -17,7 +17,7 @@ export const AdminAlbum = ({ album }: Props) => {
 
   return (
     <>
-      {isLoggedIn() && (
+      {getUser() !== null && getUser()?.isEditAccess && (
         <>
           <button
             onClick={() => {

@@ -36,6 +36,15 @@ export interface RemovedFile {
   filename: string;
 }
 
+export enum FileType {
+  image = 'image',
+  video = 'video',
+}
+
+export enum Host {
+  cloudinary = 'cloudinary.com',
+}
+
 export * from './AlbumInterface';
 export * from './FileInterface';
 export * from './AgendaInterface';
