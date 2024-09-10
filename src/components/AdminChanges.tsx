@@ -1,6 +1,11 @@
 import React, { useContext } from 'react';
 import { getUpdated, getUser } from '../state';
-import { apiLogout, apiMediaUrlsUpdater, apiSend } from '../services/api';
+import {
+  apiAddNewFiles,
+  apiLogout,
+  apiMediaUrlsUpdater,
+  apiSend,
+} from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 import { getFilteredAlbumsWithFiles } from '../services';
 
@@ -71,16 +76,28 @@ export const AdminChanges = () => {
             </button>
           </div>
           {user.isEditAccess && (
-            <div>
-              <button
-                onClick={async () => {
-                  const isSuccess = await apiMediaUrlsUpdater();
-                  await update(isSuccess);
-                }}
-              >
-                media urls updater
-              </button>
-            </div>
+            <>
+              <div>
+                <button
+                  onClick={async () => {
+                    const isSuccess = await apiMediaUrlsUpdater();
+                    await update(isSuccess);
+                  }}
+                >
+                  media urls updater
+                </button>
+              </div>
+              <div>
+                <button
+                  onClick={async () => {
+                    const isSuccess = await apiAddNewFiles();
+                    await update(isSuccess);
+                  }}
+                >
+                  add new files
+                </button>
+              </div>
+            </>
           )}
         </>
       )}

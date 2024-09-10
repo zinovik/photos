@@ -69,3 +69,9 @@ export const apiMediaUrlsUpdater = async (): Promise<boolean> => {
 
   return status < 400;
 };
+
+export const apiAddNewFiles = async (): Promise<boolean> => {
+  const [, status] = await request('/edit/add-new-files', 'POST');
+
+  return status < 400;
+};
