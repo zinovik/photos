@@ -24,6 +24,7 @@ flowchart TB
         subgraph Google Cloud Functions
             MediaUrlUpdater(media-url-updater)
         end
+        GoogleCloudScheduler(Google Cloud Scheduler)
     end
 
     GoogleAuth
@@ -42,6 +43,7 @@ flowchart TB
     GalleryApi <--> Gallery
     GalleryApi --> MediaUrlUpdater
 
+    GoogleCloudScheduler --> MediaUrlUpdater
     PhotosStorage --> MediaUrlUpdater
     MediaUrlUpdater --> fasStorage
 ```
