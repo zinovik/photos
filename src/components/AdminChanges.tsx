@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { getUpdated, getUser } from '../state';
+import { getUpdated, getUser, switchEditMode } from '../state';
 import {
   apiAddNewFiles,
   apiLogout,
@@ -77,6 +77,16 @@ export const AdminChanges = () => {
           </div>
           {user.isEditAccess && (
             <>
+              <div>
+                <button
+                  onClick={async () => {
+                    switchEditMode();
+                    forceUpdate();
+                  }}
+                >
+                  switch edit mode
+                </button>
+              </div>
               <div>
                 <button
                   onClick={async () => {

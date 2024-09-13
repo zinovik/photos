@@ -24,6 +24,7 @@ export interface UpdatedAlbum {
 export interface UpdatedFile {
   filename: string;
   path?: string;
+  isTitle?: boolean;
   description?: string;
   text?: string | string[];
 }

@@ -9,4 +9,5 @@ export interface FileInterface {
   description: string;
   text?: string | string[];
   isVertical?: true;
+  accesses?: string[];
 }

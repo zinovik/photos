@@ -20,6 +20,7 @@ export const state = {
   allAlbums: [] as AlbumInterface[],
   allFiles: [] as FileInterface[],
   user: null as User | null,
+  isEditModeEnabled: false,
   removedAlbums: [] as RemovedAlbum[],
   removedFiles: [] as RemovedFile[],
   addedAlbums: [] as AddedAlbum[],
@@ -105,6 +106,9 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
       ? {
           ...file,
           ...(updatedFile.path ? { path: updatedFile.path } : {}),
+          ...(updatedFile.isTitle !== undefined
+            ? { isTitle: updatedFile.isTitle || undefined }
+            : {}),
           ...(updatedFile.description
             ? { description: updatedFile.description }
             : {}),
@@ -161,3 +165,9 @@ export const getUpdated = () => ({
   updatedAlbums: state.updatedAlbums,
   updatedFiles: state.updatedFiles,
 });
+
+export const switchEditMode = () => {
+  state.isEditModeEnabled = !state.isEditModeEnabled;
+};
+
+export const getIsEditModeEnabled = () => state.isEditModeEnabled;

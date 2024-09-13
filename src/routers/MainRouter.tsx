@@ -41,6 +41,9 @@ export const MainRouter = () => {
 
     getFilteredAlbumsWithFiles({ path, dateRanges }).then(
       ({ albumsWithFiles, isHomePath }) => {
+        if (albumsWithFiles.length === 0) {
+          // redirect to home?
+        }
         setAlbumWithFiles(albumsWithFiles);
         setIsHomePage(isHomePath);
       }

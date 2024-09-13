@@ -3,4 +3,5 @@ export interface AlbumInterface {
   title: string;
   text?: string | string[];
   isSorted?: true;
+  accesses?: string[];
 }

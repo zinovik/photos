@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { AlbumInterface } from '../types';
 import {
-  getUser,
   addUpdatedAlbum,
   addAddedAlbum,
   addRemovedAlbum,
+  getIsEditModeEnabled,
 } from '../state';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
@@ -17,7 +17,7 @@ export const AdminAlbum = ({ album }: Props) => {
 
   return (
     <>
-      {getUser() !== null && getUser()?.isEditAccess && (
+      {getIsEditModeEnabled() && (
         <>
           <button
             onClick={() => {
@@ -31,11 +31,17 @@ export const AdminAlbum = ({ album }: Props) => {
                   : album.text) ?? '';
               const newTextString = prompt('text', oldTextString);
               if (newTextString === null) return;
+              const oldAccessesString = album.accesses
+                ? album.accesses.join(',')
+                : '';
+              const newAccessesString = prompt('accesses', oldAccessesString);
+              if (newAccessesString === null) return;
 
               if (
                 newPath === album.path &&
                 newTitle === album.title &&
-                newTextString === oldTextString
+                newTextString === oldTextString &&
+                newAccessesString === oldAccessesString
               )
                 return;
 
@@ -49,6 +55,13 @@ export const AdminAlbum = ({ album }: Props) => {
                       text: newTextString.includes('---')
                         ? newTextString.split('---')
                         : newTextString,
+                    }),
+                ...(newAccessesString === oldAccessesString
+                  ? {}
+                  : {
+                      accesses: newAccessesString
+                        ? newAccessesString.split(',')
+                        : [],
                     }),
               });
               forceUpdate();
