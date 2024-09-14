@@ -4,6 +4,7 @@ import { getFilteredAlbumsWithFiles } from '../services';
 import { apiLogin } from '../services/api';
 import { IS_LOCAL_DEVELOPMENT } from '../constants';
 import { ForceUpdateContext } from '../routers/MainRouter';
+import { getUser } from '../state';
 
 export const AdminLogin = () => {
   const forceUpdate = useContext(ForceUpdateContext);
@@ -15,7 +16,7 @@ export const AdminLogin = () => {
     forceUpdate();
   };
 
-  return (
+  return getUser() ? null : (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       {IS_LOCAL_DEVELOPMENT ? (
         <button

@@ -14,6 +14,8 @@ export const HomePage = ({ albumsWithFiles }: Props) => {
 
   return (
     <main>
+      <AdminLogin />
+
       {albumsWithFiles.map(({ album, files }) => (
         <div key={album.path} style={{ paddingBottom: '1rem' }}>
           <h1>
@@ -27,8 +29,6 @@ export const HomePage = ({ albumsWithFiles }: Props) => {
           <Markdown text={album.text} />
         </div>
       ))}
-
-      <AdminLogin />
     </main>
   );
 };

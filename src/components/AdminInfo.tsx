@@ -9,7 +9,7 @@ import {
 import { ForceUpdateContext } from '../routers/MainRouter';
 import { getFilteredAlbumsWithFiles } from '../services';
 
-export const AdminChanges = () => {
+export const AdminInfo = () => {
   const forceUpdate = useContext(ForceUpdateContext);
 
   const {

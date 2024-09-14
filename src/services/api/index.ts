@@ -33,9 +33,9 @@ export const apiLogout = async (): Promise<boolean> => {
     localStorage.removeItem('csrf');
     setUser(null);
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 };
 
 export const apiSend = async (): Promise<boolean> => {

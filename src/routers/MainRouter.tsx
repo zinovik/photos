@@ -5,7 +5,7 @@ import { HomePage } from '../pages/HomePage';
 import { getFilteredAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
-import { AdminChanges } from '../components/AdminChanges';
+import { AdminInfo } from '../components/AdminInfo';
 
 export const ForceUpdateContext = createContext(() => null as any);
 
@@ -108,7 +108,7 @@ export const MainRouter = () => {
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       <>
-        <AdminChanges />
+        <AdminInfo />
 
         {isHomePage ? (
           <HomePage albumsWithFiles={albumsWithFiles} />
