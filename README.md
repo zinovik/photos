@@ -21,9 +21,6 @@ flowchart TB
         subgraph Google Cloud Run
             GalleryApi(gallery-api)
         end
-        subgraph Google Cloud Functions
-            MediaUrlUpdater(media-url-updater)
-        end
         GoogleCloudScheduler(Google Cloud Scheduler)
     end
 
@@ -41,11 +38,9 @@ flowchart TB
     PhotosStorage --> Gallery
 
     GalleryApi <--> Gallery
-    GalleryApi --> MediaUrlUpdater
 
-    GoogleCloudScheduler --> MediaUrlUpdater
-    PhotosStorage --> MediaUrlUpdater
-    MediaUrlUpdater --> fasStorage
+    GoogleCloudScheduler --> GalleryApi
+    PhotosStorage --> GalleryApi
 ```
 
 This application requires 2 files:
