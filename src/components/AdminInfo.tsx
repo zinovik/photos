@@ -1,11 +1,6 @@
 import React, { useContext } from 'react';
 import { getUpdated, getUser, switchEditMode } from '../state';
-import {
-  apiAddNewFiles,
-  apiLogout,
-  apiMediaUrlsUpdater,
-  apiSend,
-} from '../services/api';
+import { apiAddNewFiles, apiLogout, apiSend } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 import { getFilteredAlbumsWithFiles } from '../services';
 
@@ -85,16 +80,6 @@ export const AdminInfo = () => {
                   }}
                 >
                   switch edit mode
-                </button>
-              </div>
-              <div>
-                <button
-                  onClick={async () => {
-                    const isSuccess = await apiMediaUrlsUpdater();
-                    await update(isSuccess);
-                  }}
-                >
-                  media urls updater
                 </button>
               </div>
               <div>

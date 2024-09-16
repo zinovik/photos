@@ -8,7 +8,7 @@ flowchart TB
     end
 
     subgraph Local PC
-        Backup(backup-storage-files)
+        StorageTools(storage-tools)
         fasLocal(files.json<br/>albums.json<br/>sources-configs.json)
         PhotosLocal(PHOTOS)
     end
@@ -26,10 +26,10 @@ flowchart TB
 
     GoogleAuth
 
-    PhotosLocal --> Backup
-    fasStorage --> Backup
-    Backup --> PhotosStorage
-    Backup --> fasLocal
+    PhotosLocal --> StorageTools
+    fasStorage --> StorageTools
+    StorageTools --> PhotosStorage
+    StorageTools --> fasLocal
 
     GoogleAuth --> Gallery
     GoogleAuth --> GalleryApi

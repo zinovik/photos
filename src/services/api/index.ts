@@ -64,12 +64,6 @@ export const apiSend = async (): Promise<boolean> => {
   return false;
 };
 
-export const apiMediaUrlsUpdater = async (): Promise<boolean> => {
-  const [, status] = await request('/edit/media-urls-updater', 'POST');
-
-  return status < 400;
-};
-
 export const apiAddNewFiles = async (): Promise<boolean> => {
   const [, status] = await request('/edit/add-new-files', 'POST');
 
