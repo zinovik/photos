@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { getUpdated, getUser, switchEditMode } from '../state';
-import { apiAddNewFiles, apiLogout, apiSend } from '../services/api';
+import { getUpdated, getUser, resetUpdated, switchEditMode } from '../state';
+import { apiLogout, apiSend } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 import { getFilteredAlbumsWithFiles } from '../services';
 
@@ -16,8 +16,8 @@ export const AdminInfo = () => {
   } = getUpdated();
 
   const update = async (isSuccess: boolean) => {
-    alert(isSuccess ? 'success' : 'error');
     await getFilteredAlbumsWithFiles({ path: '/', isReload: true });
+    alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };
 
@@ -54,6 +54,14 @@ export const AdminInfo = () => {
           >
             save changes
           </button>
+          <button
+            onClick={async () => {
+              resetUpdated();
+              await update(true);
+            }}
+          >
+            cancel changes
+          </button>
         </>
       )}
 
@@ -80,16 +88,6 @@ export const AdminInfo = () => {
                   }}
                 >
                   switch edit mode
-                </button>
-              </div>
-              <div>
-                <button
-                  onClick={async () => {
-                    const isSuccess = await apiAddNewFiles();
-                    await update(isSuccess);
-                  }}
-                >
-                  add new files
                 </button>
               </div>
             </>

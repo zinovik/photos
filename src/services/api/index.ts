@@ -63,9 +63,3 @@ export const apiSend = async (): Promise<boolean> => {
 
   return false;
 };
-
-export const apiAddNewFiles = async (): Promise<boolean> => {
-  const [, status] = await request('/edit/add-new-files', 'POST');
-
-  return status < 400;
-};

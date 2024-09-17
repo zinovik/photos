@@ -11,8 +11,8 @@ export const AdminLogin = () => {
 
   const clickHandler = async (token: string) => {
     const isSuccess = await apiLogin(token);
-    alert(isSuccess ? 'success' : 'error');
     await getFilteredAlbumsWithFiles({ path: '/', isReload: true });
+    alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };
 
