@@ -19,6 +19,7 @@ export interface UpdatedAlbum {
   newPath?: string;
   title?: string;
   text?: string | string[];
+  accesses?: string[];
 }
 
 export interface UpdatedFile {
@@ -27,6 +28,7 @@ export interface UpdatedFile {
   isTitle?: boolean;
   description?: string;
   text?: string | string[];
+  accesses?: string[];
 }
 
 export interface RemovedAlbum {

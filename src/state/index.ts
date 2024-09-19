@@ -82,6 +82,14 @@ export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
           ...(updatedAlbum.text !== undefined
             ? { text: updatedAlbum.text || undefined }
             : {}),
+          ...(updatedAlbum.accesses !== undefined
+            ? {
+                accesses:
+                  updatedAlbum.accesses.length > 0
+                    ? updatedAlbum.accesses
+                    : undefined,
+              }
+            : {}),
         }
       : album
   );
@@ -114,6 +122,14 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
             : {}),
           ...(updatedFile.text !== undefined
             ? { text: updatedFile.text || undefined }
+            : {}),
+          ...(updatedFile.accesses !== undefined
+            ? {
+                accesses:
+                  updatedFile.accesses.length > 0
+                    ? updatedFile.accesses
+                    : undefined,
+              }
             : {}),
         }
       : file
