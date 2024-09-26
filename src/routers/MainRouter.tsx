@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useReducer, createContext } from 'react';
-import { useParams, useSearchParams, useLocation } from 'react-router-dom';
+import {
+  useParams,
+  useSearchParams,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { AlbumPage } from '../pages/AlbumPage';
 import { HomePage } from '../pages/HomePage';
 import { getFilteredAlbumsWithFiles } from '../services';
@@ -32,6 +37,8 @@ export const MainRouter = () => {
 
   const [albumsWithFiles, setAlbumWithFiles] = useState([] as AlbumWithFiles[]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const dateRanges = dateRangesParameter
       ?.split(',')
@@ -42,13 +49,13 @@ export const MainRouter = () => {
     getFilteredAlbumsWithFiles({ path, dateRanges }).then(
       ({ albumsWithFiles, isHomePath }) => {
         if (albumsWithFiles.length === 0) {
-          // redirect to home?
+          navigate('');
         }
         setAlbumWithFiles(albumsWithFiles);
         setIsHomePage(isHomePath);
       }
     );
-  }, [path, dateRangesParameter, updateKey]);
+  }, [path, dateRangesParameter, updateKey, navigate]);
 
   useEffect(() => {
     if (albumsWithFiles.length === 0) return;

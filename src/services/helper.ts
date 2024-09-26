@@ -40,7 +40,7 @@ export const filterFilesByPathOrDateRanges = ({
       (!dateRanges ||
         dateRanges.some(
           ([from, to]) =>
-            file.datetime.slice(0, from.length) >= from &&
+            (!from || file.datetime.slice(0, from.length) >= from) &&
             (!to || file.datetime.slice(0, to.length) <= to)
         ))
   );

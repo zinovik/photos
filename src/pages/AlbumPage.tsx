@@ -28,23 +28,38 @@ export const AlbumPage = ({
 
   return (
     <>
-      <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
-        <Link to={'/'}>home</Link>
-        {links.map((link) => (
-          <span key={link.url}>
-            {' / '}
-            <Link to={link.url}>{link.text}</Link>
-          </span>
-        ))}
-        <div style={{ color: 'darkgray' }}>
-          {dateRanges
-            ?.map(
-              ([from, to]) =>
-                `${formatDatetime(from)} - ${formatDatetime(to) || 'now'}`
-            )
-            .join(', ')}
-        </div>
-      </nav>
+      {albumsWithFiles.length > 0 && (
+        <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
+          <Link to={'/'}>home</Link>
+          {links.map((link) => (
+            <span key={link.url}>
+              {' / '}
+              <Link to={link.url}>{link.text}</Link>
+            </span>
+          ))}
+          {dateRanges ? (
+            <>
+              <div>
+                <Link to={'?'}>[show by albums (default)]</Link>
+              </div>
+              <div style={{ color: 'darkgray' }}>
+                {dateRanges
+                  .map(
+                    ([from, to]) =>
+                      `${formatDatetime(from) || 'the very beginning'} - ${
+                        formatDatetime(to) || 'now'
+                      }`
+                  )
+                  .join(', ')}
+              </div>
+            </>
+          ) : (
+            <div>
+              <Link to={'?date-ranges'}>[show by date (new on top)]</Link>
+            </div>
+          )}
+        </nav>
+      )}
 
       <main>
         {albumsWithFiles.length === 0 && <>⏳ Loading...</>}
