@@ -9,16 +9,16 @@ const getFileType = (filename: string): FileType =>
 
 const getDatetimeFromFilename = (filename: string): string => {
   const dateTimeParsed = filename.match(
-    new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})')
+    new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})([\\d]{2})')
   );
 
   if (!Array.isArray(dateTimeParsed)) {
     return '';
   }
 
-  const [, year, month, date, hour, minute] = dateTimeParsed;
+  const [, year, month, date, hour, minute, second] = dateTimeParsed;
 
-  return `${year}${month}${date}_${hour}${minute}`;
+  return `${year}${month}${date}_${hour}${minute}${second}`;
 };
 
 export const mapFilesDtoToFiles = (fileDtos: FileDto[]) =>

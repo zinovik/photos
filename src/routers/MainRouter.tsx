@@ -11,13 +11,20 @@ import { getFilteredAlbumsWithFiles } from '../services';
 import { PARAMETER_DATE_RANGES, PARAMETER_FILE } from '../constants';
 import { AlbumWithFiles } from '../types';
 import { AdminInfo } from '../components/AdminInfo';
+import { ShowMode } from '../components/ShowMode';
+import { AdminLogin } from '../components/AdminLogin';
+import { Link } from 'react-router-dom';
 
 export const ForceUpdateContext = createContext(() => null as any);
 
 export const MainRouter = () => {
   const [updateKey, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const [isHomePage, setIsHomePage] = useState(false as boolean | undefined);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [isHomePathAndAlbumsShowing, setIsHomePathAndAlbumsShowing] = useState(
+    false as boolean | undefined
+  );
 
   const [dateRanges, setDateRanges] = useState(
     undefined as string[][] | undefined
@@ -30,8 +37,7 @@ export const MainRouter = () => {
   const scrolledToAlbum = hash.substring(1);
 
   const { '*': route = '' } = useParams();
-  const path =
-    `${route}`.replace(/\/+$/, '') || (dateRangesParameter ? '' : '/');
+  const path = `${route}`.replace(/\/+$/, '');
 
   const [previousRoute, setPreviousRoute] = useState(route);
 
@@ -45,14 +51,13 @@ export const MainRouter = () => {
       .map((dateRange) => dateRange.split('-'));
 
     setDateRanges(dateRanges);
+    setIsLoading(true);
 
     getFilteredAlbumsWithFiles({ path, dateRanges }).then(
-      ({ albumsWithFiles, isHomePath }) => {
-        if (albumsWithFiles.length === 0) {
-          navigate('');
-        }
+      ({ albumsWithFiles, isHomePathAndAlbumsShowing }) => {
+        setIsLoading(false);
         setAlbumWithFiles(albumsWithFiles);
-        setIsHomePage(isHomePath);
+        setIsHomePathAndAlbumsShowing(isHomePathAndAlbumsShowing);
       }
     );
   }, [path, dateRangesParameter, updateKey, navigate]);
@@ -114,20 +119,41 @@ export const MainRouter = () => {
 
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
-      <>
-        <AdminInfo />
+      {isLoading ? (
+        <main>⏳ Loading...</main>
+      ) : albumsWithFiles.length > 0 ? (
+        <>
+          <AdminLogin />
+          <AdminInfo />
 
-        {isHomePage ? (
-          <HomePage albumsWithFiles={albumsWithFiles} />
-        ) : (
-          <AlbumPage
-            albumsWithFiles={albumsWithFiles}
-            path={path}
-            dateRanges={dateRanges}
-            currentFile={scrolledToFile}
-          />
-        )}
-      </>
+          <div style={{ textAlign: 'center' }}>
+            <ShowMode dateRanges={dateRanges} />
+          </div>
+
+          {isHomePathAndAlbumsShowing ? (
+            <HomePage albumsWithFiles={albumsWithFiles} />
+          ) : (
+            <AlbumPage
+              albumsWithFiles={albumsWithFiles}
+              path={path}
+              dateRanges={dateRanges}
+              currentFile={scrolledToFile}
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <AdminLogin />
+          <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
+            <Link to={'/'}>home</Link>
+          </nav>
+          <main style={{ padding: '1rem' }}>
+            No albums or photos are available (or you don't have access to
+            them). Please try logging in or adjusting the album path (or
+            dates)."
+          </main>
+        </>
+      )}
     </ForceUpdateContext.Provider>
   );
 };

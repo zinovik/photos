@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { getFilteredAlbumsWithFiles } from '../services';
-import { apiLogin } from '../services/api';
+import { apiLoad, apiLogin } from '../services/api';
 import { IS_LOCAL_DEVELOPMENT } from '../constants';
 import { ForceUpdateContext } from '../routers/MainRouter';
 import { getUser } from '../state';
@@ -11,7 +10,7 @@ export const AdminLogin = () => {
 
   const clickHandler = async (token: string) => {
     const isSuccess = await apiLogin(token);
-    await getFilteredAlbumsWithFiles({ path: '/', isReload: true });
+    await apiLoad();
     alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };

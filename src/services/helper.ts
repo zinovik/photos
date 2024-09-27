@@ -36,7 +36,9 @@ export const filterFilesByPathOrDateRanges = ({
   return loadedFiles.filter(
     (file) =>
       (!path ||
-        (path === '/' ? file.isTitle : isThisOrChildPath(file.path, path))) &&
+        (path === '/' && !dateRanges
+          ? file.isTitle
+          : isThisOrChildPath(file.path, path))) &&
       (!dateRanges ||
         dateRanges.some(
           ([from, to]) =>

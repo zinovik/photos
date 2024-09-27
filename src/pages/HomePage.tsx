@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { File } from '../components/File';
 import { Markdown } from '../components/Markdown';
 import { AlbumWithFiles } from '../types';
-import { AdminLogin } from '../components/AdminLogin';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
@@ -14,8 +13,6 @@ export const HomePage = ({ albumsWithFiles }: Props) => {
 
   return (
     <main>
-      <AdminLogin />
-
       {albumsWithFiles.map(({ album, files }) => (
         <div key={album.path} style={{ paddingBottom: '1rem' }}>
           <h1>

@@ -38,7 +38,7 @@ export const apiLogout = async (): Promise<boolean> => {
   return false;
 };
 
-export const apiSend = async (): Promise<boolean> => {
+export const apiEdit = async (): Promise<boolean> => {
   const updated = getUpdated();
 
   const [, status] = await request('/edit', 'POST', {

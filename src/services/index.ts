@@ -9,17 +9,20 @@ import {
 } from './helper';
 
 export const getFilteredAlbumsWithFiles = async ({
-  path,
+  path: pathRoute,
   dateRanges,
-  isReload,
 }: {
   path: string;
   dateRanges?: string[][];
-  isReload?: boolean;
-}): Promise<{ albumsWithFiles: AlbumWithFiles[]; isHomePath?: boolean }> => {
-  if (state.allAlbums.length === 0 || state.allFiles.length === 0 || isReload) {
+}): Promise<{
+  albumsWithFiles: AlbumWithFiles[];
+  isHomePathAndAlbumsShowing?: boolean;
+}> => {
+  if (state.allAlbums.length === 0 || state.allFiles.length === 0) {
     await apiLoad();
   }
+
+  const path = pathRoute || (dateRanges ? '' : '/');
 
   const albums = filterAlbumsByPath({ loadedAlbums: state.allAlbums, path });
   const files = filterFilesByPathOrDateRanges({
@@ -52,8 +55,10 @@ export const getFilteredAlbumsWithFiles = async ({
     return { albumsWithFiles };
   }
 
-  const isHomePath = path === '/';
-  const albumsOrdered = isHomePath ? [...albums].reverse() : albums;
+  const isHomePathAndAlbumsShowing = path === '/';
+  const albumsOrdered = isHomePathAndAlbumsShowing
+    ? [...albums].reverse()
+    : albums;
 
   return {
     albumsWithFiles: albumsOrdered.map((album) => ({
@@ -66,6 +71,6 @@ export const getFilteredAlbumsWithFiles = async ({
           file.path === album.path
       ),
     })),
-    isHomePath,
+    isHomePathAndAlbumsShowing,
   };
 };

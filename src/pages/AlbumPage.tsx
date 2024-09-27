@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Album } from '../components/Album';
 import { AgendaInterface, AlbumWithFiles } from '../types';
-import { formatDatetime, getLinks } from '../utils';
+import { getLinks } from '../utils';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
@@ -37,33 +37,10 @@ export const AlbumPage = ({
               <Link to={link.url}>{link.text}</Link>
             </span>
           ))}
-          {dateRanges ? (
-            <>
-              <div>
-                <Link to={'?'}>[show by albums (default)]</Link>
-              </div>
-              <div style={{ color: 'darkgray' }}>
-                {dateRanges
-                  .map(
-                    ([from, to]) =>
-                      `${formatDatetime(from) || 'the very beginning'} - ${
-                        formatDatetime(to) || 'now'
-                      }`
-                  )
-                  .join(', ')}
-              </div>
-            </>
-          ) : (
-            <div>
-              <Link to={'?date-ranges'}>[show by date (new on top)]</Link>
-            </div>
-          )}
         </nav>
       )}
 
       <main>
-        {albumsWithFiles.length === 0 && <>⏳ Loading...</>}
-
         {albumsWithFiles.map((albumWithFiles) => (
           <div
             id={path}

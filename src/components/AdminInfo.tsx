@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import { getUpdated, getUser, resetUpdated, switchEditMode } from '../state';
-import { apiLogout, apiSend } from '../services/api';
+import { apiLogout, apiEdit, apiLoad } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
-import { getFilteredAlbumsWithFiles } from '../services';
 
 export const AdminInfo = () => {
   const forceUpdate = useContext(ForceUpdateContext);
@@ -16,7 +15,7 @@ export const AdminInfo = () => {
   } = getUpdated();
 
   const update = async (isSuccess: boolean) => {
-    await getFilteredAlbumsWithFiles({ path: '/', isReload: true });
+    await apiLoad();
     alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };
@@ -48,7 +47,7 @@ export const AdminInfo = () => {
           ))}
           <button
             onClick={async () => {
-              const isSuccess = await apiSend();
+              const isSuccess = await apiEdit();
               await update(isSuccess);
             }}
           >
