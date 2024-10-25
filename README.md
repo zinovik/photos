@@ -62,7 +62,6 @@ interface AlbumInterface {
 interface FileInterface {
   path: string;
   filename: string;
-  isTitle?: true;
   isNoThumbnail?: true;
   description: string;
   text?: string | string[];

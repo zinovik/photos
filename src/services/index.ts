@@ -1,12 +1,7 @@
 import { state } from '../state';
 import { AlbumInterface, AlbumWithFiles } from '../types';
-import { getLevel } from '../utils';
 import { apiLoad } from './api';
-import {
-  filterAlbumsByPath,
-  filterFilesByPathOrDateRanges,
-  isThisOrChildPath,
-} from './helper';
+import { filterAlbumsByPath, filterFilesByPathAndDateRanges } from './helper';
 
 export const getFilteredAlbumsWithFiles = async ({
   path: pathRoute,
@@ -25,7 +20,7 @@ export const getFilteredAlbumsWithFiles = async ({
   const path = pathRoute || (dateRanges ? '' : '/');
 
   const albums = filterAlbumsByPath({ loadedAlbums: state.allAlbums, path });
-  const files = filterFilesByPathOrDateRanges({
+  const files = filterFilesByPathAndDateRanges({
     loadedFiles: state.allFiles,
     path,
     dateRanges,
@@ -63,13 +58,7 @@ export const getFilteredAlbumsWithFiles = async ({
   return {
     albumsWithFiles: albumsOrdered.map((album) => ({
       album,
-      files: files.filter(
-        (file) =>
-          (file.isTitle &&
-            getLevel(album.path) === 1 &&
-            isThisOrChildPath(file.path, album.path)) ||
-          file.path === album.path
-      ),
+      files: files.filter((file) => file.path === album.path),
     })),
     isHomePathAndAlbumsShowing,
   };

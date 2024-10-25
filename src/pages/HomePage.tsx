@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { File } from '../components/File';
-import { Markdown } from '../components/Markdown';
 import { AlbumWithFiles } from '../types';
 
 interface Props {
@@ -18,12 +16,6 @@ export const HomePage = ({ albumsWithFiles }: Props) => {
           <h1>
             <Link to={`/${album.path}`}>{album.title}</Link>
           </h1>
-
-          {files.map((file) => (
-            <File file={file} key={file.url} isHomePage isAlbumCover />
-          ))}
-
-          <Markdown text={album.text} />
         </div>
       ))}
     </main>

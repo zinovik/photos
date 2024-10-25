@@ -119,9 +119,6 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
       ? {
           ...file,
           ...(updatedFile.path ? { path: updatedFile.path } : {}),
-          ...(updatedFile.isTitle !== undefined
-            ? { isTitle: updatedFile.isTitle || undefined }
-            : {}),
           ...(updatedFile.description
             ? { description: updatedFile.description }
             : {}),

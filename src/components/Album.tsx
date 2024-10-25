@@ -52,7 +52,6 @@ export const Album = ({
       {files.map((file) => (
         <File
           file={file}
-          isAlbumCover={isTopLevelAlbum}
           key={file.url}
           isCurrent={file.filename === currentFile}
         />

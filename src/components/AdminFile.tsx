@@ -26,11 +26,6 @@ export const AdminFile = ({ file }: Props) => {
                 (Array.isArray(text) ? text.join('---') : text) ?? '';
               const newTextString = prompt('text', oldTextString);
               if (newTextString === null) return;
-              const newIsTitle = prompt(
-                'isTitle',
-                String(Boolean(file.isTitle))
-              );
-              if (newIsTitle === null) return;
               const oldAccessesString = file.accesses
                 ? file.accesses.join(',')
                 : '';
@@ -41,7 +36,6 @@ export const AdminFile = ({ file }: Props) => {
                 newPath === file.path &&
                 newDescription === description &&
                 newTextString === oldTextString &&
-                newIsTitle === String(Boolean(file.isTitle)) &&
                 newAccessesString === oldAccessesString
               )
                 return;
@@ -49,9 +43,6 @@ export const AdminFile = ({ file }: Props) => {
               addUpdatedFile({
                 filename: file.filename,
                 ...(newPath === file.path ? {} : { path: newPath }),
-                ...(newIsTitle === String(Boolean(file.isTitle))
-                  ? {}
-                  : { isTitle: newIsTitle === 'true' }),
                 ...(newDescription === description
                   ? {}
                   : { description: newDescription }),

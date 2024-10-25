@@ -5,18 +5,16 @@ import { Video } from './Video';
 import { FileDescription } from './FileDescription';
 import { Markdown } from './Markdown';
 import { FileInterface, FileType } from '../types';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { AdminFile } from './AdminFile';
 import { formatDatetime, getThumbnail } from '../utils';
 
 interface Props {
   file: FileInterface;
-  isHomePage?: boolean;
-  isAlbumCover?: boolean;
   isCurrent?: boolean;
 }
 
-export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
+export const File = ({ file, isCurrent }: Props) => {
   const { url, type, isNoThumbnail, description, datetime, text } = file;
   const thumbnailUrl = isNoThumbnail
     ? url
@@ -26,15 +24,11 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
     description && datetime && ', '
   }${formatDatetime(datetime)}`;
 
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleFileClick = (): void => {
-    if (isAlbumCover) navigate(file.path.split('/')[0]);
-    else {
-      searchParams.set('file', file.filename);
-      setSearchParams(searchParams);
-    }
+    searchParams.set('file', file.filename);
+    setSearchParams(searchParams);
   };
 
   return (
@@ -65,11 +59,8 @@ export const File = ({ file, isHomePage, isAlbumCover, isCurrent }: Props) => {
         </div>
       )}
 
-      <div
-        id={`${file.filename}${isAlbumCover ? '-title' : ''}`}
-        style={{ minHeight: 200 }}
-      >
-        {!isAlbumCover && !isHomePage && <Markdown text={text} />}
+      <div id={file.filename} style={{ minHeight: 200 }}>
+        <Markdown text={text} />
 
         <LazyLoad
           offset={
