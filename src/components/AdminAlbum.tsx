@@ -71,24 +71,23 @@ export const AdminAlbum = ({ album }: Props) => {
           </button>
           <button
             onClick={() => {
-              const pathPart = prompt(`pathPart related to ${album.path}`);
-              if (pathPart === null) return;
+              const path = prompt(`path related to ${album.path}`, album.path);
+              if (path === null) return;
               const title = prompt('title');
               if (title === null) return;
               const newTextString = prompt('text');
               if (newTextString === null) return;
-              const relation = prompt('relation', 'after|before|in');
-              if (!['after', 'before', 'in'].includes(relation as string))
-                return;
+              const relation = prompt('relation', 'after|before');
+              if (!['after', 'before'].includes(relation as string)) return;
 
               addAddedAlbum({
-                pathPart,
+                path,
                 title,
                 text: newTextString.includes('---')
                   ? newTextString.split('---')
                   : newTextString,
                 relatedPath: album.path,
-                relation: relation as 'after' | 'before' | 'in',
+                relation: relation as 'after' | 'before',
               });
               forceUpdate();
             }}

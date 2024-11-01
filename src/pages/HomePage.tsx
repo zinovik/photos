@@ -1,21 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AlbumWithFiles } from '../types';
+import { AlbumInterface } from '../types';
 
 interface Props {
-  albumsWithFiles: AlbumWithFiles[];
+  albums: AlbumInterface[];
 }
 
-export const HomePage = ({ albumsWithFiles }: Props) => {
-  if (albumsWithFiles.length === 0) return <>⏳ Loading...</>;
-
+export const HomePage = ({ albums }: Props) => {
   return (
     <main>
-      {albumsWithFiles.map(({ album, files }) => (
-        <div key={album.path} style={{ paddingBottom: '1rem' }}>
-          <h1>
-            <Link to={`/${album.path}`}>{album.title}</Link>
-          </h1>
+      {albums.map(({ title, path, filesAmount }) => (
+        <div key={path}>
+          <h2>
+            <Link to={`/${path}`}>{`${title} (${filesAmount})`}</Link>
+          </h2>
         </div>
       ))}
     </main>

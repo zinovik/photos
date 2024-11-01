@@ -120,7 +120,7 @@ export const MainRouter = () => {
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
       {isLoading ? (
-        <main>⏳ Loading...</main>
+        <main>⏳ Loading... Please wait</main>
       ) : albumsWithFiles.length > 0 ? (
         <>
           <AdminUpdated />
@@ -131,7 +131,11 @@ export const MainRouter = () => {
           </div>
 
           {isHomePathAndAlbumsShowing ? (
-            <HomePage albumsWithFiles={albumsWithFiles} />
+            <HomePage
+              albums={albumsWithFiles.map(
+                (albumWithFiles) => albumWithFiles.album
+              )}
+            />
           ) : (
             <AlbumPage
               albumsWithFiles={albumsWithFiles}

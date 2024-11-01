@@ -8,7 +8,6 @@ import {
   UpdatedAlbum,
   UpdatedFile,
 } from '../types';
-import { getLevel } from '../utils';
 
 type User = {
   email: string;
@@ -46,15 +45,8 @@ export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
     {
       title: addedAlbum.title,
       text: addedAlbum.text || undefined,
-      path:
-        addedAlbum.relation === 'in'
-          ? `${addedAlbum.relatedPath}/${addedAlbum.pathPart}`
-          : getLevel(addedAlbum.relatedPath) === 1
-          ? addedAlbum.pathPart
-          : `${addedAlbum.relatedPath.slice(
-              0,
-              addedAlbum.relatedPath.lastIndexOf('/')
-            )}/${addedAlbum.pathPart}`,
+      filesAmount: 0,
+      path: addedAlbum.path,
     }
   );
 
@@ -119,7 +111,7 @@ export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
       ? {
           ...file,
           ...(updatedFile.path ? { path: updatedFile.path } : {}),
-          ...(updatedFile.description
+          ...(updatedFile.description !== undefined
             ? { description: updatedFile.description }
             : {}),
           ...(updatedFile.text !== undefined

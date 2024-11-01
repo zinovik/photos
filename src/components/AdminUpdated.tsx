@@ -23,13 +23,13 @@ export const AdminUpdated = () => {
   return (
     <>
       {removedAlbums.map((album) => (
-        <div>{`Album REMOVE: ${album.path}`}</div>
+        <div>{`Album REMOVE: ${JSON.stringify(album)}`}</div>
       ))}
       {removedFiles.map((file) => (
-        <div>{`File REMOVE: ${file.filename}`}</div>
+        <div>{`File REMOVE: ${JSON.stringify(file)}`}</div>
       ))}
       {addedAlbums.map((album) => (
-        <div>{`Album ADD: ${album.pathPart} | ${album.title} | ${album.text}`}</div>
+        <div>{`Album ADD: ${JSON.stringify(album)}`}</div>
       ))}
       {updatedAlbums.map((album) => (
         <div>{`Album UPDATE: ${JSON.stringify(album)}`}</div>

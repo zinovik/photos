@@ -5,7 +5,7 @@ export interface FileInterface {
   url: string;
   datetime: string;
   isNoThumbnail?: true;
-  description: string;
+  description?: string;
   text?: string | string[];
   isVertical?: true;
   accesses?: string[];

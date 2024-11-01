@@ -7,11 +7,11 @@ export interface AlbumWithFiles {
 }
 
 export interface AddedAlbum {
-  pathPart: string;
+  path: string;
   title: string;
   text: string | string[];
   relatedPath: string;
-  relation: 'after' | 'before' | 'in';
+  relation: 'after' | 'before';
 }
 
 export interface UpdatedAlbum {

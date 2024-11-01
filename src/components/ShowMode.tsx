@@ -11,7 +11,7 @@ export const ShowMode = ({ dateRanges }: Props) => {
   return dateRanges ? (
     <>
       <div>
-        <Link to={'?'}>show by albums (default)</Link>
+        <Link to={'?'}>by albums</Link> | by date
       </div>
       <div style={{ color: 'darkgray' }}>
         {dateRanges
@@ -26,7 +26,7 @@ export const ShowMode = ({ dateRanges }: Props) => {
     </>
   ) : (
     <div>
-      <Link to={`?${PARAMETER_DATE_RANGES}=`}>show by date (new on top)</Link>
+      by albums | <Link to={`?${PARAMETER_DATE_RANGES}=`}>by date</Link>
     </div>
   );
 };
