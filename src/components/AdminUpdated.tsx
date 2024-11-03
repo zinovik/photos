@@ -15,7 +15,7 @@ export const AdminUpdated = () => {
   } = getUpdated();
 
   const update = async (isSuccess: boolean) => {
-    await apiLoad();
+    await apiLoad(true);
     alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };

@@ -1,18 +1,28 @@
 import {
-  setAllAlbums,
-  setAllFiles,
+  state,
+  addAlbums,
+  addFiles,
   setUser,
   getUpdated,
   resetUpdated,
+  updateLoadedMainPaths,
+  getMainPath,
 } from '../../state';
 import { mapFilesDtoToFiles } from './files-mapper';
 import { request } from './request';
 
-export const apiLoad = async (): Promise<void> => {
-  const [responseJson] = await request('/get');
+export const apiLoad = async (isReplace?: boolean): Promise<void> => {
+  const mainPath = getMainPath();
+  const home =
+    mainPath === '' ? 'only' : state.allAlbums.length === 0 ? 'include' : '';
 
-  setAllAlbums(responseJson.albums);
-  setAllFiles(mapFilesDtoToFiles(responseJson.files));
+  const [responseJson] = await request(
+    `/get/${mainPath ?? ''}${home ? `?home=${home}` : ''}`
+  );
+
+  addAlbums(responseJson.albums, isReplace);
+  addFiles(mapFilesDtoToFiles(responseJson.files), isReplace);
+  updateLoadedMainPaths(mainPath, isReplace);
   setUser(responseJson.user);
 };
 

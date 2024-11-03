@@ -10,7 +10,7 @@ export const AdminLogin = () => {
 
   const clickHandler = async (token: string) => {
     const isSuccess = await apiLogin(token);
-    await apiLoad();
+    await apiLoad(true);
     alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };
@@ -33,7 +33,7 @@ export const AdminLogin = () => {
             <button
               onClick={async () => {
                 const isSuccess = await apiLogout();
-                await apiLoad();
+                await apiLoad(true);
                 alert(isSuccess ? 'success' : 'error');
                 forceUpdate();
               }}

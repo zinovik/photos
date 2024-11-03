@@ -1,4 +1,4 @@
-import { state } from '../state';
+import { setMainPath, shouldLoad, state } from '../state';
 import { AlbumInterface, AlbumWithFiles } from '../types';
 import { apiLoad } from './api';
 import { filterAlbumsByPath, filterFilesByPathAndDateRanges } from './helper';
@@ -13,7 +13,9 @@ export const getFilteredAlbumsWithFiles = async ({
   albumsWithFiles: AlbumWithFiles[];
   isHomePathAndAlbumsShowing?: boolean;
 }> => {
-  if (state.allAlbums.length === 0 || state.allFiles.length === 0) {
+  setMainPath(pathRoute.split('/')[0]);
+
+  if (shouldLoad()) {
     await apiLoad();
   }
 

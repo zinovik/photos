@@ -25,6 +25,8 @@ export const state = {
   addedAlbums: [] as AddedAlbum[],
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
+  loadedMainPaths: [] as string[],
+  mainPath: '',
 };
 
 export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
@@ -153,12 +155,43 @@ export const setUser = (user: User | null) => {
   state.user = user;
 };
 
-export const setAllAlbums = (allAlbums: AlbumInterface[]) => {
-  state.allAlbums = allAlbums;
+export const addAlbums = (allAlbums: AlbumInterface[], isReplace?: boolean) => {
+  if (isReplace) {
+    state.allAlbums = allAlbums;
+    return;
+  }
+
+  allAlbums.forEach((album) => {
+    if (state.allAlbums.every((stateAlbum) => stateAlbum.path !== album.path)) {
+      state.allAlbums.push(album);
+    }
+  });
 };
 
-export const setAllFiles = (allFiles: FileInterface[]) => {
-  state.allFiles = allFiles;
+export const addFiles = (allFiles: FileInterface[], isReplace?: boolean) => {
+  if (isReplace) {
+    state.allFiles = allFiles;
+    return;
+  }
+
+  state.allFiles.push(...allFiles);
+};
+
+export const updateLoadedMainPaths = (
+  mainPath: string,
+  isReplace?: boolean
+) => {
+  if (isReplace) {
+    state.loadedMainPaths = [];
+  }
+
+  if (mainPath) {
+    state.loadedMainPaths.push(mainPath);
+  }
+
+  if (!state.loadedMainPaths.includes('')) {
+    state.loadedMainPaths.push('');
+  }
 };
 
 export const resetUpdated = () => {
@@ -182,3 +215,11 @@ export const switchEditMode = () => {
 };
 
 export const getIsEditModeEnabled = () => state.isEditModeEnabled;
+
+export const getMainPath = () => state.mainPath;
+
+export const setMainPath = (mainPath: string) => {
+  state.mainPath = mainPath;
+};
+
+export const shouldLoad = () => !state.loadedMainPaths.includes(state.mainPath);
