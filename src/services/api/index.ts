@@ -7,22 +7,39 @@ import {
   resetUpdated,
   updateLoadedMainPaths,
   getMainPath,
+  getByDate,
+  setIsEverythingLoaded,
 } from '../../state';
 import { mapFilesDtoToFiles } from './files-mapper';
 import { request } from './request';
 
 export const apiLoad = async (isReplace?: boolean): Promise<void> => {
   const mainPath = getMainPath();
-  const home =
-    mainPath === '' ? 'only' : state.allAlbums.length === 0 ? 'include' : '';
+  const shouldLoadEverything = getByDate() && mainPath === '';
+
+  updateLoadedMainPaths(mainPath, isReplace);
+  if (shouldLoadEverything) {
+    setIsEverythingLoaded();
+  }
+
+  const home = shouldLoadEverything
+    ? ''
+    : mainPath === ''
+    ? 'only'
+    : state.allAlbums.length === 0 || isReplace
+    ? 'include'
+    : '';
 
   const [responseJson] = await request(
     `/get/${mainPath ?? ''}${home ? `?home=${home}` : ''}`
   );
 
-  addAlbums(responseJson.albums, isReplace);
-  addFiles(mapFilesDtoToFiles(responseJson.files), isReplace);
-  updateLoadedMainPaths(mainPath, isReplace);
+  addAlbums(responseJson.albums, isReplace || shouldLoadEverything);
+  addFiles(
+    mapFilesDtoToFiles(responseJson.files),
+    isReplace || shouldLoadEverything
+  );
+
   setUser(responseJson.user);
 };
 

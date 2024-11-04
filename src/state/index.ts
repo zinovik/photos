@@ -26,7 +26,9 @@ export const state = {
   updatedAlbums: [] as UpdatedAlbum[],
   updatedFiles: [] as UpdatedFile[],
   loadedMainPaths: [] as string[],
+  isEverythingLoaded: false,
   mainPath: '',
+  byDate: false,
 };
 
 export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
@@ -194,6 +196,10 @@ export const updateLoadedMainPaths = (
   }
 };
 
+export const setIsEverythingLoaded = () => {
+  state.isEverythingLoaded = true;
+};
+
 export const resetUpdated = () => {
   state.removedAlbums = [];
   state.removedFiles = [];
@@ -217,9 +223,17 @@ export const switchEditMode = () => {
 export const getIsEditModeEnabled = () => state.isEditModeEnabled;
 
 export const getMainPath = () => state.mainPath;
+export const getByDate = () => state.byDate;
 
 export const setMainPath = (mainPath: string) => {
   state.mainPath = mainPath;
 };
 
-export const shouldLoad = () => !state.loadedMainPaths.includes(state.mainPath);
+export const setByDate = (byDate: boolean) => {
+  state.byDate = byDate;
+};
+
+export const shouldLoad = () =>
+  !state.isEverythingLoaded &&
+  (!state.loadedMainPaths.includes(state.mainPath) ||
+    (state.mainPath === '' && state.byDate));

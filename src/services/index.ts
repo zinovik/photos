@@ -1,4 +1,4 @@
-import { setMainPath, shouldLoad, state } from '../state';
+import { setByDate, setMainPath, shouldLoad, state } from '../state';
 import { AlbumInterface, AlbumWithFiles } from '../types';
 import { apiLoad } from './api';
 import { filterAlbumsByPath, filterFilesByPathAndDateRanges } from './helper';
@@ -14,6 +14,7 @@ export const getFilteredAlbumsWithFiles = async ({
   isHomePathAndAlbumsShowing?: boolean;
 }> => {
   setMainPath(pathRoute.split('/')[0]);
+  setByDate(Boolean(dateRanges));
 
   if (shouldLoad()) {
     await apiLoad();

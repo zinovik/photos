@@ -119,9 +119,11 @@ export const MainRouter = () => {
 
   return (
     <ForceUpdateContext.Provider value={() => forceUpdate()}>
-      {isLoading ? (
+      {isLoading && (
         <main style={{ padding: '0.5rem' }}>⏳ Loading... Please wait</main>
-      ) : albumsWithFiles.length > 0 ? (
+      )}
+
+      {!isLoading && albumsWithFiles.length > 0 && (
         <>
           <AdminUpdated />
           <AdminLogin />
@@ -145,7 +147,9 @@ export const MainRouter = () => {
             />
           )}
         </>
-      ) : (
+      )}
+
+      {!isLoading && albumsWithFiles.length === 0 && (
         <>
           <AdminUpdated />
           <AdminLogin />
