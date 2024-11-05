@@ -11,8 +11,9 @@ export const AdminLogin = () => {
   const clickHandler = async (token: string) => {
     const isSuccess = await apiLogin(token);
     await apiLoad(true);
-    alert(isSuccess ? 'success' : 'error');
-    forceUpdate();
+    if (isSuccess) {
+      forceUpdate();
+    }
   };
 
   const user = getUser();
@@ -34,8 +35,9 @@ export const AdminLogin = () => {
               onClick={async () => {
                 const isSuccess = await apiLogout();
                 await apiLoad(true);
-                alert(isSuccess ? 'success' : 'error');
-                forceUpdate();
+                if (isSuccess) {
+                  forceUpdate();
+                }
               }}
             >
               logout

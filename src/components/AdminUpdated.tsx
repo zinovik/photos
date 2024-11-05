@@ -14,9 +14,8 @@ export const AdminUpdated = () => {
     updatedFiles,
   } = getUpdated();
 
-  const update = async (isSuccess: boolean) => {
+  const update = async () => {
     await apiLoad(true);
-    alert(isSuccess ? 'success' : 'error');
     forceUpdate();
   };
 
@@ -46,7 +45,9 @@ export const AdminUpdated = () => {
           <button
             onClick={async () => {
               const isSuccess = await apiEdit();
-              await update(isSuccess);
+              if (isSuccess) {
+                await update();
+              }
             }}
           >
             save changes
@@ -54,7 +55,7 @@ export const AdminUpdated = () => {
           <button
             onClick={async () => {
               resetUpdated();
-              await update(true);
+              await update();
             }}
           >
             cancel changes
