@@ -77,7 +77,7 @@ export const AdminAlbum = ({ album }: Props) => {
               if (title === null) return;
               const newTextString = prompt('text');
               if (newTextString === null) return;
-              const relation = prompt('relation', 'after|before');
+              const relation = prompt('relation (after or before the related)', 'after');
               if (!['after', 'before'].includes(relation as string)) return;
 
               addAddedAlbum({

@@ -8,6 +8,7 @@ import { AgendaInterface, AlbumWithFiles } from '../types';
 import { AdminAlbum } from './AdminAlbum';
 import { HashLink } from 'react-router-hash-link';
 import { getLevel } from '../utils';
+import { PARAMETER_DATE_RANGES } from '../constants';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
@@ -36,7 +37,12 @@ export const Album = ({
 
       {!isCurrentOpenedAlbum && (
         <Title level={level}>
-          <Link id={album.path} to={`/${album.path}`}>
+          <Link
+            id={album.path}
+            to={`/${album.path}${
+              album.defaultByDate ? `?${PARAMETER_DATE_RANGES}=` : ''
+            }`}
+          >
             {album.title}
           </Link>{' '}
           {!isHiddenHashLink && <HashLink to={`#${album.path}`}>#</HashLink>}
