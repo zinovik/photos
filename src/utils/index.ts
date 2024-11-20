@@ -1,17 +1,28 @@
-import { Host } from '../types';
+import { AlbumInterface, Host } from '../types';
+import { PARAMETER_DATE_RANGES } from '../constants';
 
 export const getLevel = (path: string): number => path.split('/').length;
 
-export const getLinks = (path: string): { text: string; url: string }[] =>
+export const getLink = (path: string, defaultByDate?: boolean) =>
+  `/${path}${defaultByDate ? `?${PARAMETER_DATE_RANGES}=` : ''}`;
+
+export const getLinks = (
+  path: string,
+  albums: AlbumInterface[]
+): { text: string; url: string }[] =>
   path
     .split('/')
     .slice(0, -1)
-    .map((link, index, links) => {
-      const url = `${links.slice(0, index).join('/')}/${link}`;
+    .map((text, index, texts) => {
+      const textPath = texts.slice(0, index + 1).join('/');
+
+      const album = albums.find((album) => album.path === textPath);
+
+      const defaultByDate = album && album.defaultByDate;
 
       return {
-        text: link,
-        url: `${url.startsWith('/') ? '' : '/'}${url}`,
+        text,
+        url: getLink(textPath, defaultByDate),
       };
     });
 

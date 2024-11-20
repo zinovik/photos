@@ -237,3 +237,5 @@ export const shouldLoad = () =>
   !state.isEverythingLoaded &&
   (!state.loadedMainPaths.includes(state.mainPath) ||
     (state.mainPath === '' && state.byDate));
+
+export const getAllAlbums = () => state.allAlbums;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AlbumInterface } from '../types';
-import { PARAMETER_DATE_RANGES } from '../constants';
+import { getLink } from '../utils';
 
 interface Props {
   albums: AlbumInterface[];
@@ -14,9 +14,7 @@ export const HomePage = ({ albums }: Props) => {
         <div key={path}>
           <h2>
             <Link
-              to={`/${path}${
-                defaultByDate ? `?${PARAMETER_DATE_RANGES}=` : ''
-              }`}
+              to={getLink(path, defaultByDate)}
             >{`${title} (${filesAmount})`}</Link>
           </h2>
         </div>

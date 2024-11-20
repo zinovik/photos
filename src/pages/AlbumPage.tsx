@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Album } from '../components/Album';
 import { AgendaInterface, AlbumWithFiles } from '../types';
-import { getLinks } from '../utils';
+import { Navigation } from '../components/Navigation';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
@@ -17,8 +16,6 @@ export const AlbumPage = ({
   dateRanges,
   currentFile,
 }: Props) => {
-  const links = getLinks(path);
-
   const albumAgenda: AgendaInterface[] = albumsWithFiles
     .slice(1)
     .map((albumWithFiles) => ({
@@ -28,17 +25,7 @@ export const AlbumPage = ({
 
   return (
     <>
-      {albumsWithFiles.length > 0 && (
-        <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
-          <Link to={'/'}>home</Link>
-          {links.map((link) => (
-            <span key={link.url}>
-              {' / '}
-              <Link to={link.url}>{link.text}</Link>
-            </span>
-          ))}
-        </nav>
-      )}
+      {albumsWithFiles.length > 0 && <Navigation path={path} />}
 
       <main>
         {albumsWithFiles.map((albumWithFiles) => (
