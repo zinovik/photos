@@ -9,11 +9,21 @@ const getFileType = (filename: string): FileType =>
 
 const getDatetimeFromFilename = (filename: string): string => {
   const dateTimeParsed = filename.match(
-    new RegExp('([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})([\\d]{2})')
+    new RegExp('^([\\d]{4})([\\d]{2})([\\d]{2})_([\\d]{2})([\\d]{2})([\\d]{2})')
   );
 
   if (!Array.isArray(dateTimeParsed)) {
-    return '';
+    const dateParsed = filename.match(
+      new RegExp('^([\\d]{4})([\\d]{2})([\\d]{2})_')
+    );
+
+    if (!Array.isArray(dateParsed)) {
+      return '';
+    }
+
+    const [, year, month, date] = dateParsed;
+
+    return `${year}${month}${date}`;
   }
 
   const [, year, month, date, hour, minute, second] = dateTimeParsed;
