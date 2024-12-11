@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { getUpdated, resetUpdated } from '../state';
+import { getSelectedFiles, getUpdated, resetUpdated } from '../state';
 import { apiEdit, apiLoad } from '../services/api';
 import { ForceUpdateContext } from '../routers/MainRouter';
 
@@ -14,6 +14,8 @@ export const AdminUpdated = () => {
     updatedFiles,
   } = getUpdated();
 
+  const selectedFiles = getSelectedFiles();
+
   const update = async () => {
     await apiLoad(true);
     forceUpdate();
@@ -21,6 +23,9 @@ export const AdminUpdated = () => {
 
   return (
     <>
+      {selectedFiles.length > 0 && (
+        <div>{`Selected Files: ${selectedFiles}`}</div>
+      )}
       {removedAlbums.map((album) => (
         <div>{`Album REMOVE: ${JSON.stringify(album)}`}</div>
       ))}

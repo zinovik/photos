@@ -29,6 +29,7 @@ export const state = {
   isEverythingLoaded: false,
   mainPath: '',
   byDate: false,
+  selectedFiles: [] as string[],
 };
 
 export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
@@ -216,8 +217,11 @@ export const getUpdated = () => ({
   updatedFiles: state.updatedFiles,
 });
 
-export const switchEditMode = () => {
-  state.isEditModeEnabled = !state.isEditModeEnabled;
+export const getSelectedFiles = () => state.selectedFiles;
+
+export const switchEditMode = (value?: boolean) => {
+  state.isEditModeEnabled =
+    value !== undefined ? value : !state.isEditModeEnabled;
 };
 
 export const getIsEditModeEnabled = () => state.isEditModeEnabled;
@@ -239,3 +243,13 @@ export const shouldLoad = () =>
     (state.mainPath === '' && state.byDate));
 
 export const getAllAlbums = () => state.allAlbums;
+
+export const addSelectedFile = (filename: string) => {
+  state.selectedFiles.push(filename);
+};
+
+export const removeSelectedFile = (filename: string) => {
+  state.selectedFiles = state.selectedFiles.filter(
+    (selectedFile) => selectedFile !== filename
+  );
+};

@@ -33,6 +33,7 @@ export const AdminLogin = () => {
             {user.email}{' '}
             <button
               onClick={async () => {
+                switchEditMode(false);
                 const isSuccess = await apiLogout();
                 await apiLoad(true);
                 if (isSuccess) {
