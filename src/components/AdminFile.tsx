@@ -28,6 +28,7 @@ export const AdminFile = ({ file }: Props) => {
     <>
       <input
         type="checkbox"
+        checked={selectedFiles.includes(file.filename)}
         onChange={(e) => {
           if (e.target.checked) {
             addSelectedFile(file.filename);
@@ -57,32 +58,27 @@ export const AdminFile = ({ file }: Props) => {
             newPath === file.path &&
             newDescription === description &&
             newTextString === oldTextString &&
-            newAccessesString === oldAccessesString
+            newAccessesString === oldAccessesString &&
+            selectedFiles.length === 0
           )
             return;
 
-          // const filenames =
-          //   selectedFiles.length > 0 ? selectedFiles : [file.filename];
+          const filenames =
+            selectedFiles.length > 0 ? selectedFiles : [file.filename];
 
-          addUpdatedFile({
-            filename: file.filename,
-            ...(newPath === file.path ? {} : { path: newPath }),
-            ...(newDescription === description
-              ? {}
-              : { description: newDescription }),
-            ...(newTextString === oldTextString
-              ? {}
-              : {
-                  text: newTextString.includes('---')
-                    ? newTextString.split('---')
-                    : newTextString,
-                }),
-            ...(newAccessesString === oldAccessesString
-              ? {}
-              : {
-                  accesses: newAccessesString.split(','),
-                }),
-          });
+          filenames.forEach((filename) =>
+            addUpdatedFile({
+              filename: filename,
+              path: newPath,
+              description: newDescription,
+              text: newTextString.includes('---')
+                ? newTextString.split('---')
+                : newTextString,
+              accesses: newAccessesString.split(','),
+            })
+          );
+          removeSelectedFile();
+
           forceUpdate();
         }}
       >

@@ -48,22 +48,12 @@ export const AdminAlbum = ({ album }: Props) => {
 
           addUpdatedAlbum({
             path: album.path,
-            ...(newPath === album.path ? {} : { newPath }),
-            ...(newTitle === album.title ? {} : { title: newTitle }),
-            ...(newTextString === oldTextString
-              ? {}
-              : {
-                  text: newTextString.includes('---')
-                    ? newTextString.split('---')
-                    : newTextString,
-                }),
-            ...(newAccessesString === oldAccessesString
-              ? {}
-              : {
-                  accesses: newAccessesString
-                    ? newAccessesString.split(',')
-                    : [],
-                }),
+            newPath,
+            title: newTitle,
+            text: newTextString.includes('---')
+              ? newTextString.split('---')
+              : newTextString,
+            accesses: newAccessesString.split(','),
           });
           forceUpdate();
         }}

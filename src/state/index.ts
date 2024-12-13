@@ -60,37 +60,54 @@ export const addAddedAlbum = (addedAlbum: AddedAlbum): void => {
 };
 
 export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
+  const currentAlbum = state.allAlbums.find(
+    (album) => album.path === updatedAlbum.path
+  );
+  const newPath =
+    updatedAlbum.newPath !== currentAlbum?.path ? updatedAlbum.newPath : null;
+  console.log(newPath);
+  const updatedAlbumChangedFields = {
+    path: updatedAlbum.path,
+    ...(updatedAlbum.title !== currentAlbum?.title
+      ? { title: updatedAlbum.title }
+      : {}),
+    ...(updatedAlbum.text !== (currentAlbum?.text || '')
+      ? { text: updatedAlbum.text }
+      : {}),
+    ...(updatedAlbum.accesses?.join(',') !==
+    (currentAlbum?.accesses || []).join(',')
+      ? { accesses: updatedAlbum.accesses }
+      : {}),
+  };
+
   let isUpdated = false;
   state.updatedAlbums = state.updatedAlbums.map((alreadyUpdatedAlbum) => {
     if (
       (alreadyUpdatedAlbum.newPath || alreadyUpdatedAlbum.path) ===
-      updatedAlbum.path
+      updatedAlbumChangedFields.path
     ) {
       isUpdated = true;
-      return updatedAlbum;
+      return {
+        ...alreadyUpdatedAlbum,
+        ...updatedAlbumChangedFields,
+        ...(newPath ? { newPath } : {}),
+      };
     }
     return alreadyUpdatedAlbum;
   });
-  if (!isUpdated) state.updatedAlbums.push(updatedAlbum);
+  if (!isUpdated)
+    state.updatedAlbums.push({
+      ...updatedAlbumChangedFields,
+      ...(newPath ? { newPath } : {}),
+    });
 
   // loadedAlbums update
   const loadedAlbumsUpdated = state.allAlbums.map((album) =>
-    album.path === updatedAlbum.path
+    album.path === updatedAlbumChangedFields.path
       ? {
           ...album,
-          ...(updatedAlbum.newPath ? { path: updatedAlbum.newPath } : {}),
-          ...(updatedAlbum.title ? { title: updatedAlbum.title } : {}),
-          ...(updatedAlbum.text !== undefined
-            ? { text: updatedAlbum.text || undefined }
-            : {}),
-          ...(updatedAlbum.accesses !== undefined
-            ? {
-                accesses:
-                  updatedAlbum.accesses.length > 0
-                    ? updatedAlbum.accesses
-                    : undefined,
-              }
-            : {}),
+          ...updatedAlbumChangedFields,
+          ...(newPath ? { path: newPath } : {}),
         }
       : album
   );
@@ -100,36 +117,44 @@ export const addUpdatedAlbum = (updatedAlbum: UpdatedAlbum): void => {
 };
 
 export const addUpdatedFile = (updatedFile: UpdatedFile): void => {
+  const currentFile = state.allFiles.find(
+    (file) => file.filename === updatedFile.filename
+  );
+  const updatedFileChangedFields = {
+    filename: updatedFile.filename,
+    ...(updatedFile.path !== currentFile?.path
+      ? { path: updatedFile.path }
+      : {}),
+    ...(updatedFile.description !== currentFile?.description
+      ? { description: updatedFile.description }
+      : {}),
+    ...(updatedFile.text !== (currentFile?.text || '')
+      ? { text: updatedFile.text }
+      : {}),
+    ...(updatedFile.accesses?.join(',') !==
+    (currentFile?.accesses || []).join(',')
+      ? {
+          accesses: updatedFile.accesses,
+        }
+      : {}),
+  };
+
   let isUpdated = false;
   state.updatedFiles = state.updatedFiles.map((alreadyUpdatedFile) => {
-    if (alreadyUpdatedFile.filename === updatedFile.filename) {
+    if (alreadyUpdatedFile.filename === updatedFileChangedFields.filename) {
       isUpdated = true;
-      return updatedFile;
+      return { ...alreadyUpdatedFile, ...updatedFileChangedFields };
     }
     return alreadyUpdatedFile;
   });
-  if (!isUpdated) state.updatedFiles.push(updatedFile);
+  if (!isUpdated) state.updatedFiles.push(updatedFileChangedFields);
 
   // allFiles update
   const files = state.allFiles.map((file) =>
-    file.filename === updatedFile.filename
+    file.filename === updatedFileChangedFields.filename
       ? {
           ...file,
-          ...(updatedFile.path ? { path: updatedFile.path } : {}),
-          ...(updatedFile.description !== undefined
-            ? { description: updatedFile.description }
-            : {}),
-          ...(updatedFile.text !== undefined
-            ? { text: updatedFile.text || undefined }
-            : {}),
-          ...(updatedFile.accesses !== undefined
-            ? {
-                accesses:
-                  updatedFile.accesses.length > 0
-                    ? updatedFile.accesses
-                    : undefined,
-              }
-            : {}),
+          ...updatedFileChangedFields,
         }
       : file
   );
@@ -248,8 +273,8 @@ export const addSelectedFile = (filename: string) => {
   state.selectedFiles.push(filename);
 };
 
-export const removeSelectedFile = (filename: string) => {
-  state.selectedFiles = state.selectedFiles.filter(
-    (selectedFile) => selectedFile !== filename
-  );
+export const removeSelectedFile = (filename?: string) => {
+  state.selectedFiles = filename
+    ? state.selectedFiles.filter((selectedFile) => selectedFile !== filename)
+    : [];
 };
