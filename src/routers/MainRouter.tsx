@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { AlbumPage } from '../pages/AlbumPage';
 import { HomePage } from '../pages/HomePage';
+import { applyChanges } from '../services/applyChanges';
 import { getAlbumsWithFilesToShow } from '../services/getAlbumsWithFilesToShow';
 import { AdminChanges } from '../components/AdminChanges';
 import { ShowMode } from '../components/ShowMode';
@@ -12,6 +13,7 @@ import {
   apiLoad,
   selectAllAlbums,
   selectAllFiles,
+  selectChanges,
   selectIsApiLoading,
   selectShouldLoad,
   setCurrentMainPath,
@@ -27,6 +29,7 @@ export const MainRouter = () => {
   const allAlbums = useAppSelector(selectAllAlbums);
   const allFiles = useAppSelector(selectAllFiles);
   const shouldLoad = useAppSelector(selectShouldLoad);
+  const changes = useAppSelector(selectChanges);
 
   const { path, dateRanges, scrolledToFile, scrolledToAlbum } = parseUrl(
     useParams(),
@@ -45,9 +48,14 @@ export const MainRouter = () => {
     })();
   }, [path, dateRanges, dispatch, shouldLoad]);
 
-  const albumsWithFilesToShow = getAlbumsWithFilesToShow({
+  const { albums, files } = applyChanges({
     allAlbums,
     allFiles,
+    changes,
+  });
+  const albumsWithFilesToShow = getAlbumsWithFilesToShow({
+    allAlbums: albums,
+    allFiles: files,
     path,
     dateRanges,
   });

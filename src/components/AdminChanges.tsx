@@ -1,26 +1,22 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
-  selectRemovedAlbums,
-  selectRemovedFiles,
-  selectAddedAlbums,
-  selectUpdatedAlbums,
-  selectUpdatedFiles,
   resetUpdated,
   apiEdit,
   apiLoad,
   selectSelectedFiles,
+  selectChanges,
 } from '../app/stateSlices/allAlbumsAndFilesSlice';
 
 export const AdminChanges = () => {
   const dispatch = useAppDispatch();
 
   const selectedFiles = useAppSelector(selectSelectedFiles);
-  const removedAlbums = useAppSelector(selectRemovedAlbums);
-  const removedFiles = useAppSelector(selectRemovedFiles);
-  const addedAlbums = useAppSelector(selectAddedAlbums);
-  const updatedAlbums = useAppSelector(selectUpdatedAlbums);
-  const updatedFiles = useAppSelector(selectUpdatedFiles);
+  const {
+    remove: { albums: removedAlbums, files: removedFiles },
+    add: { albums: addedAlbums },
+    update: { albums: updatedAlbums, files: updatedFiles },
+  } = useAppSelector(selectChanges);
 
   return (
     <>
@@ -44,31 +40,30 @@ export const AdminChanges = () => {
         <div>{`File UPDATE: ${JSON.stringify(file)}`}</div>
       ))}
 
-      {removedAlbums.length > 0 ||
+      {(removedAlbums.length > 0 ||
         removedFiles.length > 0 ||
         addedAlbums.length > 0 ||
         updatedAlbums.length > 0 ||
         updatedFiles.length > 0 ||
-        (selectedFiles.length > 0 && (
-          <>
-            <button
-              onClick={async () => {
-                await dispatch(apiEdit());
-                await dispatch(apiLoad(true));
-              }}
-            >
-              save changes
-            </button>
-            <button
-              onClick={async () => {
-                dispatch(resetUpdated());
-                await dispatch(apiLoad(true));
-              }}
-            >
-              cancel changes
-            </button>
-          </>
-        ))}
+        selectedFiles.length > 0) && (
+        <>
+          <button
+            onClick={async () => {
+              await dispatch(apiEdit());
+              await dispatch(apiLoad(true));
+            }}
+          >
+            save changes
+          </button>
+          <button
+            onClick={async () => {
+              dispatch(resetUpdated());
+            }}
+          >
+            cancel changes
+          </button>
+        </>
+      )}
     </>
   );
 };

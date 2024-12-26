@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   AddedAlbum,
   AlbumInterface,
+  Changes,
   FileInterface,
   RemovedAlbum,
   RemovedFile,
@@ -11,7 +12,6 @@ import {
 import { RootState } from '../store';
 import { createAppAsyncThunk } from '../withTypes';
 import { request } from '../../services/api/request';
-import { sortAlbums, sortFiles } from '../../services/sort';
 import { mapFilesDtoToFiles } from '../../services/api/mapFilesDtoToFiles';
 import {
   getUpdatedAlbumChangedFields,
@@ -36,19 +36,7 @@ export interface AllAlbumsAndFilesState {
 
   isEditModeEnabled: boolean;
   selectedFiles: string[];
-  editPayload: {
-    remove: {
-      albums: RemovedAlbum[];
-      files: RemovedFile[];
-    };
-    add: {
-      albums: AddedAlbum[];
-    };
-    update: {
-      albums: UpdatedAlbum[];
-      files: UpdatedFile[];
-    };
-  };
+  changes: Changes;
 }
 
 const initialState: AllAlbumsAndFilesState = {
@@ -63,7 +51,7 @@ const initialState: AllAlbumsAndFilesState = {
 
   isEditModeEnabled: false,
   selectedFiles: [] as string[],
-  editPayload: {
+  changes: {
     remove: {
       albums: [] as RemovedAlbum[],
       files: [] as RemovedFile[],
@@ -104,45 +92,15 @@ const albumsSlice = createSlice({
     },
     addRemovedAlbum: (state, action: PayloadAction<RemovedAlbum>) => {
       const removedAlbum = action.payload;
-      state.editPayload.remove.albums.push(removedAlbum);
-
-      state.allAlbums = state.allAlbums.filter(
-        (album) => album.path !== removedAlbum.path
-      );
+      state.changes.remove.albums.push(removedAlbum);
     },
     addRemovedFile: (state, action: PayloadAction<RemovedFile>) => {
       const removedFile = action.payload;
-      state.editPayload.remove.files.push(removedFile);
-
-      state.allFiles = state.allFiles.filter(
-        (file) => file.filename !== removedFile.filename
-      );
+      state.changes.remove.files.push(removedFile);
     },
     addAddedAlbum: (state, action: PayloadAction<AddedAlbum>) => {
       const addedAlbum = action.payload;
-      state.editPayload.add.albums.push(addedAlbum);
-
-      const albumsWithAdded = [...state.allAlbums];
-
-      const relatedPathIndex = albumsWithAdded.findIndex(
-        (album) => album.path === addedAlbum.relatedPath
-      );
-
-      if (relatedPathIndex === -1) return;
-
-      albumsWithAdded.splice(
-        relatedPathIndex + (addedAlbum.relation === 'before' ? 0 : 1),
-        0,
-        {
-          title: addedAlbum.title,
-          text: addedAlbum.text || undefined,
-          filesAmount: 0,
-          path: addedAlbum.path,
-        }
-      );
-
-      state.allAlbums = sortAlbums(albumsWithAdded);
-      state.allFiles = sortFiles(state.allFiles, state.allAlbums);
+      state.changes.add.albums.push(addedAlbum);
     },
     addUpdatedAlbum: (state, action: PayloadAction<UpdatedAlbum>) => {
       const updatedAlbum = action.payload;
@@ -154,7 +112,7 @@ const albumsSlice = createSlice({
         getUpdatedAlbumChangedFields(updatedAlbum, currentAlbum);
 
       let isUpdated = false;
-      state.editPayload.update.albums = state.editPayload.update.albums.map(
+      state.changes.update.albums = state.changes.update.albums.map(
         (alreadyUpdatedAlbum) => {
           if (
             (alreadyUpdatedAlbum.newPath || alreadyUpdatedAlbum.path) ===
@@ -170,25 +128,12 @@ const albumsSlice = createSlice({
           return alreadyUpdatedAlbum;
         }
       );
+
       if (!isUpdated)
-        state.editPayload.update.albums.push({
+        state.changes.update.albums.push({
           ...updatedAlbumChangedFields,
           ...(newPath ? { newPath } : {}),
         });
-
-      // allAlbums update
-      const loadedAlbumsUpdated = state.allAlbums.map((album) =>
-        album.path === updatedAlbumChangedFields.path
-          ? {
-              ...album,
-              ...updatedAlbumChangedFields,
-              ...(newPath ? { path: newPath } : {}),
-            }
-          : album
-      );
-
-      state.allAlbums = sortAlbums(loadedAlbumsUpdated);
-      state.allFiles = sortFiles(state.allFiles, state.allAlbums);
     },
     addUpdatedFile: (state, action: PayloadAction<UpdatedFile>) => {
       const updatedFile = action.payload;
@@ -201,7 +146,7 @@ const albumsSlice = createSlice({
       );
 
       let isUpdated = false;
-      state.editPayload.update.files = state.editPayload.update.files.map(
+      state.changes.update.files = state.changes.update.files.map(
         (alreadyUpdatedFile) => {
           if (
             alreadyUpdatedFile.filename === updatedFileChangedFields.filename
@@ -212,26 +157,15 @@ const albumsSlice = createSlice({
           return alreadyUpdatedFile;
         }
       );
-      if (!isUpdated)
-        state.editPayload.update.files.push(updatedFileChangedFields);
 
-      // allFiles update
-      const files = state.allFiles.map((file) =>
-        file.filename === updatedFileChangedFields.filename
-          ? {
-              ...file,
-              ...updatedFileChangedFields,
-            }
-          : file
-      );
-      state.allFiles = sortFiles(files, state.allAlbums);
+      if (!isUpdated) state.changes.update.files.push(updatedFileChangedFields);
     },
     resetUpdated: (state) => {
-      state.editPayload.remove.albums = [];
-      state.editPayload.remove.files = [];
-      state.editPayload.add.albums = [];
-      state.editPayload.update.albums = [];
-      state.editPayload.update.files = [];
+      state.changes.remove.albums = [];
+      state.changes.remove.files = [];
+      state.changes.add.albums = [];
+      state.changes.update.albums = [];
+      state.changes.update.files = [];
       state.selectedFiles = [];
     },
   },
@@ -309,11 +243,11 @@ const albumsSlice = createSlice({
         const isSuccess = action.payload;
 
         if (isSuccess) {
-          state.editPayload.remove.albums = [];
-          state.editPayload.remove.files = [];
-          state.editPayload.add.albums = [];
-          state.editPayload.update.albums = [];
-          state.editPayload.update.files = [];
+          state.changes.remove.albums = [];
+          state.changes.remove.files = [];
+          state.changes.add.albums = [];
+          state.changes.update.albums = [];
+          state.changes.update.files = [];
           state.selectedFiles = [];
         }
       });
@@ -379,7 +313,7 @@ export const apiEdit = createAppAsyncThunk(
     const [, status] = await request(
       '/edit',
       'POST',
-      state.allAlbumsAndFiles.editPayload
+      state.allAlbumsAndFiles.changes
     );
 
     return status < 400;
@@ -432,13 +366,5 @@ export const selectIsEditModeEnabled = (state: RootState) =>
   state.allAlbumsAndFiles.isEditModeEnabled;
 export const selectSelectedFiles = (state: RootState) =>
   state.allAlbumsAndFiles.selectedFiles;
-export const selectRemovedAlbums = (state: RootState) =>
-  state.allAlbumsAndFiles.editPayload.remove.albums;
-export const selectRemovedFiles = (state: RootState) =>
-  state.allAlbumsAndFiles.editPayload.remove.files;
-export const selectAddedAlbums = (state: RootState) =>
-  state.allAlbumsAndFiles.editPayload.add.albums;
-export const selectUpdatedAlbums = (state: RootState) =>
-  state.allAlbumsAndFiles.editPayload.update.albums;
-export const selectUpdatedFiles = (state: RootState) =>
-  state.allAlbumsAndFiles.editPayload.update.files;
+export const selectChanges = (state: RootState) =>
+  state.allAlbumsAndFiles.changes;

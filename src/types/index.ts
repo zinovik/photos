@@ -38,6 +38,20 @@ export interface RemovedFile {
   filename: string;
 }
 
+export interface Changes {
+  remove: {
+    albums: RemovedAlbum[];
+    files: RemovedFile[];
+  };
+  add: {
+    albums: AddedAlbum[];
+  };
+  update: {
+    albums: UpdatedAlbum[];
+    files: UpdatedFile[];
+  };
+}
+
 export enum FileType {
   image = 'image',
   video = 'video',
