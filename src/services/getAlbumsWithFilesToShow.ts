@@ -15,7 +15,11 @@ export const getAlbumsWithFilesToShow = ({
   path: string;
   dateRanges?: string[][];
 }): AlbumWithFiles[] => {
-  const albums = filterAlbumsByPath({ albums: allAlbums, path });
+  const albums = filterAlbumsByPath({
+    albums: allAlbums,
+    path,
+    isShowingByDate: Boolean(dateRanges),
+  });
   const files = filterFilesByPathAndDateRanges({
     files: allFiles,
     path,
@@ -46,7 +50,7 @@ export const getAlbumsWithFilesToShow = ({
     return albumsWithFiles;
   }
 
-  const albumsOrdered = path === '/' ? [...albums].reverse() : albums;
+  const albumsOrdered = path === '' ? [...albums].reverse() : albums;
 
   return albumsOrdered.map((album) => ({
     album,

@@ -19,14 +19,12 @@ export const parseUrl = (
   scrolledToAlbum: string;
 } => {
   const { '*': route = '' } = params;
-  const pathRoute = `${route}`.replace(/\/+$/, '');
+  const path = `${route}`.replace(/\/+$/, '');
 
   const dateRangesParameter = searchParams.get(PARAMETER_DATE_RANGES);
   const dateRanges = dateRangesParameter
     ?.split(',')
     .map((dateRange) => dateRange.split('-'));
-
-  const path = pathRoute || (dateRanges ? '' : '/');
 
   const scrolledToFile = searchParams.get(PARAMETER_FILE) ?? '';
   const scrolledToAlbum = location.hash.substring(1);

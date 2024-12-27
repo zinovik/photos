@@ -8,17 +8,17 @@ const isTopLevelPath = (path: string): boolean => !path.includes('/');
 export const filterAlbumsByPath = ({
   albums,
   path,
+  isShowingByDate,
 }: {
   albums: AlbumInterface[];
   path: string;
+  isShowingByDate: boolean;
 }): AlbumInterface[] => {
-  return path === ''
-    ? albums
-    : albums.filter((album) =>
-        path === '/'
-          ? isTopLevelPath(album.path)
-          : isThisOrChildPath(album.path, path)
-      );
+  return albums.filter((album) =>
+    path === ''
+      ? isShowingByDate || isTopLevelPath(album.path)
+      : isThisOrChildPath(album.path, path)
+  );
 };
 
 export const filterFilesByPathAndDateRanges = ({

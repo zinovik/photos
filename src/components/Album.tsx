@@ -15,7 +15,7 @@ interface Props {
   isCurrentOpenedAlbum: boolean;
   albumAgenda: AgendaInterface[];
   currentFile: string | null;
-  isHiddenHashLink?: boolean;
+  isShowingByDate?: boolean;
 }
 
 export const Album = ({
@@ -23,7 +23,7 @@ export const Album = ({
   isCurrentOpenedAlbum,
   albumAgenda,
   currentFile,
-  isHiddenHashLink,
+  isShowingByDate,
 }: Props) => {
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
@@ -45,7 +45,7 @@ export const Album = ({
           >
             {album.title}
           </Link>{' '}
-          {!isHiddenHashLink && <HashLink to={`#${album.path}`}>#</HashLink>}
+          {!isShowingByDate && <HashLink to={`#${album.path}`}>#</HashLink>}
         </Title>
       )}
 

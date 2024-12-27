@@ -6,14 +6,14 @@ import { Navigation } from '../components/Navigation';
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
   path: string;
-  isHiddenHashLink: boolean;
+  isShowingByDate: boolean;
   currentFile: string | null;
 }
 
 export const AlbumPage = ({
   albumsWithFiles,
   path,
-  isHiddenHashLink,
+  isShowingByDate,
   currentFile,
 }: Props) => {
   const albumAgenda: AgendaInterface[] = albumsWithFiles
@@ -42,7 +42,7 @@ export const AlbumPage = ({
               isCurrentOpenedAlbum={albumWithFiles.album.path === path}
               albumAgenda={albumAgenda}
               currentFile={currentFile}
-              isHiddenHashLink={isHiddenHashLink}
+              isShowingByDate={isShowingByDate}
             />
           </div>
         ))}

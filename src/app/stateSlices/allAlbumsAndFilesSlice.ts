@@ -171,10 +171,10 @@ const albumsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(apiLoad.pending, (state, action) => {
+      .addCase(apiLoad.pending, (state) => {
         state.isApiLoading = true;
       })
-      .addCase(apiLoad.rejected, (state, action) => {
+      .addCase(apiLoad.rejected, (state) => {
         state.isApiLoading = false;
       })
       .addCase(apiLoad.fulfilled, (state, action) => {
@@ -187,7 +187,7 @@ const albumsSlice = createSlice({
         state.user = user;
 
         // loadedMainPaths
-        if (isReplace) {
+        if (isReplace || isEverythingLoaded) {
           state.loadedMainPaths = [];
         }
 
@@ -208,16 +208,14 @@ const albumsSlice = createSlice({
         }
 
         // albums and files
-        if (isReplace) {
+        if (isReplace || isEverythingLoaded) {
           state.allAlbums = albums;
           state.allFiles = mapFilesDtoToFiles(files);
         } else {
-          albums.forEach((album: any) => {
-            if (
-              state.allAlbums.every(
-                (stateAlbum) => stateAlbum.path !== album.path
-              )
-            ) {
+          const allAlbumPaths = state.allAlbums.map((album) => album.path);
+
+          albums.forEach((album: AlbumInterface) => {
+            if (!allAlbumPaths.includes(album.path)) {
               state.allAlbums.push(album);
             }
           });
@@ -276,7 +274,7 @@ export const apiLoad = createAppAsyncThunk(
     );
 
     return {
-      isReplace: isReplace || shouldLoadEverything,
+      isReplace,
       isEverythingLoaded: shouldLoadEverything,
       albums: responseJson.albums,
       files: responseJson.files,

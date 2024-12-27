@@ -60,8 +60,6 @@ export const MainRouter = () => {
     dateRanges,
   });
 
-  const isHomePathAndAlbumsShowing = !dateRanges && path === '/';
-
   return (
     <>
       {isApiLoading && (
@@ -79,7 +77,7 @@ export const MainRouter = () => {
                 <ShowMode dateRanges={dateRanges} />
               </div>
 
-              {isHomePathAndAlbumsShowing ? (
+              {!dateRanges && path === '' ? (
                 <HomePage
                   albums={albumsWithFilesToShow.map(
                     (albumWithFiles) => albumWithFiles.album
@@ -90,7 +88,7 @@ export const MainRouter = () => {
                   <AlbumPage
                     albumsWithFiles={albumsWithFilesToShow}
                     path={path}
-                    isHiddenHashLink={Boolean(dateRanges)}
+                    isShowingByDate={Boolean(dateRanges)}
                     currentFile={scrolledToFile}
                   />
 
