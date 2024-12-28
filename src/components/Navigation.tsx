@@ -5,15 +5,19 @@ import { selectAllAlbums } from '../app/stateSlices/allAlbumsAndFilesSlice';
 import { useAppSelector } from '../app/hooks';
 
 interface Props {
-  path?: string;
-  isLastIncluded?: boolean;
+  albumPath?: string;
+  isLastIncludedCurrentPathSkipped?: boolean;
   align?: 'left';
 }
 
-export const Navigation = ({ path, isLastIncluded, align }: Props) => {
+export const Navigation = ({
+  albumPath,
+  isLastIncludedCurrentPathSkipped,
+  align,
+}: Props) => {
   const allAlbums = useAppSelector(selectAllAlbums);
 
-  const links = getLinks(path || '', allAlbums, isLastIncluded);
+  const links = getLinks(albumPath || '', allAlbums, isLastIncludedCurrentPathSkipped);
 
   return (
     <nav style={{ textAlign: align || 'right', paddingTop: '1rem' }}>

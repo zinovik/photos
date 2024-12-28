@@ -13,7 +13,7 @@ import { Navigation } from './Navigation';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
-  isCurrentOpenedAlbum: boolean;
+  path: string;
   albumAgenda: AgendaInterface[];
   currentFile: string | null;
   isShowingByDate?: boolean;
@@ -21,13 +21,14 @@ interface Props {
 
 export const Album = ({
   albumWithFiles,
-  isCurrentOpenedAlbum,
+  path,
   albumAgenda,
   currentFile,
   isShowingByDate,
 }: Props) => {
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
+  const isCurrentOpenedAlbum = albumWithFiles.album.path === path;
   const isCurrentAlbumTopLevelAlbum = level === 1;
 
   return (
@@ -51,11 +52,13 @@ export const Album = ({
       )}
 
       {!isCurrentOpenedAlbum && isShowingByDate && (
-        <>
-          <Title level={4}>
-            <Navigation path={album.path} isLastIncluded align={'left'} />
-          </Title>
-        </>
+        <Title level={4}>
+          <Navigation
+            albumPath={album.path}
+            isLastIncludedCurrentPathSkipped
+            align={'left'}
+          />
+        </Title>
       )}
 
       {isCurrentOpenedAlbum && !isCurrentAlbumTopLevelAlbum && (

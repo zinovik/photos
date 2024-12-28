@@ -40,6 +40,7 @@ export const AdminFile = ({ file }: Props) => {
           }
         }}
       />
+
       <button
         onClick={async () => {
           const newPath = prompt('path', file.path);
@@ -85,6 +86,7 @@ export const AdminFile = ({ file }: Props) => {
       >
         {selectedFiles.length > 0 ? 'edit selected files' : 'edit file'}
       </button>
+
       <button
         onClick={() => {
           if (!window.confirm(`Remove ${file.filename}?`)) return;

@@ -4,6 +4,7 @@ import {
   AlbumInterface,
   Changes,
   FileInterface,
+  NewAlbumPath,
   RemovedAlbum,
   RemovedFile,
   UpdatedAlbum,
@@ -134,6 +135,37 @@ const albumsSlice = createSlice({
           ...updatedAlbumChangedFields,
           ...(newPath ? { newPath } : {}),
         });
+    },
+    newAlbumPath: (state, action: PayloadAction<NewAlbumPath>) => {
+      const { path, newPath } = action.payload;
+
+      const updatedAlbums = state.allAlbums
+        .filter(
+          (album) => album.path === path || album.path.startsWith(`${path}/`)
+        )
+        .map((album) => ({
+          path: album.path,
+          newPath:
+            album.path === path
+              ? newPath
+              : album.path.replace(`${path}/`, `${newPath}/`),
+        }));
+
+      state.changes.update.albums.push(...updatedAlbums);
+
+      const updatedFiles = state.allFiles
+        .filter(
+          (file) => file.path === path || file.path.startsWith(`${path}/`)
+        )
+        .map((file) => ({
+          filename: file.filename,
+          path:
+            file.path === path
+              ? newPath
+              : file.path.replace(`${path}/`, `${newPath}/`),
+        }));
+
+      state.changes.update.files.push(...updatedFiles);
     },
     addUpdatedFile: (state, action: PayloadAction<UpdatedFile>) => {
       const updatedFile = action.payload;
@@ -328,6 +360,7 @@ export const {
   addRemovedFile,
   addAddedAlbum,
   addUpdatedAlbum,
+  newAlbumPath,
   addUpdatedFile,
   resetUpdated,
 } = albumsSlice.actions;

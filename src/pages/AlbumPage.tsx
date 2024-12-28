@@ -25,7 +25,7 @@ export const AlbumPage = ({
 
   return (
     <>
-      {albumsWithFiles.length > 0 && <Navigation path={path} />}
+      {albumsWithFiles.length > 0 && <Navigation albumPath={path} />}
 
       <main>
         {albumsWithFiles.map((albumWithFiles) => (
@@ -39,7 +39,7 @@ export const AlbumPage = ({
           >
             <Album
               albumWithFiles={albumWithFiles}
-              isCurrentOpenedAlbum={albumWithFiles.album.path === path}
+              path={path}
               albumAgenda={albumAgenda}
               currentFile={currentFile}
               isShowingByDate={isShowingByDate}

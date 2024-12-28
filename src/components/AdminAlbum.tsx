@@ -4,6 +4,7 @@ import {
   addAddedAlbum,
   addRemovedAlbum,
   addUpdatedAlbum,
+  newAlbumPath,
   selectIsEditModeEnabled,
 } from '../app/stateSlices/allAlbumsAndFilesSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -63,6 +64,7 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         edit album
       </button>
+
       <button
         onClick={() => {
           const path = prompt(`path related to ${album.path}`, album.path);
@@ -92,6 +94,7 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         add album
       </button>
+
       <button
         onClick={() => {
           if (!window.confirm(`Remove ${album.path}?`)) return;
@@ -100,6 +103,17 @@ export const AdminAlbum = ({ album }: Props) => {
         }}
       >
         remove album
+      </button>
+
+      <button
+        onClick={() => {
+          const newPath = prompt('path', album.path);
+          if (newPath === null) return;
+
+          dispatch(newAlbumPath({ path: album.path, newPath }));
+        }}
+      >
+        new path
       </button>
     </>
   );

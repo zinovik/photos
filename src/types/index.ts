@@ -22,6 +22,11 @@ export interface UpdatedAlbum {
   accesses?: string[];
 }
 
+export interface NewAlbumPath {
+  path: string;
+  newPath: string;
+}
+
 export interface UpdatedFile {
   filename: string;
   path?: string;

@@ -43,34 +43,36 @@ export const getLink = (path: string, defaultByDate?: boolean) =>
   `/${path}${defaultByDate ? `?${PARAMETER_DATE_RANGES}=` : ''}`;
 
 export const getLinks = (
-  path: string,
+  albumPath: string,
   albums: AlbumInterface[],
-  isLastIncluded?: boolean
+  isLastIncludedCurrentPathSkipped?: boolean
 ): { text: string; url: string }[] => {
-  const pathParts = path.split('/');
+  const pathParts = albumPath.split('/');
 
-  const links = (isLastIncluded ? pathParts : pathParts.slice(0, -1)).map(
-    (_text, index, texts) => {
-      const textPath = texts.slice(0, index + 1).join('/');
+  const links = (
+    isLastIncludedCurrentPathSkipped ? pathParts : pathParts.slice(0, -1)
+  ).map((_text, index, texts) => {
+    const textPath = texts.slice(0, index + 1).join('/');
 
-      const album = albums.find((album) => album.path === textPath);
+    const album = albums.find((album) => album.path === textPath);
 
-      const defaultByDate = album && album.defaultByDate;
+    const defaultByDate = album && album.defaultByDate;
 
-      return {
-        text: album?.title || '',
-        url: getLink(textPath, defaultByDate),
-      };
-    }
-  );
+    return {
+      text: album?.title || '',
+      url: getLink(textPath, defaultByDate),
+    };
+  });
 
-  return [
-    {
-      text: 'Home',
-      url: '/',
-    },
-    ...links,
-  ];
+  return isLastIncludedCurrentPathSkipped
+    ? links
+    : [
+        {
+          text: 'Home',
+          url: '/',
+        },
+        ...links,
+      ];
 };
 
 export const formatDatetime = (datetime?: string): string => {
