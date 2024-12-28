@@ -9,6 +9,7 @@ import { AdminAlbum } from './AdminAlbum';
 import { HashLink } from 'react-router-hash-link';
 import { getLevel } from '../services/utils';
 import { PARAMETER_DATE_RANGES } from '../constants';
+import { Navigation } from './Navigation';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
@@ -27,7 +28,7 @@ export const Album = ({
 }: Props) => {
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
-  const isTopLevelAlbum = level === 1;
+  const isCurrentAlbumTopLevelAlbum = level === 1;
 
   return (
     <>
@@ -35,7 +36,7 @@ export const Album = ({
 
       {isCurrentOpenedAlbum && <Title level={level}>{album.title}</Title>}
 
-      {!isCurrentOpenedAlbum && (
+      {!isCurrentOpenedAlbum && !isShowingByDate && (
         <Title level={level}>
           <Link
             id={album.path}
@@ -45,11 +46,19 @@ export const Album = ({
           >
             {album.title}
           </Link>{' '}
-          {!isShowingByDate && <HashLink to={`#${album.path}`}>#</HashLink>}
+          <HashLink to={`#${album.path}`}>#</HashLink>
         </Title>
       )}
 
-      {isCurrentOpenedAlbum && !isTopLevelAlbum && (
+      {!isCurrentOpenedAlbum && isShowingByDate && (
+        <>
+          <Title level={4}>
+            <Navigation path={album.path} isLastIncluded align={'left'} />
+          </Title>
+        </>
+      )}
+
+      {isCurrentOpenedAlbum && !isCurrentAlbumTopLevelAlbum && (
         <Agenda agenda={albumAgenda} />
       )}
 
@@ -63,7 +72,7 @@ export const Album = ({
         />
       ))}
 
-      {isTopLevelAlbum && <Agenda agenda={albumAgenda} />}
+      {isCurrentAlbumTopLevelAlbum && <Agenda agenda={albumAgenda} />}
     </>
   );
 };

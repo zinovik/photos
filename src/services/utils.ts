@@ -44,12 +44,13 @@ export const getLink = (path: string, defaultByDate?: boolean) =>
 
 export const getLinks = (
   path: string,
-  albums: AlbumInterface[]
-): { text: string; url: string }[] =>
-  path
-    .split('/')
-    .slice(0, -1)
-    .map((text, index, texts) => {
+  albums: AlbumInterface[],
+  isLastIncluded?: boolean
+): { text: string; url: string }[] => {
+  const pathParts = path.split('/');
+
+  const links = (isLastIncluded ? pathParts : pathParts.slice(0, -1)).map(
+    (_text, index, texts) => {
       const textPath = texts.slice(0, index + 1).join('/');
 
       const album = albums.find((album) => album.path === textPath);
@@ -57,10 +58,20 @@ export const getLinks = (
       const defaultByDate = album && album.defaultByDate;
 
       return {
-        text,
+        text: album?.title || '',
         url: getLink(textPath, defaultByDate),
       };
-    });
+    }
+  );
+
+  return [
+    {
+      text: 'Home',
+      url: '/',
+    },
+    ...links,
+  ];
+};
 
 export const formatDatetime = (datetime?: string): string => {
   if (!datetime) return '';

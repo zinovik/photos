@@ -5,20 +5,21 @@ import { selectAllAlbums } from '../app/stateSlices/allAlbumsAndFilesSlice';
 import { useAppSelector } from '../app/hooks';
 
 interface Props {
-  path: string;
+  path?: string;
+  isLastIncluded?: boolean;
+  align?: 'left';
 }
 
-export const Navigation = ({ path }: Props) => {
+export const Navigation = ({ path, isLastIncluded, align }: Props) => {
   const allAlbums = useAppSelector(selectAllAlbums);
 
-  const links = getLinks(path, allAlbums);
+  const links = getLinks(path || '', allAlbums, isLastIncluded);
 
   return (
-    <nav style={{ textAlign: 'right', paddingTop: '1rem' }}>
-      <Link to={'/'}>home</Link>
-      {links.map((link) => (
+    <nav style={{ textAlign: align || 'right', paddingTop: '1rem' }}>
+      {links.map((link, index) => (
         <span key={link.url}>
-          {' / '}
+          {index > 0 && ' | '}
           <Link to={link.url}>{link.text}</Link>
         </span>
       ))}
