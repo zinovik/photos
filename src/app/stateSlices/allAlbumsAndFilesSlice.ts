@@ -151,7 +151,19 @@ const albumsSlice = createSlice({
               : album.path.replace(`${path}/`, `${newPath}/`),
         }));
 
-      state.changes.update.albums.push(...updatedAlbums);
+      const updatedAlbumsNew: UpdatedAlbum[] = [];
+      updatedAlbums.forEach((updatedAlbum) => {
+        const alreadyUpdatedAlbum = state.changes.update.albums.find(
+          (album) => (album.newPath || album.path) === updatedAlbum.path
+        );
+
+        updatedAlbumsNew.push(
+          alreadyUpdatedAlbum
+            ? { ...alreadyUpdatedAlbum, ...updatedAlbum }
+            : updatedAlbum
+        );
+      });
+      state.changes.update.albums = updatedAlbumsNew;
 
       const updatedFiles = state.allFiles
         .filter(
@@ -165,7 +177,19 @@ const albumsSlice = createSlice({
               : file.path.replace(`${path}/`, `${newPath}/`),
         }));
 
-      state.changes.update.files.push(...updatedFiles);
+      const updatedFilesNew: UpdatedFile[] = [];
+      updatedFiles.forEach((updatedFile) => {
+        const alreadyUpdatedFile = state.changes.update.files.find(
+          (file) => file.filename === updatedFile.filename
+        );
+
+        updatedFilesNew.push(
+          alreadyUpdatedFile
+            ? { ...alreadyUpdatedFile, ...updatedFile }
+            : updatedFile
+        );
+      });
+      state.changes.update.files = updatedFilesNew;
     },
     addUpdatedFile: (state, action: PayloadAction<UpdatedFile>) => {
       const updatedFile = action.payload;
