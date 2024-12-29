@@ -2,6 +2,8 @@ import React from 'react';
 import { Album } from '../components/Album';
 import { AgendaInterface, AlbumWithFiles } from '../types';
 import { Navigation } from '../components/Navigation';
+import { useAppSelector } from '../app/hooks';
+import { selectAllAlbums } from '../app/stateSlices/allAlbumsAndFilesSlice';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
@@ -16,6 +18,8 @@ export const AlbumPage = ({
   isShowingByDate,
   currentFile,
 }: Props) => {
+  const allAlbums = useAppSelector(selectAllAlbums);
+
   const albumAgenda: AgendaInterface[] = albumsWithFiles
     .slice(1)
     .map((albumWithFiles) => ({
@@ -23,12 +27,16 @@ export const AlbumPage = ({
       path: albumWithFiles.album.path,
     }));
 
+  const currentOpenedAlbum = allAlbums.find(
+    (album) => album.path === currentPath
+  );
+
   return (
     <>
       {albumsWithFiles.length > 0 && <Navigation albumPath={currentPath} />}
 
       <main>
-        {albumsWithFiles.map((albumWithFiles) => (
+        {albumsWithFiles.map((albumWithFiles, index) => (
           <div
             id={currentPath}
             key={
@@ -43,6 +51,7 @@ export const AlbumPage = ({
               albumAgenda={albumAgenda}
               currentFile={currentFile}
               isShowingByDate={isShowingByDate}
+              currentOpenedAlbum={index === 0 ? currentOpenedAlbum : undefined}
             />
           </div>
         ))}
