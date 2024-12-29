@@ -7,22 +7,22 @@ import {
 export const getAlbumsWithFilesToShow = ({
   allAlbums,
   allFiles,
-  path,
+  currentPath,
   dateRanges,
 }: {
   allAlbums: AlbumInterface[];
   allFiles: FileInterface[];
-  path: string;
+  currentPath: string;
   dateRanges?: string[][];
 }): AlbumWithFiles[] => {
   const albums = filterAlbumsByPath({
     albums: allAlbums,
-    path,
+    currentPath,
     isShowingByDate: Boolean(dateRanges),
   });
   const files = filterFilesByPathAndDateRanges({
     files: allFiles,
-    path,
+    currentPath,
     dateRanges,
   });
 
@@ -50,7 +50,7 @@ export const getAlbumsWithFilesToShow = ({
     return albumsWithFiles;
   }
 
-  const albumsOrdered = path === '' ? [...albums].reverse() : albums;
+  const albumsOrdered = currentPath === '' ? [...albums].reverse() : albums;
 
   return albumsOrdered.map((album) => ({
     album,

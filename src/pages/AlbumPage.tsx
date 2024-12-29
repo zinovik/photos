@@ -5,14 +5,14 @@ import { Navigation } from '../components/Navigation';
 
 interface Props {
   albumsWithFiles: AlbumWithFiles[];
-  path: string;
+  currentPath: string;
   isShowingByDate: boolean;
   currentFile: string | null;
 }
 
 export const AlbumPage = ({
   albumsWithFiles,
-  path,
+  currentPath,
   isShowingByDate,
   currentFile,
 }: Props) => {
@@ -25,12 +25,12 @@ export const AlbumPage = ({
 
   return (
     <>
-      {albumsWithFiles.length > 0 && <Navigation albumPath={path} />}
+      {albumsWithFiles.length > 0 && <Navigation albumPath={currentPath} />}
 
       <main>
         {albumsWithFiles.map((albumWithFiles) => (
           <div
-            id={path}
+            id={currentPath}
             key={
               albumWithFiles.album.path +
               '-' +
@@ -39,7 +39,7 @@ export const AlbumPage = ({
           >
             <Album
               albumWithFiles={albumWithFiles}
-              path={path}
+              currentPath={currentPath}
               albumAgenda={albumAgenda}
               currentFile={currentFile}
               isShowingByDate={isShowingByDate}

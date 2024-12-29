@@ -10,10 +10,12 @@ import { HashLink } from 'react-router-hash-link';
 import { getLevel } from '../services/utils';
 import { PARAMETER_DATE_RANGES } from '../constants';
 import { Navigation } from './Navigation';
+import { useAppSelector } from '../app/hooks';
+import { selectAllAlbums } from '../app/stateSlices/allAlbumsAndFilesSlice';
 
 interface Props {
   albumWithFiles: AlbumWithFiles;
-  path: string;
+  currentPath: string;
   albumAgenda: AgendaInterface[];
   currentFile: string | null;
   isShowingByDate?: boolean;
@@ -21,21 +23,28 @@ interface Props {
 
 export const Album = ({
   albumWithFiles,
-  path,
+  currentPath,
   albumAgenda,
   currentFile,
   isShowingByDate,
 }: Props) => {
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
-  const isCurrentOpenedAlbum = albumWithFiles.album.path === path;
+  const isCurrentOpenedAlbum = albumWithFiles.album.path === currentPath;
   const isCurrentAlbumTopLevelAlbum = level === 1;
+
+  const allAlbums = useAppSelector(selectAllAlbums);
+  const currentAlbum = allAlbums.find((album) => album.path === currentPath);
 
   return (
     <>
       <AdminAlbum album={album} />
 
       {isCurrentOpenedAlbum && <Title level={level}>{album.title}</Title>}
+
+      {isCurrentOpenedAlbum && !isCurrentAlbumTopLevelAlbum && (
+        <Agenda agenda={albumAgenda} />
+      )}
 
       {!isCurrentOpenedAlbum && !isShowingByDate && (
         <Title level={level}>
@@ -52,17 +61,21 @@ export const Album = ({
       )}
 
       {!isCurrentOpenedAlbum && isShowingByDate && (
-        <Title level={4}>
-          <Navigation
-            albumPath={album.path}
-            isLastIncludedCurrentPathSkipped
-            align={'left'}
-          />
-        </Title>
-      )}
-
-      {isCurrentOpenedAlbum && !isCurrentAlbumTopLevelAlbum && (
-        <Agenda agenda={albumAgenda} />
+        <>
+          {currentAlbum && (
+            <Title level={getLevel(currentAlbum.path)}>
+              {currentAlbum.title}
+            </Title>
+          )}
+          <Title level={4}>
+            <Navigation
+              albumPath={album.path}
+              currentPath={currentPath}
+              isAlbumTitle
+              align={'left'}
+            />
+          </Title>
+        </>
       )}
 
       <Markdown text={album.text} />

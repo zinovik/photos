@@ -31,7 +31,7 @@ export const MainRouter = () => {
   const shouldLoad = useAppSelector(selectShouldLoad);
   const changes = useAppSelector(selectChanges);
 
-  const { path, dateRanges, scrolledToFile, scrolledToAlbum } = parseUrl(
+  const { currentPath, dateRanges, scrolledToFile, scrolledToAlbum } = parseUrl(
     useParams(),
     useSearchParams()[0],
     useLocation()
@@ -39,14 +39,14 @@ export const MainRouter = () => {
 
   useEffect(() => {
     (async () => {
-      dispatch(setCurrentMainPath(path));
+      dispatch(setCurrentMainPath(currentPath));
       dispatch(setIsShowingByDate(Boolean(dateRanges)));
 
       if (shouldLoad) {
         await dispatch(apiLoad(false));
       }
     })();
-  }, [path, dateRanges, dispatch, shouldLoad]);
+  }, [currentPath, dateRanges, dispatch, shouldLoad]);
 
   const { albums, files } = applyChanges({
     allAlbums,
@@ -56,7 +56,7 @@ export const MainRouter = () => {
   const albumsWithFilesToShow = getAlbumsWithFilesToShow({
     allAlbums: albums,
     allFiles: files,
-    path,
+    currentPath,
     dateRanges,
   });
 
@@ -77,7 +77,7 @@ export const MainRouter = () => {
                 <ShowMode dateRanges={dateRanges} />
               </div>
 
-              {!dateRanges && path === '' ? (
+              {!dateRanges && currentPath === '' ? (
                 <HomePage
                   albums={albumsWithFilesToShow.map(
                     (albumWithFiles) => albumWithFiles.album
@@ -87,13 +87,13 @@ export const MainRouter = () => {
                 <>
                   <AlbumPage
                     albumsWithFiles={albumsWithFilesToShow}
-                    path={path}
+                    currentPath={currentPath}
                     isShowingByDate={Boolean(dateRanges)}
                     currentFile={scrolledToFile}
                   />
 
                   <ScrollTo
-                    path={path}
+                    currentPath={currentPath}
                     scrolledToAlbum={scrolledToAlbum}
                     scrolledToFile={scrolledToFile}
                   />

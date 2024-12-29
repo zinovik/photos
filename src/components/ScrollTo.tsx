@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 interface Props {
-  path: string;
+  currentPath: string;
   scrolledToFile: string;
   scrolledToAlbum: string;
 }
 
-export const ScrollTo = ({ path, scrolledToFile, scrolledToAlbum }: Props) => {
+export const ScrollTo = ({
+  currentPath,
+  scrolledToFile,
+  scrolledToAlbum,
+}: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [previousPath, setPreviousPath] = useState(path);
+  const [previousPath, setPreviousPath] = useState(currentPath);
 
   useEffect(() => {
     const removeFileParam = (event: Event) => {
@@ -53,11 +57,17 @@ export const ScrollTo = ({ path, scrolledToFile, scrolledToAlbum }: Props) => {
   }, [scrolledToAlbum, scrolledToFile, searchParams, setSearchParams]);
 
   useEffect(() => {
-    if (path !== previousPath) {
-      setPreviousPath(path);
+    if (currentPath !== previousPath) {
+      setPreviousPath(currentPath);
       if (!scrolledToFile && !scrolledToAlbum) window.scrollTo(0, 0);
     }
-  }, [scrolledToFile, scrolledToAlbum, path, previousPath, setPreviousPath]);
+  }, [
+    scrolledToFile,
+    scrolledToAlbum,
+    currentPath,
+    previousPath,
+    setPreviousPath,
+  ]);
 
   return <></>;
 };

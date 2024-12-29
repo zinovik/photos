@@ -13,13 +13,13 @@ export const parseUrl = (
   searchParams: URLSearchParams,
   location: Location
 ): {
-  path: string;
+  currentPath: string;
   dateRanges?: string[][];
   scrolledToFile: string;
   scrolledToAlbum: string;
 } => {
   const { '*': route = '' } = params;
-  const path = `${route}`.replace(/\/+$/, '');
+  const currentPath = `${route}`.replace(/\/+$/, '');
 
   const dateRangesParameter = searchParams.get(PARAMETER_DATE_RANGES);
   const dateRanges = dateRangesParameter
@@ -30,7 +30,7 @@ export const parseUrl = (
   const scrolledToAlbum = location.hash.substring(1);
 
   return {
-    path,
+    currentPath,
     dateRanges,
     scrolledToFile,
     scrolledToAlbum,
@@ -42,37 +42,41 @@ export const getLevel = (path: string): number => path.split('/').length;
 export const getLink = (path: string, defaultByDate?: boolean) =>
   `/${path}${defaultByDate ? `?${PARAMETER_DATE_RANGES}=` : ''}`;
 
-export const getLinks = (
-  albumPath: string,
-  albums: AlbumInterface[],
-  isLastIncludedCurrentPathSkipped?: boolean
-): { text: string; url: string }[] => {
-  const pathParts = albumPath.split('/');
-
-  const links = (
-    isLastIncludedCurrentPathSkipped ? pathParts : pathParts.slice(0, -1)
-  ).map((_text, index, texts) => {
+export const getLinks = ({
+  albumPath = '',
+  currentPath = '',
+  allAlbums,
+  isAlbumTitle,
+}: {
+  albumPath?: string;
+  currentPath?: string;
+  allAlbums: AlbumInterface[];
+  isAlbumTitle?: boolean;
+}): { text: string; url: string }[] => {
+  const links = albumPath.split('/').map((_text, index, texts) => {
     const textPath = texts.slice(0, index + 1).join('/');
 
-    const album = albums.find((album) => album.path === textPath);
-
-    const defaultByDate = album && album.defaultByDate;
+    const album = allAlbums.find((album) => album.path === textPath);
 
     return {
       text: album?.title || '',
-      url: getLink(textPath, defaultByDate),
+      url: getLink(textPath, album?.defaultByDate),
     };
   });
 
-  return isLastIncludedCurrentPathSkipped
-    ? links
-    : [
-        {
-          text: 'Home',
-          url: '/',
-        },
-        ...links,
-      ];
+  if (isAlbumTitle) {
+    const skipNumber = currentPath.split('/').length;
+
+    return links.slice(skipNumber);
+  }
+
+  return [
+    {
+      text: 'Home',
+      url: '/',
+    },
+    ...links.slice(0, -1),
+  ];
 };
 
 export const formatDatetime = (datetime?: string): string => {

@@ -7,31 +7,31 @@ const isTopLevelPath = (path: string): boolean => !path.includes('/');
 
 export const filterAlbumsByPath = ({
   albums,
-  path,
+  currentPath,
   isShowingByDate,
 }: {
   albums: AlbumInterface[];
-  path: string;
+  currentPath: string;
   isShowingByDate: boolean;
 }): AlbumInterface[] => {
   return albums.filter((album) =>
-    path === ''
+    currentPath === ''
       ? isShowingByDate || isTopLevelPath(album.path)
-      : isThisOrChildPath(album.path, path)
+      : isThisOrChildPath(album.path, currentPath)
   );
 };
 
 export const filterFilesByPathAndDateRanges = ({
   files,
-  path,
+  currentPath,
   dateRanges,
 }: {
   files: FileInterface[];
-  path?: string;
+  currentPath?: string;
   dateRanges?: string[][];
 }): FileInterface[] =>
   files.filter((file) => {
-    if (path && !isThisOrChildPath(file.path, path)) {
+    if (currentPath && !isThisOrChildPath(file.path, currentPath)) {
       return false;
     }
 

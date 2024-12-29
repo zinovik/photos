@@ -6,18 +6,25 @@ import { useAppSelector } from '../app/hooks';
 
 interface Props {
   albumPath?: string;
-  isLastIncludedCurrentPathSkipped?: boolean;
+  currentPath?: string;
+  isAlbumTitle?: boolean;
   align?: 'left';
 }
 
 export const Navigation = ({
   albumPath,
-  isLastIncludedCurrentPathSkipped,
+  currentPath,
+  isAlbumTitle,
   align,
 }: Props) => {
   const allAlbums = useAppSelector(selectAllAlbums);
 
-  const links = getLinks(albumPath || '', allAlbums, isLastIncludedCurrentPathSkipped);
+  const links = getLinks({
+    albumPath,
+    currentPath,
+    allAlbums,
+    isAlbumTitle,
+  });
 
   return (
     <nav style={{ textAlign: align || 'right', paddingTop: '1rem' }}>
