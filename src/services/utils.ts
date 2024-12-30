@@ -11,7 +11,7 @@ import { Location, Params } from 'react-router-dom';
 export const parseUrl = (
   params: Params<string>,
   searchParams: URLSearchParams,
-  location: Location
+  location: Location,
 ): {
   currentPath: string;
   dateRanges?: string[][];
@@ -65,7 +65,9 @@ export const getLinks = ({
   });
 
   if (isAlbumTitle) {
-    const skipNumber = currentPath.split('/').length;
+    const skipNumber = currentPath
+      .split('/')
+      .filter((path) => path !== '').length;
 
     return links.slice(skipNumber);
   }
@@ -108,7 +110,7 @@ export const getThumbnail = (url: string, width: number): string => {
 
 export const getUpdatedAlbumChangedFields = (
   updatedAlbum: UpdatedAlbum,
-  currentAlbum?: AlbumInterface
+  currentAlbum?: AlbumInterface,
 ): {
   updatedAlbumChangedFields: Partial<AlbumInterface> & { path: string };
   newPath?: string | null;
@@ -135,7 +137,7 @@ export const getUpdatedAlbumChangedFields = (
 
 export const getUpdatedFileChangedFields = (
   updatedFile: UpdatedFile,
-  currentFile?: FileInterface
+  currentFile?: FileInterface,
 ): {
   updatedFileChangedFields: Partial<FileInterface> & { filename: string };
 } => {
