@@ -18,6 +18,7 @@ import {
   selectShouldLoad,
   setCurrentMainPath,
   setIsShowingByDate,
+  setToken,
 } from '../app/stateSlices/allAlbumsAndFilesSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { ScrollTo } from '../components/ScrollTo';
@@ -31,22 +32,20 @@ export const MainRouter = () => {
   const shouldLoad = useAppSelector(selectShouldLoad);
   const changes = useAppSelector(selectChanges);
 
-  const { currentPath, dateRanges, scrolledToFile, scrolledToAlbum } = parseUrl(
-    useParams(),
-    useSearchParams()[0],
-    useLocation()
-  );
+  const { currentPath, dateRanges, scrolledToFile, scrolledToAlbum, token } =
+    parseUrl(useParams(), useSearchParams()[0], useLocation());
 
   useEffect(() => {
     (async () => {
       dispatch(setCurrentMainPath(currentPath));
       dispatch(setIsShowingByDate(Boolean(dateRanges)));
+      dispatch(setToken(token));
 
       if (shouldLoad) {
         await dispatch(apiLoad(false));
       }
     })();
-  }, [currentPath, dateRanges, dispatch, shouldLoad]);
+  }, [currentPath, dateRanges, dispatch, shouldLoad, token]);
 
   const { albums, files } = applyChanges({
     allAlbums,

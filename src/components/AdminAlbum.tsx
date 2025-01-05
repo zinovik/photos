@@ -8,6 +8,9 @@ import {
   selectIsEditModeEnabled,
 } from '../app/stateSlices/allAlbumsAndFilesSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { request } from '../services/api/request';
+import { useSearchParams } from 'react-router-dom';
+import { PARAMETER_TOKEN } from '../constants';
 
 interface Props {
   album: AlbumInterface;
@@ -15,6 +18,8 @@ interface Props {
 
 export const AdminAlbum = ({ album }: Props) => {
   const dispatch = useAppDispatch();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const isEditModeEnabled = useAppSelector(selectIsEditModeEnabled);
 
@@ -114,6 +119,17 @@ export const AdminAlbum = ({ album }: Props) => {
         }}
       >
         new path
+      </button>
+
+      <button
+        onClick={async () => {
+          const [responseJson] = await request(`/auth/share/${album.path}`);
+
+          searchParams.set(PARAMETER_TOKEN, responseJson.token);
+          setSearchParams(searchParams);
+        }}
+      >
+        share
       </button>
     </>
   );

@@ -27,6 +27,7 @@ type User = {
 
 export interface AllAlbumsAndFilesState {
   currentMainPath: string;
+  token: string;
   isShowingByDate: boolean;
   isApiLoading: boolean;
   allAlbums: AlbumInterface[];
@@ -42,6 +43,7 @@ export interface AllAlbumsAndFilesState {
 
 const initialState: AllAlbumsAndFilesState = {
   currentMainPath: '',
+  token: '',
   isShowingByDate: false,
   isApiLoading: true,
   allAlbums: [] as AlbumInterface[],
@@ -76,6 +78,9 @@ const albumsSlice = createSlice({
     },
     setIsShowingByDate: (state, action: PayloadAction<boolean>) => {
       state.isShowingByDate = action.payload;
+    },
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
     },
     switchEditMode: (state, action: PayloadAction<boolean | undefined>) => {
       state.isEditModeEnabled =
@@ -312,7 +317,7 @@ export const apiLoad = createAppAsyncThunk(
   'allAlbumsAndFiles/apiLoad',
   async (isReplace: boolean, { getState }) => {
     const {
-      allAlbumsAndFiles: { isShowingByDate, currentMainPath, allAlbums },
+      allAlbumsAndFiles: { isShowingByDate, currentMainPath, allAlbums, token },
     } = getState();
 
     const shouldLoadEverything = isShowingByDate && currentMainPath === '';
@@ -325,8 +330,15 @@ export const apiLoad = createAppAsyncThunk(
       ? 'include'
       : '';
 
+    const params = [
+      { name: 'home', value: home },
+      { name: 'token', value: token },
+    ]
+      .map((param) => (param.value ? `${param.name}=${param.value}` : ''))
+      .join('&');
+
     const [responseJson] = await request(
-      `/get/${currentMainPath ?? ''}${home ? `?home=${home}` : ''}`
+      `/get/${currentMainPath ?? ''}${params ? `?${params}` : ''}`
     );
 
     return {
@@ -376,6 +388,7 @@ export const apiEdit = createAppAsyncThunk(
 
 export const {
   setCurrentMainPath,
+  setToken,
   setIsShowingByDate,
   switchEditMode,
   addSelectedFile,
