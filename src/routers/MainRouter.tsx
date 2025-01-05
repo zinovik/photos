@@ -79,7 +79,7 @@ export const MainRouter = () => {
               {!dateRanges && currentPath === '' ? (
                 <HomePage
                   albums={albumsWithFilesToShow.map(
-                    (albumWithFiles) => albumWithFiles.album
+                    (albumWithFiles) => albumWithFiles.album,
                   )}
                 />
               ) : (
@@ -107,7 +107,7 @@ export const MainRouter = () => {
               <main style={{ padding: '1rem' }}>
                 No albums or photos are available (or you don't have access to
                 them). Please try logging in or adjusting the album path (or
-                dates)."
+                dates).
               </main>
             </>
           )}

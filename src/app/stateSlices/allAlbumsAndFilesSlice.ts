@@ -28,6 +28,7 @@ type User = {
 export interface AllAlbumsAndFilesState {
   currentMainPath: string;
   token: string;
+  tokenExpiresAt: number;
   isShowingByDate: boolean;
   isApiLoading: boolean;
   allAlbums: AlbumInterface[];
@@ -44,6 +45,7 @@ export interface AllAlbumsAndFilesState {
 const initialState: AllAlbumsAndFilesState = {
   currentMainPath: '',
   token: '',
+  tokenExpiresAt: 0,
   isShowingByDate: false,
   isApiLoading: true,
   allAlbums: [] as AlbumInterface[],
@@ -80,7 +82,18 @@ const albumsSlice = createSlice({
       state.isShowingByDate = action.payload;
     },
     setToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload;
+      const token = action.payload;
+
+      state.token = token;
+
+      if (token) {
+        const [, payloadBase64] = token.split('.');
+        const payload = JSON.parse(atob(payloadBase64));
+
+        state.tokenExpiresAt = payload.exp * 1000;
+      } else {
+        state.tokenExpiresAt = 0;
+      }
     },
     switchEditMode: (state, action: PayloadAction<boolean | undefined>) => {
       state.isEditModeEnabled =
@@ -93,7 +106,7 @@ const albumsSlice = createSlice({
     },
     removeSelectedFile: (state, action: PayloadAction<string>) => {
       state.selectedFiles = state.selectedFiles.filter(
-        (selectedFile) => selectedFile !== action.payload
+        (selectedFile) => selectedFile !== action.payload,
       );
     },
     addRemovedAlbum: (state, action: PayloadAction<RemovedAlbum>) => {
@@ -111,7 +124,7 @@ const albumsSlice = createSlice({
     addUpdatedAlbum: (state, action: PayloadAction<UpdatedAlbum>) => {
       const updatedAlbum = action.payload;
       const currentAlbum = state.allAlbums.find(
-        (album) => album.path === updatedAlbum.path
+        (album) => album.path === updatedAlbum.path,
       );
 
       const { updatedAlbumChangedFields, newPath } =
@@ -132,7 +145,7 @@ const albumsSlice = createSlice({
             };
           }
           return alreadyUpdatedAlbum;
-        }
+        },
       );
 
       if (!isUpdated)
@@ -146,7 +159,7 @@ const albumsSlice = createSlice({
 
       const updatedAlbums = state.allAlbums
         .filter(
-          (album) => album.path === path || album.path.startsWith(`${path}/`)
+          (album) => album.path === path || album.path.startsWith(`${path}/`),
         )
         .map((album) => ({
           path: album.path,
@@ -159,20 +172,20 @@ const albumsSlice = createSlice({
       const updatedAlbumsNew: UpdatedAlbum[] = [];
       updatedAlbums.forEach((updatedAlbum) => {
         const alreadyUpdatedAlbum = state.changes.update.albums.find(
-          (album) => (album.newPath || album.path) === updatedAlbum.path
+          (album) => (album.newPath || album.path) === updatedAlbum.path,
         );
 
         updatedAlbumsNew.push(
           alreadyUpdatedAlbum
             ? { ...alreadyUpdatedAlbum, ...updatedAlbum }
-            : updatedAlbum
+            : updatedAlbum,
         );
       });
       state.changes.update.albums = updatedAlbumsNew;
 
       const updatedFiles = state.allFiles
         .filter(
-          (file) => file.path === path || file.path.startsWith(`${path}/`)
+          (file) => file.path === path || file.path.startsWith(`${path}/`),
         )
         .map((file) => ({
           filename: file.filename,
@@ -185,13 +198,13 @@ const albumsSlice = createSlice({
       const updatedFilesNew: UpdatedFile[] = [];
       updatedFiles.forEach((updatedFile) => {
         const alreadyUpdatedFile = state.changes.update.files.find(
-          (file) => file.filename === updatedFile.filename
+          (file) => file.filename === updatedFile.filename,
         );
 
         updatedFilesNew.push(
           alreadyUpdatedFile
             ? { ...alreadyUpdatedFile, ...updatedFile }
-            : updatedFile
+            : updatedFile,
         );
       });
       state.changes.update.files = updatedFilesNew;
@@ -199,11 +212,11 @@ const albumsSlice = createSlice({
     addUpdatedFile: (state, action: PayloadAction<UpdatedFile>) => {
       const updatedFile = action.payload;
       const currentFile = state.allFiles.find(
-        (file) => file.filename === updatedFile.filename
+        (file) => file.filename === updatedFile.filename,
       );
       const { updatedFileChangedFields } = getUpdatedFileChangedFields(
         updatedFile,
-        currentFile
+        currentFile,
       );
 
       let isUpdated = false;
@@ -216,7 +229,7 @@ const albumsSlice = createSlice({
             return { ...alreadyUpdatedFile, ...updatedFileChangedFields };
           }
           return alreadyUpdatedFile;
-        }
+        },
       );
 
       if (!isUpdated) state.changes.update.files.push(updatedFileChangedFields);
@@ -325,20 +338,21 @@ export const apiLoad = createAppAsyncThunk(
     const home = shouldLoadEverything
       ? ''
       : currentMainPath === ''
-      ? 'only'
-      : allAlbums.length === 0 || isReplace
-      ? 'include'
-      : '';
+        ? 'only'
+        : allAlbums.length === 0 || isReplace
+          ? 'include'
+          : '';
 
     const params = [
       { name: 'home', value: home },
       { name: 'token', value: token },
     ]
       .map((param) => (param.value ? `${param.name}=${param.value}` : ''))
+      .filter((param) => Boolean(param))
       .join('&');
 
     const [responseJson] = await request(
-      `/get/${currentMainPath ?? ''}${params ? `?${params}` : ''}`
+      `/get/${currentMainPath ?? ''}${params ? `?${params}` : ''}`,
     );
 
     return {
@@ -348,7 +362,7 @@ export const apiLoad = createAppAsyncThunk(
       files: responseJson.files,
       user: responseJson.user,
     };
-  }
+  },
 );
 
 export const apiLogin = createAppAsyncThunk(
@@ -359,7 +373,7 @@ export const apiLogin = createAppAsyncThunk(
     });
 
     return [status < 400, csrf];
-  }
+  },
 );
 
 export const apiLogout = createAppAsyncThunk(
@@ -368,7 +382,7 @@ export const apiLogout = createAppAsyncThunk(
     const [, status] = await request('/auth/logout', 'POST');
 
     return status < 400;
-  }
+  },
 );
 
 export const apiEdit = createAppAsyncThunk(
@@ -379,11 +393,11 @@ export const apiEdit = createAppAsyncThunk(
     const [, status] = await request(
       '/edit',
       'POST',
-      state.allAlbumsAndFiles.changes
+      state.allAlbumsAndFiles.changes,
     );
 
     return status < 400;
-  }
+  },
 );
 
 export const {
@@ -429,6 +443,8 @@ export const selectShouldLoad = (state: RootState) => {
 };
 
 export const selectUser = (state: RootState) => state.allAlbumsAndFiles.user;
+export const selectTokenExpiresAt = (state: RootState) =>
+  state.allAlbumsAndFiles.tokenExpiresAt;
 
 export const selectIsEditModeEnabled = (state: RootState) =>
   state.allAlbumsAndFiles.isEditModeEnabled;
