@@ -3,7 +3,7 @@ import { FileInterface, FileType } from '../../types';
 type FileDto = Omit<FileInterface, 'datetime' | 'type'>;
 
 const getFileType = (filename: string): FileType =>
-  ['mp4'].includes(filename.split('.').pop() || '')
+  ['mp4', 'mov'].includes(filename.split('.').pop() || '')
     ? FileType.video
     : FileType.image;
 

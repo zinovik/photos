@@ -5,28 +5,46 @@ import { PARAMETER_DATE_RANGES } from '../constants';
 
 interface Props {
   dateRanges: string[][] | undefined;
+  currentPath: string;
 }
 
-export const ShowMode = ({ dateRanges }: Props) => {
-  return dateRanges ? (
-    <>
-      <div>
-        <Link to={'?'}>by albums</Link> | by date
-      </div>
-      <div style={{ color: 'darkgray' }}>
-        {dateRanges
-          .map(
-            ([from, to]) =>
-              `${formatDatetime(from) || 'the very beginning'} - ${
-                formatDatetime(to) || 'now'
-              }`
-          )
-          .join(', ')}
-      </div>
-    </>
-  ) : (
+export const ShowMode = ({ dateRanges, currentPath }: Props) => {
+  if (dateRanges) {
+    return (
+      <>
+        <div>
+          <Link to={'?'}>by albums</Link> | by date
+        </div>
+        <div style={{ color: 'darkgray' }}>
+          {dateRanges
+            .map(
+              ([from, to]) =>
+                `${formatDatetime(from) || 'the very beginning'} - ${
+                  formatDatetime(to) || 'now'
+                }`
+            )
+            .join(', ')}
+        </div>
+      </>
+    );
+  }
+
+  let dateRangesLink = '';
+
+  if (!currentPath) {
+    const threeMonthsAgoDate = new Date();
+    threeMonthsAgoDate.setMonth(threeMonthsAgoDate.getMonth() - 3);
+
+    dateRangesLink = threeMonthsAgoDate
+      .toISOString()
+      .replaceAll('-', '')
+      .slice(0, 8);
+  }
+
+  return (
     <div>
-      by albums | <Link to={`?${PARAMETER_DATE_RANGES}=`}>by date</Link>
+      by albums |{' '}
+      <Link to={`?${PARAMETER_DATE_RANGES}=${dateRangesLink}`}>by date</Link>
     </div>
   );
 };

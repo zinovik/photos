@@ -73,13 +73,13 @@ export const MainRouter = () => {
           {albumsWithFilesToShow.length > 0 && (
             <>
               <div style={{ textAlign: 'center' }}>
-                <ShowMode dateRanges={dateRanges} />
+                <ShowMode dateRanges={dateRanges} currentPath={currentPath} />
               </div>
 
               {!dateRanges && currentPath === '' ? (
                 <HomePage
                   albums={albumsWithFilesToShow.map(
-                    (albumWithFiles) => albumWithFiles.album,
+                    (albumWithFiles) => albumWithFiles.album
                   )}
                 />
               ) : (
