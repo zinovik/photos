@@ -82,6 +82,8 @@ export const AdminFile = ({ file }: Props) => {
               })
             )
           );
+
+          dispatch(removeSelectedFile());
         }}
       >
         {selectedFiles.length > 0 ? 'edit selected files' : 'edit file'}

@@ -110,10 +110,14 @@ const albumsSlice = createSlice({
     addSelectedFile: (state, action: PayloadAction<string>) => {
       state.selectedFiles.push(action.payload);
     },
-    removeSelectedFile: (state, action: PayloadAction<string>) => {
-      state.selectedFiles = state.selectedFiles.filter(
-        (selectedFile) => selectedFile !== action.payload
-      );
+    removeSelectedFile: (state, action: PayloadAction<string | undefined>) => {
+      if (!action.payload) {
+        state.selectedFiles = state.selectedFiles.filter(
+          (selectedFile) => selectedFile !== action.payload
+        );
+      } else {
+        state.selectedFiles = [];
+      }
     },
     addRemovedAlbum: (state, action: PayloadAction<RemovedAlbum>) => {
       const removedAlbum = action.payload;
