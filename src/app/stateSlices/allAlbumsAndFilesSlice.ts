@@ -15,8 +15,10 @@ import { createAppAsyncThunk } from '../withTypes';
 import { request } from '../../services/api/request';
 import { mapFilesDtoToFiles } from '../../services/api/mapFilesDtoToFiles';
 import {
+  getAlbumsFromFiles,
   getUpdatedAlbumChangedFields,
   getUpdatedFileChangedFields,
+  uniqueAlbums,
 } from '../../services/utils';
 
 type User = {
@@ -291,20 +293,20 @@ const albumsSlice = createSlice({
           state.isEverythingLoaded = isEverythingLoaded;
         }
 
+        const allFiles = mapFilesDtoToFiles(files);
+        const albumsFromFiles = getAlbumsFromFiles(files);
+
         // albums and files
         if (isReplace || isEverythingLoaded) {
-          state.allAlbums = albums;
-          state.allFiles = mapFilesDtoToFiles(files);
+          state.allAlbums = uniqueAlbums(albums, albumsFromFiles);
+          state.allFiles = allFiles;
         } else {
-          const allAlbumPaths = state.allAlbums.map((album) => album.path);
-
-          albums.forEach((album: AlbumInterface) => {
-            if (!allAlbumPaths.includes(album.path)) {
-              state.allAlbums.push(album);
-            }
-          });
-
-          state.allFiles.push(...mapFilesDtoToFiles(files));
+          state.allAlbums = uniqueAlbums(
+            state.allAlbums,
+            albums,
+            albumsFromFiles
+          );
+          state.allFiles.push(...allFiles);
         }
       })
       .addCase(apiLogin.fulfilled, (_state, action) => {

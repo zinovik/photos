@@ -1,4 +1,4 @@
-[zinovik.github.io/gallery](zinovik.github.io/gallery)
+[zinovik.github.io/gallery](https://zinovik.github.io/gallery)
 
 ![diagram](./diagram.png)
 
@@ -67,7 +67,6 @@ interface FileInterface {
   isNoThumbnail?: true;
   description: string;
   text?: string | string[];
-  isVertical?: true;
 }
 ```
 

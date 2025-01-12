@@ -53,7 +53,6 @@ const addAlbums = (
       {
         title: addedAlbum.title,
         text: addedAlbum.text || undefined,
-        filesAmount: 0,
         path: addedAlbum.path,
       }
     );

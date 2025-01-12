@@ -7,6 +7,5 @@ export interface FileInterface {
   isNoThumbnail?: true;
   description?: string;
   text?: string | string[];
-  isVertical?: true;
   accesses?: string[];
 }

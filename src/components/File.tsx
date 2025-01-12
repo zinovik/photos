@@ -20,8 +20,8 @@ export const File = ({ file, isCurrent }: Props) => {
     ? url
     : getThumbnail(url, window.innerWidth);
 
-  const descriptionWithDatetime = `${description}${
-    description && datetime && ', '
+  const descriptionWithDatetime = `${description ? description : ''}${
+    description && datetime ? ', ' : ''
   }${formatDatetime(datetime)}`;
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,11 +62,7 @@ export const File = ({ file, isCurrent }: Props) => {
       <div id={file.filename} style={{ minHeight: 200 }}>
         <Markdown text={text} />
 
-        <LazyLoad
-          offset={
-            Math.min(window.innerWidth, 880) * (file.isVertical ? 1.333 : 0.75)
-          }
-        >
+        <LazyLoad offset={Math.min(window.innerWidth, 880) * 0.75}>
           <div style={{ textAlign: 'center' }}>
             {type === FileType.image && (
               <Image

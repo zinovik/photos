@@ -170,3 +170,28 @@ export const getUpdatedFileChangedFields = (
 
   return { updatedFileChangedFields };
 };
+
+export const getAlbumsFromFiles = (
+  files: FileInterface[]
+): AlbumInterface[] => {
+  return [...new Set(files.map((file) => file.path))].map((path) => ({
+    title: `[${path.split('/').slice(-1).join('') || 'untitled'}]`,
+    path,
+  }));
+};
+
+export const uniqueAlbums = (...args: AlbumInterface[][]): AlbumInterface[] => {
+  const uniqueAlbums: AlbumInterface[] = [];
+
+  args.forEach((albums) => {
+    const uniqueAlbumsPaths = uniqueAlbums.map((album) => album.path);
+
+    albums.forEach((album: AlbumInterface) => {
+      if (!uniqueAlbumsPaths.includes(album.path)) {
+        uniqueAlbums.push(album);
+      }
+    });
+  });
+
+  return uniqueAlbums;
+};

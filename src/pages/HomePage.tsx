@@ -13,9 +13,9 @@ export const HomePage = ({ albums }: Props) => {
       {albums.map(({ title, path, filesAmount, defaultByDate }) => (
         <div key={path}>
           <h2>
-            <Link
-              to={getLink(path, defaultByDate)}
-            >{`${title} (${filesAmount})`}</Link>
+            <Link to={getLink(path, defaultByDate)}>{`${title}${
+              typeof filesAmount === 'number' ? ` (${filesAmount})` : ''
+            }`}</Link>
           </h2>
         </div>
       ))}
