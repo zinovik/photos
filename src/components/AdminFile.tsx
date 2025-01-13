@@ -78,7 +78,7 @@ export const AdminFile = ({ file }: Props) => {
                 text: newTextString.includes('---')
                   ? newTextString.split('---')
                   : newTextString,
-                accesses: newAccessesString.split(','),
+                accesses: newAccessesString.split(',').filter(Boolean),
               })
             )
           );

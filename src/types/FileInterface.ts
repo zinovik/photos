@@ -7,5 +7,5 @@ export interface FileInterface {
   isNoThumbnail?: true;
   description?: string;
   text?: string | string[];
-  accesses?: string[];
+  accesses: string[];
 }

@@ -5,5 +5,6 @@ export interface AlbumInterface {
   defaultByDate?: true;
   text?: string | string[];
   isSorted?: true;
-  accesses?: string[];
+  accesses: string[];
+  order?: number;
 }

@@ -62,7 +62,7 @@ export const AdminAlbum = ({ album }: Props) => {
               text: newTextString.includes('---')
                 ? newTextString.split('---')
                 : newTextString,
-              accesses: newAccessesString.split(','),
+              accesses: newAccessesString.split(',').filter(Boolean),
             })
           );
         }}
@@ -76,8 +76,10 @@ export const AdminAlbum = ({ album }: Props) => {
           if (path === null) return;
           const title = prompt('title');
           if (title === null) return;
-          const newTextString = prompt('text');
-          if (newTextString === null) return;
+          const textString = prompt('text');
+          if (textString === null) return;
+          const accessesString = prompt('accesses');
+          if (accessesString === null) return;
           const relation = prompt(
             'relation (after or before the related)',
             'after'
@@ -88,11 +90,12 @@ export const AdminAlbum = ({ album }: Props) => {
             addAddedAlbum({
               path,
               title,
-              text: newTextString.includes('---')
-                ? newTextString.split('---')
-                : newTextString,
+              text: textString.includes('---')
+                ? textString.split('---')
+                : textString,
               relatedPath: album.path,
               relation: relation as 'after' | 'before',
+              accesses: accessesString.split(','),
             })
           );
         }}

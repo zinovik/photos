@@ -177,6 +177,7 @@ export const getAlbumsFromFiles = (
   return [...new Set(files.map((file) => file.path))].map((path) => ({
     title: `[${path.split('/').slice(-1).join('') || 'untitled'}]`,
     path,
+    accesses: [],
   }));
 };
 

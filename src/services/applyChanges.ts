@@ -54,6 +54,7 @@ const addAlbums = (
         title: addedAlbum.title,
         text: addedAlbum.text || undefined,
         path: addedAlbum.path,
+        accesses: addedAlbum.accesses,
       }
     );
   });
