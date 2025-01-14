@@ -27,6 +27,10 @@ export const AdminAlbum = ({ album }: Props) => {
     return null;
   }
 
+  if (album.title.startsWith('[') && album.title.endsWith(']')) {
+    return null;
+  }
+
   return (
     <>
       <button
@@ -144,6 +148,8 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         share
       </button>
+
+      {` accesses: ${album.accesses.join(', ')}`}
     </>
   );
 };
