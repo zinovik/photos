@@ -181,17 +181,19 @@ const albumsSlice = createSlice({
         }));
 
       const updatedAlbumsNew: UpdatedAlbum[] = [];
-      updatedAlbums.forEach((updatedAlbum) => {
-        const alreadyUpdatedAlbum = state.changes.update.albums.find(
-          (album) => (album.newPath || album.path) === updatedAlbum.path
-        );
+      [...state.changes.update.albums, ...updatedAlbums].forEach(
+        (updatedAlbum) => {
+          const alreadyUpdatedAlbum = state.changes.update.albums.find(
+            (album) => (album.newPath || album.path) === updatedAlbum.path
+          );
 
-        updatedAlbumsNew.push(
-          alreadyUpdatedAlbum
-            ? { ...alreadyUpdatedAlbum, ...updatedAlbum }
-            : updatedAlbum
-        );
-      });
+          updatedAlbumsNew.push(
+            alreadyUpdatedAlbum
+              ? { ...alreadyUpdatedAlbum, ...updatedAlbum }
+              : updatedAlbum
+          );
+        }
+      );
       state.changes.update.albums = updatedAlbumsNew;
 
       const updatedFiles = state.allFiles
@@ -207,17 +209,19 @@ const albumsSlice = createSlice({
         }));
 
       const updatedFilesNew: UpdatedFile[] = [];
-      updatedFiles.forEach((updatedFile) => {
-        const alreadyUpdatedFile = state.changes.update.files.find(
-          (file) => file.filename === updatedFile.filename
-        );
+      [...state.changes.update.files, ...updatedFiles].forEach(
+        (updatedFile) => {
+          const alreadyUpdatedFile = state.changes.update.files.find(
+            (file) => file.filename === updatedFile.filename
+          );
 
-        updatedFilesNew.push(
-          alreadyUpdatedFile
-            ? { ...alreadyUpdatedFile, ...updatedFile }
-            : updatedFile
-        );
-      });
+          updatedFilesNew.push(
+            alreadyUpdatedFile
+              ? { ...alreadyUpdatedFile, ...updatedFile }
+              : updatedFile
+          );
+        }
+      );
       state.changes.update.files = updatedFilesNew;
     },
     addUpdatedFile: (state, action: PayloadAction<UpdatedFile>) => {
