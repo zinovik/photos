@@ -6,5 +6,4 @@ export interface AlbumInterface {
   text?: string | string[];
   isSorted?: true;
   accesses: string[];
-  order?: number;
 }

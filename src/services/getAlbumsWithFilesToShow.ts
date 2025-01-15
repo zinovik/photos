@@ -3,6 +3,7 @@ import {
   filterAlbumsByPath,
   filterFilesByPathAndDateRanges,
 } from './filtersByPathAndDateRanges';
+import { getAlbumsFromFiles, uniqueAlbums } from './utils';
 
 export const getAlbumsWithFilesToShow = ({
   allAlbums,
@@ -15,15 +16,21 @@ export const getAlbumsWithFilesToShow = ({
   currentPath: string;
   dateRanges?: string[][];
 }): AlbumWithFiles[] => {
-  const albums = filterAlbumsByPath({
-    albums: allAlbums,
-    currentPath,
-    isShowingByDate: Boolean(dateRanges),
-  });
   const files = filterFilesByPathAndDateRanges({
     files: allFiles,
     currentPath,
     dateRanges,
+  });
+
+  const allAlbumsWithGenerated = uniqueAlbums(
+    allAlbums,
+    getAlbumsFromFiles(allFiles)
+  );
+
+  const albums = filterAlbumsByPath({
+    albums: allAlbumsWithGenerated,
+    currentPath,
+    isShowingByDate: Boolean(dateRanges),
   });
 
   if (dateRanges) {

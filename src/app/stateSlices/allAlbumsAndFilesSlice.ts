@@ -15,7 +15,6 @@ import { createAppAsyncThunk } from '../withTypes';
 import { request } from '../../services/api/request';
 import { mapFilesDtoToFiles } from '../../services/api/mapFilesDtoToFiles';
 import {
-  getAlbumsFromFiles,
   getUpdatedAlbumChangedFields,
   getUpdatedFileChangedFields,
   uniqueAlbums,
@@ -294,18 +293,13 @@ const albumsSlice = createSlice({
         }
 
         const allFiles = mapFilesDtoToFiles(files);
-        const albumsFromFiles = getAlbumsFromFiles(files);
 
         // albums and files
         if (isReplace || isEverythingLoaded) {
-          state.allAlbums = uniqueAlbums(albums, albumsFromFiles);
+          state.allAlbums = albums;
           state.allFiles = allFiles;
         } else {
-          state.allAlbums = uniqueAlbums(
-            state.allAlbums,
-            albums,
-            albumsFromFiles
-          );
+          state.allAlbums = uniqueAlbums(state.allAlbums, albums);
           state.allFiles.push(...allFiles);
         }
       })
