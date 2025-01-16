@@ -1,11 +1,11 @@
-import { AlbumInterface, FileInterface } from '../types';
+import { AlbumInterface } from '../types';
 
 export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
-  const sortedAlbums = albums
+  const rootPathsWithSortedSubAlbums = albums
     .filter((album) => album.isSorted)
     .map((album) => album.path);
 
-  const topLevelAlbums = albums
+  const topLevelPathsOrdered = albums
     .filter((album) => album.path.split('/').length === 1)
     .map((album) => album.path);
 
@@ -13,21 +13,23 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
     const a1PathParts = a1.path.split('/');
     const a2PathParts = a2.path.split('/');
 
+    // root paths
     if (a1PathParts.length === 1 && a2PathParts.length === 1) {
       return 0;
     }
 
+    // albums from different root paths (one can be root, doesn't matter)
     if (a1PathParts[0] !== a2PathParts[0]) {
       return (
-        topLevelAlbums.indexOf(a1PathParts[0]) -
-        topLevelAlbums.indexOf(a2PathParts[0])
+        topLevelPathsOrdered.indexOf(a1PathParts[0]) -
+        topLevelPathsOrdered.indexOf(a2PathParts[0])
       );
     }
 
     // the same root path
 
-    // is sorted album
-    if (sortedAlbums.includes(a1PathParts[0])) {
+    // should sort sub albums
+    if (rootPathsWithSortedSubAlbums.includes(a1PathParts[0])) {
       if (a1PathParts.length === a2PathParts.length)
         return a1.path.localeCompare(a2.path);
 
@@ -47,17 +49,4 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
 
     return 0;
   });
-};
-
-export const sortFiles = (
-  files: FileInterface[],
-  albums: AlbumInterface[]
-): FileInterface[] => {
-  const albumPaths = albums.map((album) => album.path);
-
-  return [...files].sort((f1, f2) =>
-    f1.path.split('/')[0] === f2.path.split('/')[0] // the same root path
-      ? f1.filename.localeCompare(f2.filename)
-      : albumPaths.indexOf(f1.path) - albumPaths.indexOf(f2.path)
-  );
 };

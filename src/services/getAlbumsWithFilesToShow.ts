@@ -41,18 +41,16 @@ export const getAlbumsWithFilesToShow = ({
 
     const albumsWithFiles: AlbumWithFiles[] = [];
 
-    files
-      .sort((file1, file2) => file2.datetime.localeCompare(file1.datetime))
-      .forEach((file) => {
-        if (
-          albumsWithFiles.length === 0 ||
-          albumsWithFiles[albumsWithFiles.length - 1].album.path !== file.path
-        ) {
-          albumsWithFiles.push({ album: albumsMap[file.path], files: [file] });
-        } else {
-          albumsWithFiles[albumsWithFiles.length - 1].files.push(file);
-        }
-      });
+    [...files].reverse().forEach((file) => {
+      if (
+        albumsWithFiles.length === 0 ||
+        albumsWithFiles[albumsWithFiles.length - 1].album.path !== file.path
+      ) {
+        albumsWithFiles.push({ album: albumsMap[file.path], files: [file] });
+      } else {
+        albumsWithFiles[albumsWithFiles.length - 1].files.push(file);
+      }
+    });
 
     return albumsWithFiles;
   }

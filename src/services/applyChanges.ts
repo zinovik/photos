@@ -8,7 +8,7 @@ import {
   UpdatedAlbum,
   UpdatedFile,
 } from '../types';
-import { sortAlbums, sortFiles } from './sort';
+import { sortAlbums } from './sort';
 
 const removeAlbums = (
   albums: AlbumInterface[],
@@ -129,8 +129,5 @@ export const applyChanges = ({
   const albumsWithUpdated = updateAlbums(albumsWithAdded, updatedAlbums);
   const filesWithUpdated = updateFiles(filesWithoutRemoved, updatedFiles);
 
-  const sortedAlbums = sortAlbums(albumsWithUpdated);
-  const sortedFiles = sortFiles(filesWithUpdated, sortedAlbums);
-
-  return { albums: sortedAlbums, files: sortedFiles };
+  return { albums: sortAlbums(albumsWithUpdated), files: filesWithUpdated };
 };
