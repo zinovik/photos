@@ -59,7 +59,7 @@ export const AdminFile = ({ file }: Props) => {
 
           if (
             newPath === file.path &&
-            newDescription === description &&
+            newDescription === (description ?? '') &&
             newTextString === oldTextString &&
             newAccessesString === oldAccessesString &&
             selectedFiles.length === 0

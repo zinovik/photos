@@ -154,7 +154,7 @@ export const getUpdatedFileChangedFields = (
     ...(updatedFile.path !== currentFile?.path
       ? { path: updatedFile.path }
       : {}),
-    ...(updatedFile.description !== currentFile?.description
+    ...(updatedFile.description !== (currentFile?.description || '')
       ? { description: updatedFile.description }
       : {}),
     ...(updatedFile.text !== (currentFile?.text || '')
