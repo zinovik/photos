@@ -84,11 +84,6 @@ export const AdminAlbum = ({ album }: Props) => {
           if (textString === null) return;
           const accessesString = prompt('accesses');
           if (accessesString === null) return;
-          const relation = prompt(
-            'relation (after or before the related)',
-            'after'
-          );
-          if (!['after', 'before'].includes(relation as string)) return;
 
           dispatch(
             addAddedAlbum({
@@ -98,7 +93,6 @@ export const AdminAlbum = ({ album }: Props) => {
                 ? textString.split('---')
                 : textString,
               relatedPath: album.path,
-              relation: relation as 'after' | 'before',
               accesses: accessesString.split(','),
             })
           );

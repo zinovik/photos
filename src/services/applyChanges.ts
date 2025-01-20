@@ -47,16 +47,12 @@ const addAlbums = (
 
     if (relatedPathIndex === -1) return;
 
-    albumsWithAdded.splice(
-      relatedPathIndex + (addedAlbum.relation === 'before' ? 0 : 1),
-      0,
-      {
-        title: addedAlbum.title,
-        text: addedAlbum.text || undefined,
-        path: addedAlbum.path,
-        accesses: addedAlbum.accesses,
-      }
-    );
+    albumsWithAdded.push({
+      title: addedAlbum.title,
+      text: addedAlbum.text || undefined,
+      path: addedAlbum.path,
+      accesses: addedAlbum.accesses,
+    });
   });
 
   return albumsWithAdded;

@@ -11,7 +11,6 @@ export interface AddedAlbum {
   title: string;
   text: string | string[];
   relatedPath: string;
-  relation: 'after' | 'before';
   accesses: string[];
 }
 
