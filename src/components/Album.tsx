@@ -91,7 +91,9 @@ export const Album = ({
         />
       ))}
 
-      {isCurrentAlbumTopLevelAlbum && <Agenda agenda={albumAgenda} />}
+      {isCurrentOpenedAlbum && isCurrentAlbumTopLevelAlbum && (
+        <Agenda agenda={albumAgenda} />
+      )}
     </>
   );
 };

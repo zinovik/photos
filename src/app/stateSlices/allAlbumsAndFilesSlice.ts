@@ -26,7 +26,7 @@ type User = {
   isEditAccess?: boolean;
 };
 
-export interface AllAlbumsAndFilesState {
+interface AllAlbumsAndFilesState {
   currentMainPath: string;
   token: string;
   tokenExpiresAt: number;

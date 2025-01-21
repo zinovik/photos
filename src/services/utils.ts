@@ -47,6 +47,9 @@ export const parseUrl = (
 
 export const getLevel = (path: string): number => path.split('/').length;
 
+const generateAlbumTitleByPath = (path: string): string =>
+  `[ ${path.split('/').slice(-1).join('') || 'untitled'} ]`;
+
 export const getLink = (path: string, defaultByDate?: boolean) =>
   `/${path}${defaultByDate ? `?${PARAMETER_DATE_RANGES}=` : ''}`;
 
@@ -65,10 +68,11 @@ export const getLinks = ({
     const textPath = texts.slice(0, index + 1).join('/');
 
     const album = allAlbums.find((album) => album.path === textPath);
+    const url = getLink(textPath, album?.defaultByDate);
 
     return {
-      text: album?.title || '',
-      url: getLink(textPath, album?.defaultByDate),
+      text: album?.title || generateAlbumTitleByPath(url),
+      url,
     };
   });
 
@@ -131,6 +135,9 @@ export const getUpdatedAlbumChangedFields = (
     ...(updatedAlbum.text !== (currentAlbum?.text || '')
       ? { text: updatedAlbum.text }
       : {}),
+    ...(updatedAlbum.order !== currentAlbum?.order
+      ? { order: updatedAlbum.order }
+      : {}),
     ...(updatedAlbum.accesses?.join(',') !==
     (currentAlbum?.accesses || []).join(',')
       ? { accesses: updatedAlbum.accesses }
@@ -175,7 +182,7 @@ export const getAlbumsFromFiles = (
   files: FileInterface[]
 ): AlbumInterface[] => {
   return [...new Set(files.map((file) => file.path))].map((path) => ({
-    title: `[${path.split('/').slice(-1).join('') || 'untitled'}]`,
+    title: generateAlbumTitleByPath(path),
     path,
     accesses: [],
   }));

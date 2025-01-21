@@ -1,8 +1,8 @@
 import { AlbumInterface } from '../types';
 
 export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
-  const rootPathsWithSortedSubAlbums = albums
-    .filter((album) => album.isSorted)
+  const rootPathsWithNotSortedSubAlbums = albums
+    .filter((album) => album.isNotSorted)
     .map((album) => album.path);
 
   const topLevelPathsOrdered = albums
@@ -28,8 +28,19 @@ export const sortAlbums = (albums: AlbumInterface[]): AlbumInterface[] => {
 
     // the same root path
 
+    if (
+      a1.path.includes('/') &&
+      a2.path.includes('/') &&
+      (a1.order !== undefined || a2.order !== undefined)
+    ) {
+      if (a2.order === undefined) return -1;
+      if (a1.order === undefined) return 1;
+
+      return a1.order - a2.order;
+    }
+
     // should sort sub albums
-    if (rootPathsWithSortedSubAlbums.includes(a1PathParts[0])) {
+    if (!rootPathsWithNotSortedSubAlbums.includes(a1PathParts[0])) {
       if (a1PathParts.length === a2PathParts.length)
         return a1.path.localeCompare(a2.path);
 

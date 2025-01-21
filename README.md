@@ -45,31 +45,6 @@ flowchart TB
     PhotosStorage --> GalleryApi
 ```
 
-This application requires 2 files:
-
-**ALBUMS_URL** - an array of albums:
-
-```typescript
-interface AlbumInterface {
-  path: string;
-  title: string;
-  text?: string | string[];
-  isSorted?: true;
-}
-```
-
-**FILES_URL** - an array of files (images and videos):
-
-```typescript
-interface FileInterface {
-  path: string;
-  filename: string;
-  isNoThumbnail?: true;
-  description: string;
-  text?: string | string[];
-}
-```
-
 ### create bucket, setup cors, check the bucket's cors:
 
 ```bash

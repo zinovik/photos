@@ -4,6 +4,7 @@ export interface AlbumInterface {
   filesAmount?: number;
   defaultByDate?: true;
   text?: string | string[];
-  isSorted?: true;
+  isNotSorted?: true; // will be removed
+  order?: number;
   accesses: string[];
 }

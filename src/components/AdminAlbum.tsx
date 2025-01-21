@@ -44,6 +44,9 @@ export const AdminAlbum = ({ album }: Props) => {
             '';
           const newTextString = prompt('text', oldTextString);
           if (newTextString === null) return;
+          const oldOrderString = album.order ? String(album.order) : '';
+          const newOrderString = prompt('order', oldOrderString);
+          if (newOrderString === null) return;
           const oldAccessesString = album.accesses
             ? album.accesses.join(',')
             : '';
@@ -54,6 +57,7 @@ export const AdminAlbum = ({ album }: Props) => {
             newPath === album.path &&
             newTitle === album.title &&
             newTextString === oldTextString &&
+            newOrderString === oldOrderString &&
             newAccessesString === oldAccessesString
           )
             return;
@@ -66,6 +70,9 @@ export const AdminAlbum = ({ album }: Props) => {
               text: newTextString.includes('---')
                 ? newTextString.split('---')
                 : newTextString,
+              order: isNaN(Number(newOrderString))
+                ? undefined
+                : Number(newOrderString),
               accesses: newAccessesString.split(',').filter(Boolean),
             })
           );
@@ -73,7 +80,6 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         edit album
       </button>
-
       <button
         onClick={() => {
           const path = prompt(`path related to ${album.path}`, album.path);
@@ -100,7 +106,6 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         add album
       </button>
-
       <button
         onClick={() => {
           if (!window.confirm(`Remove ${album.path}?`)) return;
@@ -110,7 +115,6 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         remove album
       </button>
-
       <button
         onClick={() => {
           const newPath = prompt('path', album.path);
@@ -121,7 +125,6 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         new path
       </button>
-
       <button
         onClick={async () => {
           const expiresIn = prompt('expires in, h', '24');
@@ -142,8 +145,8 @@ export const AdminAlbum = ({ album }: Props) => {
       >
         share
       </button>
-
-      {` accesses: ${album.accesses.join(', ')}`}
+      {` ${album.path}; [${album.accesses.join(',')}]`}
+      {album.order ? `; ${album.order}` : ''}
     </>
   );
 };

@@ -34,19 +34,23 @@ export const getAlbumsWithFilesToShow = ({
   });
 
   if (dateRanges) {
-    const albumsMap: Record<string, AlbumInterface> = {};
+    const albumsByPathMap: Record<string, AlbumInterface> = {};
     albums.forEach((album) => {
-      albumsMap[album.path] = album;
+      albumsByPathMap[album.path] = album;
     });
 
     const albumsWithFiles: AlbumWithFiles[] = [];
 
+    // reverse order (by date)
     [...files].reverse().forEach((file) => {
       if (
         albumsWithFiles.length === 0 ||
         albumsWithFiles[albumsWithFiles.length - 1].album.path !== file.path
       ) {
-        albumsWithFiles.push({ album: albumsMap[file.path], files: [file] });
+        albumsWithFiles.push({
+          album: albumsByPathMap[file.path],
+          files: [file],
+        });
       } else {
         albumsWithFiles[albumsWithFiles.length - 1].files.push(file);
       }
@@ -55,7 +59,7 @@ export const getAlbumsWithFilesToShow = ({
     return albumsWithFiles;
   }
 
-  const albumsOrdered = currentPath === '' ? [...albums].reverse() : albums;
+  const albumsOrdered = currentPath === '' ? [...albums].reverse() : albums; // reverse order for home page (by albums)
 
   return albumsOrdered.map((album) => ({
     album,
