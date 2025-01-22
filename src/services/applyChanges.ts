@@ -117,6 +117,15 @@ export const applyChanges = ({
     update: { albums: updatedAlbums, files: updatedFiles },
   } = changes;
 
+  if (
+    removedAlbums.length === 0 &&
+    removedFiles.length === 0 &&
+    addedAlbums.length === 0 &&
+    updatedAlbums.length === 0 &&
+    updatedFiles.length === 0
+  )
+    return { albums: allAlbums, files: allFiles };
+
   const albumsWithoutRemoved = removeAlbums(allAlbums, removedAlbums);
   const filesWithoutRemoved = removeFiles(allFiles, removedFiles);
 

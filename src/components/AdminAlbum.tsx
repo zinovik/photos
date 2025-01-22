@@ -120,6 +120,8 @@ export const AdminAlbum = ({ album }: Props) => {
           const newPath = prompt('path', album.path);
           if (newPath === null) return;
 
+          if (newPath === album.path) return;
+
           dispatch(newAlbumPath({ path: album.path, newPath }));
         }}
       >

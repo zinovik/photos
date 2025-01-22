@@ -135,7 +135,7 @@ export const getUpdatedAlbumChangedFields = (
     ...(updatedAlbum.text !== (currentAlbum?.text || '')
       ? { text: updatedAlbum.text }
       : {}),
-    ...(updatedAlbum.order !== currentAlbum?.order
+    ...(updatedAlbum.order !== (currentAlbum?.order || 0)
       ? { order: updatedAlbum.order }
       : {}),
     ...(updatedAlbum.accesses?.join(',') !==
