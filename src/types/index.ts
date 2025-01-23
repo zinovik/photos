@@ -19,8 +19,8 @@ export interface UpdatedAlbum {
   newPath?: string;
   title?: string;
   text?: string | string[];
-  order?: number;
   accesses?: string[];
+  order?: number;
 }
 
 export interface NewAlbumPath {

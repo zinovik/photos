@@ -31,7 +31,6 @@ export const Album = ({
   const { album, files } = albumWithFiles;
   const level = getLevel(album.path);
   const isCurrentOpenedAlbum = album.path === currentPath;
-  const isCurrentAlbumTopLevelAlbum = level === 1;
 
   return (
     <>
@@ -41,7 +40,7 @@ export const Album = ({
         <>
           <Title level={level}>{album.title}</Title>
 
-          {!isCurrentAlbumTopLevelAlbum && <Agenda agenda={albumAgenda} />}
+          <Agenda agenda={albumAgenda} />
         </>
       )}
 
@@ -90,10 +89,6 @@ export const Album = ({
           isCurrent={file.filename === currentFile}
         />
       ))}
-
-      {isCurrentOpenedAlbum && isCurrentAlbumTopLevelAlbum && (
-        <Agenda agenda={albumAgenda} />
-      )}
     </>
   );
 };
