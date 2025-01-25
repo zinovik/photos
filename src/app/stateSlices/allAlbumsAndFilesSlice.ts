@@ -32,6 +32,7 @@ interface AllAlbumsAndFilesState {
   tokenExpiresAt: number;
   isShowingByDate: boolean;
   isApiLoading: boolean;
+  isApiLogining: boolean;
   allAlbums: AlbumInterface[];
   allFiles: FileInterface[];
   loadedMainPaths: string[];
@@ -49,6 +50,7 @@ const initialState: AllAlbumsAndFilesState = {
   tokenExpiresAt: 0,
   isShowingByDate: false,
   isApiLoading: true,
+  isApiLogining: true,
   allAlbums: [] as AlbumInterface[],
   allFiles: [] as FileInterface[],
   loadedMainPaths: [] as string[],
@@ -112,7 +114,7 @@ const albumsSlice = createSlice({
       state.selectedFiles.push(action.payload);
     },
     removeSelectedFile: (state, action: PayloadAction<string | undefined>) => {
-      if (!action.payload) {
+      if (action.payload) {
         state.selectedFiles = state.selectedFiles.filter(
           (selectedFile) => selectedFile !== action.payload
         );
@@ -265,9 +267,11 @@ const albumsSlice = createSlice({
       })
       .addCase(apiLoad.rejected, (state) => {
         state.isApiLoading = false;
+        state.isApiLogining = false;
       })
       .addCase(apiLoad.fulfilled, (state, action) => {
         state.isApiLoading = false;
+        state.isApiLogining = false;
 
         const { isReplace, isEverythingLoaded, albums, files, user } =
           action.payload;
@@ -307,12 +311,24 @@ const albumsSlice = createSlice({
           state.allFiles.push(...allFiles);
         }
       })
-      .addCase(apiLogin.fulfilled, (_state, action) => {
+      .addCase(apiLogin.pending, (state) => {
+        state.isApiLogining = true;
+      })
+      .addCase(apiLogin.rejected, (state) => {
+        state.isApiLogining = false;
+      })
+      .addCase(apiLogin.fulfilled, (state, action) => {
         const [isSuccess, csrf] = action.payload;
 
         if (isSuccess) {
           localStorage.setItem('csrf', csrf);
         }
+      })
+      .addCase(apiLogout.pending, (state) => {
+        state.isApiLogining = true;
+      })
+      .addCase(apiLogout.rejected, (state) => {
+        state.isApiLogining = false;
       })
       .addCase(apiLogout.fulfilled, (_state, action) => {
         const isSuccess = action.payload;
@@ -430,6 +446,8 @@ export default albumsSlice.reducer;
 
 export const selectIsApiLoading = (state: RootState) =>
   state.allAlbumsAndFiles.isApiLoading;
+export const selectIsApiLogining = (state: RootState) =>
+  state.allAlbumsAndFiles.isApiLogining;
 export const selectAllAlbums = (state: RootState) =>
   state.allAlbumsAndFiles.allAlbums;
 export const selectAllFiles = (state: RootState) =>

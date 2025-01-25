@@ -15,6 +15,7 @@ import {
   selectAllFiles,
   selectChanges,
   selectIsApiLoading,
+  selectIsApiLogining,
   selectShouldLoad,
   setCurrentMainPath,
   setIsShowingByDate,
@@ -27,6 +28,7 @@ export const MainRouter = () => {
   const dispatch = useAppDispatch();
 
   const isApiLoading = useAppSelector(selectIsApiLoading);
+  const isApiLogining = useAppSelector(selectIsApiLogining);
   const allAlbums = useAppSelector(selectAllAlbums);
   const allFiles = useAppSelector(selectAllFiles);
   const shouldLoad = useAppSelector(selectShouldLoad);
@@ -61,21 +63,25 @@ export const MainRouter = () => {
 
   return (
     <>
-      {isApiLoading && (
+      <AdminChanges />
+
+      {!isApiLogining && (
+        <>
+          <AdminLogin />
+          <div style={{ textAlign: 'center' }}>
+            <ShowMode dateRanges={dateRanges} currentPath={currentPath} />
+          </div>
+        </>
+      )}
+
+      {(isApiLoading || isApiLogining) && (
         <main style={{ padding: '0.5rem' }}>⏳ Loading... Please wait</main>
       )}
 
       {!isApiLoading && (
         <>
-          <AdminChanges />
-          <AdminLogin />
-
           {albumsWithFilesToShow.length > 0 && (
             <>
-              <div style={{ textAlign: 'center' }}>
-                <ShowMode dateRanges={dateRanges} currentPath={currentPath} />
-              </div>
-
               {!dateRanges && currentPath === '' ? (
                 <HomePage
                   albums={albumsWithFilesToShow.map(
