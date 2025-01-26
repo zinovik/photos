@@ -40,7 +40,7 @@ export const Album = ({
         <>
           <Title level={level}>{album.title}</Title>
 
-          <Agenda agenda={albumAgenda} />
+          {!isShowingByDate && <Agenda agenda={albumAgenda} />}
         </>
       )}
 
