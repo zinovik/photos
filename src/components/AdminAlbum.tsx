@@ -82,7 +82,7 @@ export const AdminAlbum = ({ album }: Props) => {
       </button>
       <button
         onClick={() => {
-          const path = prompt(`path related to ${album.path}`, album.path);
+          const path = prompt('path', album.path);
           if (path === null) return;
           const title = prompt('title');
           if (title === null) return;
