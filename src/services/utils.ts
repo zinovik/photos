@@ -102,12 +102,12 @@ export const formatDatetime = (datetime?: string): string => {
   const hour = datetime.slice(9, 11);
   const minute = datetime.slice(11, 13);
 
-  const datePart = `${date}.${month}.${year}`;
+  const datePart = `${date ? `${date}.` : ''}${
+    month ? `${month}.` : ''
+  }${year}`;
   const timePart = ` ${hour}:${minute}`;
 
-  return `${year && month && date ? datePart : ''}${
-    hour && minute ? timePart : ''
-  }`;
+  return `${year ? datePart : ''}${hour && minute ? timePart : ''}`;
 };
 
 export const getThumbnail = (url: string, width: number): string => {
